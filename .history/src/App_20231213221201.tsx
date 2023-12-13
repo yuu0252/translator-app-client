@@ -17,10 +17,13 @@ function App() {
 
       // The compression process is asynchronous,
       // which means you have to access the `result` in the `success` hook function.
-      async success(result) {
+      success(result) {
         const blob = result;
-        const text = await new Response(blob).text();
-        console.log(text);
+        const reader = new FileReader();
+        reader.addEventListener('loadend', () => {
+          // reader.result には blob の内容が型付き配列として格納されます。
+        });
+        reader.readAsArrayBuffer(blob);
       },
       error(err) {
         console.log(err.message);

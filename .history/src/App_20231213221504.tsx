@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   // const image = axios.post('https://vision.googleapis.com/v1/images:annotate')
 
-  const onChangeImage = (e) => {
+  const onChangeImage = async (e) => {
     const file = e.target.files[0];
 
     if (!file) {

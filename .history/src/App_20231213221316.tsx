@@ -17,10 +17,9 @@ function App() {
 
       // The compression process is asynchronous,
       // which means you have to access the `result` in the `success` hook function.
-      async success(result) {
+      success(result) {
         const blob = result;
-        const text = await new Response(blob).text();
-        console.log(text);
+        const text = new Response(blob).text();
       },
       error(err) {
         console.log(err.message);
