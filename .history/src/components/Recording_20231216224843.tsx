@@ -10,7 +10,7 @@ export const Recording = () => {
     const data = async () => {
       if (!mediaBlobUrl) return;
       const blob = fetch(mediaBlobUrl).then((r) => {
-        return r.blob();
+        r.blob();
       });
       console.log(blob);
     };

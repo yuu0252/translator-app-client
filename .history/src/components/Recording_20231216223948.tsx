@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaMicrophone } from 'react-icons/fa6';
 import { useReactMediaRecorder } from 'react-media-recorder-2';
@@ -9,9 +10,7 @@ export const Recording = () => {
   useEffect(() => {
     const data = async () => {
       if (!mediaBlobUrl) return;
-      const blob = fetch(mediaBlobUrl).then((r) => {
-        return r.blob();
-      });
+      const blob = axios(mediaBlobUrl).then((res) => res.data);
       console.log(blob);
     };
     data();

@@ -9,12 +9,11 @@ export const Recording = () => {
   useEffect(() => {
     const data = async () => {
       if (!mediaBlobUrl) return;
-      const blob = fetch(mediaBlobUrl).then((r) => {
-        return r.blob();
-      });
-      console.log(blob);
+      const blob = fetch(mediaBlobUrl).then((r) => r.blob());
+      const blobText = await blob.text();
+      console.log(blobText);
+      data();
     };
-    data();
   }, [mediaBlobUrl]);
   return (
     <>

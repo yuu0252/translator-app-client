@@ -9,9 +9,7 @@ export const Recording = () => {
   useEffect(() => {
     const data = async () => {
       if (!mediaBlobUrl) return;
-      const blob = fetch(mediaBlobUrl).then((r) => {
-        return r.blob();
-      });
+      const blob = fetch(mediaBlobUrl).then((r) => r.blob());
       console.log(blob);
     };
     data();

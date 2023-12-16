@@ -2,19 +2,14 @@ import { useEffect, useState } from 'react';
 import { FaMicrophone } from 'react-icons/fa6';
 import { useReactMediaRecorder } from 'react-media-recorder-2';
 
-export const Recording = () => {
+export const Recording = async () => {
   const [isRecording, setIsRecording] = useState(false);
   const { status, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({ audio: true });
   useEffect(() => {
-    const data = async () => {
-      if (!mediaBlobUrl) return;
-      const blob = fetch(mediaBlobUrl).then((r) => {
-        return r.blob();
-      });
-      console.log(blob);
-    };
-    data();
+    if (!mediaBlobUrl) return;
+    const blob = fetch(mediaBlobUrl).then((r) => r.blob());
+    const blobText = await blob.text();
   }, [mediaBlobUrl]);
   return (
     <>

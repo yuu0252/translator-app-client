@@ -6,15 +6,10 @@ export const Recording = () => {
   const [isRecording, setIsRecording] = useState(false);
   const { status, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({ audio: true });
-  useEffect(() => {
-    const data = async () => {
-      if (!mediaBlobUrl) return;
-      const blob = fetch(mediaBlobUrl).then((r) => {
-        return r.blob();
-      });
-      console.log(blob);
-    };
-    data();
+  await useEffect(() => {
+    if (!mediaBlobUrl) return;
+    const blob = fetch(mediaBlobUrl).then((r) => r.blob());
+    const blobText = await blob.text();
   }, [mediaBlobUrl]);
   return (
     <>
