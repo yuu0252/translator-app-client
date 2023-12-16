@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { useReactMediaRecorder } from 'react-media-recorder-2';
+
 export const Simple = () => {
   const languageList = { English: '英語', 簡体字: '台湾・香港' };
   const placeholders = [

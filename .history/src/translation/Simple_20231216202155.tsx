@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FaMicrophone } from 'react-icons/fa6';
 
 export const Simple = () => {
   const languageList = { English: '英語', 簡体字: '台湾・香港' };
@@ -14,6 +15,7 @@ export const Simple = () => {
   ];
   const placeholder = placeholders.join(`\n`);
   const [outputText, setOutputText] = useState(placeholder);
+  const [isRecording, setIsRecording] = useState(false);
 
   return (
     <section id="simple">
@@ -30,6 +32,11 @@ export const Simple = () => {
           <span>{outputText}</span>
         </p>
       </div>
+      <button>
+        <div>
+          <FaMicrophone />
+        </div>
+      </button>
     </section>
   );
 };

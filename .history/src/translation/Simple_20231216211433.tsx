@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { FaMicrophone } from 'react-icons/fa6';
+import { useReactMediaRecorder } from 'react-media-recorder-2';
 
 export const Simple = () => {
   const languageList = { English: '英語', 簡体字: '台湾・香港' };
@@ -14,6 +16,9 @@ export const Simple = () => {
   ];
   const placeholder = placeholders.join(`\n`);
   const [outputText, setOutputText] = useState(placeholder);
+  const [isRecording, setIsRecording] = useState(false);
+  const { status, startRecording, stopRecording, mediaBlobUrl } =
+    useReactMediaRecorder({ audio: true });
 
   return (
     <section id="simple">
@@ -30,6 +35,14 @@ export const Simple = () => {
           <span>{outputText}</span>
         </p>
       </div>
+      <button onClick={startRecording}>
+        <div>
+          <FaMicrophone />
+        </div>
+      </button>
+      <button onClick={startRecording}>
+        <div>Stop</div>
+      </button>
     </section>
   );
 };
