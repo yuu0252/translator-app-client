@@ -78,7 +78,7 @@ export const Recording = ({
               const languageCode = result.languageCode;
               const text = result.alternatives[0].transcript;
 
-              if (languageCode === 'ja-jp' && language.language === 'none') {
+              if (languageCode === 'ja-jp' && language === 'init') {
                 alert(
                   '相手に先にしゃべってもらうか(自動検出)、言語を選んでください(右上)'
                 );
@@ -92,8 +92,7 @@ export const Recording = ({
                 languageCode === 'ja-jp'
                   ? 'ja'
                   : languageCodeList[languageCode].code;
-              const target =
-                languageCode === 'ja-jp' ? language.language : 'ja';
+              const target = language.language;
 
               console.log(source + ':' + target);
 

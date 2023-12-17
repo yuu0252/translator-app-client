@@ -92,8 +92,7 @@ export const Recording = ({
                 languageCode === 'ja-jp'
                   ? 'ja'
                   : languageCodeList[languageCode].code;
-              const target =
-                languageCode === 'ja-jp' ? language.language : 'ja';
+              const target = language.language;
 
               console.log(source + ':' + target);
 
