@@ -2,9 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaMicrophone } from 'react-icons/fa6';
 import { FaStop } from 'react-icons/fa';
-import { languageCodeList } from '../constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectLanguage, setLanguage } from '../languageSlice';
+import { languageCode } from '../constants';
+import { useDispatch } from 'react-redux';
 
 const audioBlobToBase64 = (blob: Blob) => {
   return new Promise((resolve, reject) => {
@@ -34,7 +33,6 @@ export const Recording = ({
   const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
   const SPEECH_TO_TEXT_URL = import.meta.env.VITE_SPEECH_TO_TEXT_URL;
   const TRANSLATE_URL = import.meta.env.VITE_TRANSLATE_URL;
-  const language = useSelector(selectLanguage);
   const dispatch = useDispatch();
 
   const [recording, setRecording] = useState(false);
@@ -67,7 +65,7 @@ export const Recording = ({
                 encoding: 'WEBM_OPUS',
                 sampleRateHertz: 48000,
                 languageCode: 'ja-JP',
-                alternativeLanguageCodes: Object.keys(languageCodeList),
+                alternativeLanguageCodes: Object.keys(languageCode),
               },
               audio: {
                 content: base64audio,
@@ -78,41 +76,22 @@ export const Recording = ({
               const languageCode = result.languageCode;
               const text = result.alternatives[0].transcript;
 
-              if (languageCode === 'ja-JP' && language === 'init') {
-                alert(
-                  '相手に先にしゃべってもらうか(自動検出)、言語を選んでください(右上)'
-                );
-                return;
-              }
-
               dispatch(setLanguage(languageCode));
               setTranscription(text);
-
-              const source =
-                languageCode === 'ja-jp'
-                  ? 'ja'
-                  : languageCodeList[languageCode].code;
-              const target = language.language;
-
-              console.log(source + ':' + target);
 
               axios
                 .post(`${TRANSLATE_URL}?key=${API_KEY}`, {
                   q: text,
-                  source: source,
-                  target: target,
+                  source: languageCode[languageCode],
+                  target: 'en',
                   format: 'text',
                 })
                 .then((res) => {
+                  console.log(res.data);
                   setOutputText(res.data.data.translations[0].translatedText);
-                })
-                .catch((err) => {
-                  console.log(err);
-                  setOutputText('Translating failed');
                 });
             })
-            .catch((err) => {
-              console.log(err);
+            .catch(() => {
               setTranscription('Recording failed');
               setRecording(false);
             });

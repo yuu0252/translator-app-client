@@ -88,31 +88,24 @@ export const Recording = ({
               dispatch(setLanguage(languageCode));
               setTranscription(text);
 
-              const source =
-                languageCode === 'ja-jp'
-                  ? 'ja'
-                  : languageCodeList[languageCode].code;
-              const target = language.language;
-
-              console.log(source + ':' + target);
+              console.log(languageCodeList[languageCode].code + ':' + language);
 
               axios
                 .post(`${TRANSLATE_URL}?key=${API_KEY}`, {
                   q: text,
-                  source: source,
-                  target: target,
+                  source: languageCodeList[languageCode].code,
+                  target: language.language,
                   format: 'text',
                 })
                 .then((res) => {
                   setOutputText(res.data.data.translations[0].translatedText);
                 })
-                .catch((err) => {
-                  console.log(err);
+                .catch(() => {
                   setOutputText('Translating failed');
                 });
             })
             .catch((err) => {
-              console.log(err);
+              console.log(res);
               setTranscription('Recording failed');
               setRecording(false);
             });

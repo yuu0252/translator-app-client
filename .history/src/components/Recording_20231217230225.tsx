@@ -82,37 +82,23 @@ export const Recording = ({
                 alert(
                   '相手に先にしゃべってもらうか(自動検出)、言語を選んでください(右上)'
                 );
-                return;
               }
 
               dispatch(setLanguage(languageCode));
               setTranscription(text);
 
-              const source =
-                languageCode === 'ja-jp'
-                  ? 'ja'
-                  : languageCodeList[languageCode].code;
-              const target = language.language;
-
-              console.log(source + ':' + target);
-
               axios
                 .post(`${TRANSLATE_URL}?key=${API_KEY}`, {
                   q: text,
-                  source: source,
-                  target: target,
+                  source: languageCodeList[languageCode].code,
+                  target: language,
                   format: 'text',
                 })
                 .then((res) => {
                   setOutputText(res.data.data.translations[0].translatedText);
-                })
-                .catch((err) => {
-                  console.log(err);
-                  setOutputText('Translating failed');
                 });
             })
-            .catch((err) => {
-              console.log(err);
+            .catch(() => {
               setTranscription('Recording failed');
               setRecording(false);
             });

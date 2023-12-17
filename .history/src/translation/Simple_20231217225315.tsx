@@ -16,6 +16,7 @@ export const Simple = () => {
   const placeholder = placeholders.join(`\n`);
   const [transcription, setTranscription] = useState(placeholder);
   const [outputText, setOutputText] = useState('');
+  const [language, setLanguage] = useState('');
 
   return (
     <>

@@ -94,8 +94,6 @@ export const Recording = ({
                   : languageCodeList[languageCode].code;
               const target = language.language;
 
-              console.log(source + ':' + target);
-
               axios
                 .post(`${TRANSLATE_URL}?key=${API_KEY}`, {
                   q: text,
@@ -106,8 +104,7 @@ export const Recording = ({
                 .then((res) => {
                   setOutputText(res.data.data.translations[0].translatedText);
                 })
-                .catch((err) => {
-                  console.log(err);
+                .catch(() => {
                   setOutputText('Translating failed');
                 });
             })

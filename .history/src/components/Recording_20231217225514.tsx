@@ -67,7 +67,7 @@ export const Recording = ({
                 encoding: 'WEBM_OPUS',
                 sampleRateHertz: 48000,
                 languageCode: 'ja-JP',
-                alternativeLanguageCodes: Object.keys(languageCodeList),
+                alternativeLanguageCodes: Object.keys(languageCode),
               },
               audio: {
                 content: base64audio,
@@ -78,41 +78,21 @@ export const Recording = ({
               const languageCode = result.languageCode;
               const text = result.alternatives[0].transcript;
 
-              if (languageCode === 'ja-JP' && language === 'init') {
-                alert(
-                  '相手に先にしゃべってもらうか(自動検出)、言語を選んでください(右上)'
-                );
-                return;
-              }
-
               dispatch(setLanguage(languageCode));
               setTranscription(text);
-
-              const source =
-                languageCode === 'ja-jp'
-                  ? 'ja'
-                  : languageCodeList[languageCode].code;
-              const target = language.language;
-
-              console.log(source + ':' + target);
 
               axios
                 .post(`${TRANSLATE_URL}?key=${API_KEY}`, {
                   q: text,
-                  source: source,
-                  target: target,
+                  source: languageCodeList[languageCode],
+                  target: language,
                   format: 'text',
                 })
                 .then((res) => {
                   setOutputText(res.data.data.translations[0].translatedText);
-                })
-                .catch((err) => {
-                  console.log(err);
-                  setOutputText('Translating failed');
                 });
             })
-            .catch((err) => {
-              console.log(err);
+            .catch(() => {
               setTranscription('Recording failed');
               setRecording(false);
             });

@@ -94,8 +94,6 @@ export const Recording = ({
                   : languageCodeList[languageCode].code;
               const target = language.language;
 
-              console.log(source + ':' + target);
-
               axios
                 .post(`${TRANSLATE_URL}?key=${API_KEY}`, {
                   q: text,
