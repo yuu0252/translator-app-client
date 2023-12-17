@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaMicrophone } from 'react-icons/fa6';
 import { FaStop } from 'react-icons/fa';
-import { languageCode } from '../constants';
 
 const audioBlobToBase64 = (blob: Blob) => {
   return new Promise((resolve, reject) => {
@@ -37,6 +36,15 @@ export const Recording = ({
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<any>(null);
 
+  const languageCode = {
+    'en-US': 'en',
+    'ja-JP': 'ja',
+    'yue-Hant-HK': 'zh-TW',
+    'cmn-Hant-TW': 'zh-TW',
+    'cmn-Hans-CN': 'zh-CN',
+    'vi-VN': 'vi',
+  };
+
   useEffect(() => {
     return () => {
       if (mediaRecorder) {
@@ -63,7 +71,7 @@ export const Recording = ({
               config: {
                 encoding: 'WEBM_OPUS',
                 sampleRateHertz: 48000,
-                languageCode: 'ja-JP',
+                languageCode: 'ja',
                 alternativeLanguageCodes: Object.keys(languageCode),
               },
               audio: {

@@ -1,7 +1,3 @@
-body {
-  background-color: #555;
-}
-
 #header {
   width: 100%;
   height: 60px;
@@ -46,7 +42,8 @@ body {
   width: 100%;
   height: calc(100vh - 60px);
   height: calc(100dvh - 60px);
-  padding: 30px;
+  background-color: #555;
+  padding: 90px 30px 30px;
 
   & .textarea {
     width: 100%;

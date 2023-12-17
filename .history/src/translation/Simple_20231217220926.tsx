@@ -3,6 +3,7 @@ import { Recording } from '../components/Recording';
 import { Header } from '../components/Header';
 
 export const Simple = () => {
+  const languageList = { English: '英語', 簡体字: '台湾・香港' };
   const placeholders = [
     '相手に先に喋ってもらうか(自動検出)、',
     '言語を選んでください(右上)',
@@ -19,21 +20,19 @@ export const Simple = () => {
   const [language, setLanguage] = useState('');
 
   return (
-    <>
-      <Header />
-      <section id="simple">
-        <div className="textarea">
-          <div className={transcription === placeholder ? 'placeholder' : ''}>
-            <p>{transcription}</p>
-            {outputText && <p>{outputText}</p>}
-          </div>
+    <Header />
+    <section id="simple">
+      <div className="textarea">
+        <div className={transcription === placeholder ? 'placeholder' : ''}>
+          <p>{transcription}</p>
+          {outputText && <p>{outputText}</p>}
         </div>
-        <Recording
-          setTranscription={setTranscription}
-          setLanguage={setLanguage}
-          setOutputText={setOutputText}
-        />
-      </section>
-    </>
+      </div>
+      <Recording
+        setTranscription={setTranscription}
+        setLanguage={setLanguage}
+        setOutputText={setOutputText}
+      />
+    </section>
   );
 };

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaMicrophone } from 'react-icons/fa6';
 import { FaStop } from 'react-icons/fa';
-import { languageCode } from '../constants';
 
 const audioBlobToBase64 = (blob: Blob) => {
   return new Promise((resolve, reject) => {
@@ -36,6 +35,15 @@ export const Recording = ({
   const TRANSLATE_URL = import.meta.env.VITE_TRANSLATE_URL;
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<any>(null);
+
+  const languageCode = {
+    'en-us': 'en',
+    'ja-jp': 'ja',
+    'yue-hant-hK': 'zh-tw',
+    'cmn-hant-tw': 'zh-tw',
+    'cmn-hans-cn': 'zh-cn',
+    'vi-vn': 'vi',
+  };
 
   useEffect(() => {
     return () => {

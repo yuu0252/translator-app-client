@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaMicrophone } from 'react-icons/fa6';
 import { FaStop } from 'react-icons/fa';
-import { languageCode } from '../constants';
 
 const audioBlobToBase64 = (blob: Blob) => {
   return new Promise((resolve, reject) => {
