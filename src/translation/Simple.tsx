@@ -18,8 +18,6 @@ export const Simple = () => {
   const [outputText, setOutputText] = useState("");
   const [language, setLanguage] = useState("");
 
-  useEffect(() => {}, [transcription]);
-
   return (
     <section id="simple">
       <div className="select-box">

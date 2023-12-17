@@ -42,6 +42,7 @@ export const Recording = ({
     "yue-Hant-HK": "zh-TW",
     "cmn-Hant-TW": "zh-TW",
     "cmn-Hans-CN": "zh-CN",
+    "vi-VN": "vi",
   };
 
   useEffect(() => {
@@ -71,12 +72,7 @@ export const Recording = ({
                 encoding: "WEBM_OPUS",
                 sampleRateHertz: 48000,
                 languageCode: "ja-JP",
-                alternativeLanguageCodes: [
-                  "en-US",
-                  "zh",
-                  "zh-TW",
-                  "yue-Hant-HK",
-                ],
+                alternativeLanguageCodes: Object.keys(languageCode),
               },
               audio: {
                 content: base64audio,
