@@ -1,5 +1,5 @@
 type obj = {
-  [key: string]: {
+  string: {
     code: string;
     name: string;
   };

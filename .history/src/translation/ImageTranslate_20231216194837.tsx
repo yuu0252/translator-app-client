@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const ImageTranslation = () => {
   const fetch = (base64: string) => {
@@ -10,14 +10,14 @@ export const ImageTranslation = () => {
       },
       features: [
         {
-          type: 'TEXT_DETECTION',
+          type: "TEXT_DETECTION",
         },
       ],
     };
 
     console.log(data);
 
-    axios
+    const image = axios
       .post(
         `https://vision.googleapis.com/v1/images:annotate?key=${
           import.meta.env.VITE_GOOGLE_API_KEY
@@ -40,7 +40,7 @@ export const ImageTranslation = () => {
     reader.readAsDataURL(file);
     reader.onload = () => {
       const result = reader.result as string;
-      const base64 = result.replace('data:', '').replace(/^.+,/, '');
+      const base64 = result.replace("data:", "").replace(/^.+,/, "");
       console.log(base64);
       fetch(base64);
     };

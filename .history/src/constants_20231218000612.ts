@@ -1,11 +1,4 @@
-type obj = {
-  [key: string]: {
-    code: string;
-    name: string;
-  };
-};
-
-export const languageCodeList: obj = {
+export const languageCodeList = {
   'en-us': { code: 'en', name: 'English(英語)' },
   'yue-hant-hk': { code: 'zh-tw', name: '繁体字(香港)' },
   'cmn-hant-tw': { code: 'zh-tw', name: '繁体字(台湾)' },
