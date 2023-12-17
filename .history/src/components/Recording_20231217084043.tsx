@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaMicrophone } from 'react-icons/fa6';
 import { useReactMediaRecorder } from 'react-media-recorder-2';
@@ -8,18 +7,14 @@ export const Recording = () => {
   const { status, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({ audio: true });
   useEffect(() => {
-    const data = {
-      audio: {
-        content: mediaBlobUrl,
-      },
-      config: {
-        enableAutomaticPunctuation: true,
-        encoding: 'LINEAR16',
-        languageCode: 'ja-JP',
-        model: 'default',
-      },
+    const data = async () => {
+      if (!mediaBlobUrl) return;
+      const blob = await fetch(mediaBlobUrl).then((r) => {
+        return r.blob();
+      });
+      console.log(blob);
     };
-    axios.post(import.meta.env.VITE_SPEECH_TO_TEXT_URL, data);
+    data();
   }, [mediaBlobUrl]);
   return (
     <>

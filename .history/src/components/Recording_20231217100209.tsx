@@ -10,7 +10,7 @@ export const Recording = () => {
   useEffect(() => {
     const data = {
       audio: {
-        content: mediaBlobUrl,
+        content: '/* Your audio */',
       },
       config: {
         enableAutomaticPunctuation: true,

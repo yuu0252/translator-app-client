@@ -10,7 +10,7 @@ export const Recording = () => {
   useEffect(() => {
     const data = {
       audio: {
-        content: mediaBlobUrl,
+        content: '/* Your audio */',
       },
       config: {
         enableAutomaticPunctuation: true,
@@ -19,7 +19,7 @@ export const Recording = () => {
         model: 'default',
       },
     };
-    axios.post(import.meta.env.VITE_SPEECH_TO_TEXT_URL, data);
+    axios.post(import.meta.env.VITE_SPEECH_TO_TEXT_URL);
   }, [mediaBlobUrl]);
   return (
     <>

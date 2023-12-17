@@ -8,18 +8,7 @@ export const Recording = () => {
   const { status, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({ audio: true });
   useEffect(() => {
-    const data = {
-      audio: {
-        content: mediaBlobUrl,
-      },
-      config: {
-        enableAutomaticPunctuation: true,
-        encoding: 'LINEAR16',
-        languageCode: 'ja-JP',
-        model: 'default',
-      },
-    };
-    axios.post(import.meta.env.VITE_SPEECH_TO_TEXT_URL, data);
+    axios.post(import.meta.env.VITE_SPEECH_TO_TEXT_URL);
   }, [mediaBlobUrl]);
   return (
     <>
