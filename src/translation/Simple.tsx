@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { Recording } from "../components/Recording";
 
 export const Simple = () => {
-  const languageList = { English: '英語', 簡体字: '台湾・香港' };
+  const languageList = { English: "英語", 簡体字: "台湾・香港" };
   const placeholders = [
-    '相手に先に喋ってもらうか(自動検出)、',
-    '言語を選んでください(右上)',
-    'Speak your language!',
-    '说你的语言',
-    '說你的語言',
-    'พูดภาษาของคุณ',
-    'nói ngôn ngữ của bạn',
-    'magsalita ng iyong wika',
+    "相手に先に喋ってもらうか(自動検出)、",
+    "言語を選んでください(右上)",
+    "Speak your language!",
+    "说你的语言",
+    "說你的語言",
+    "พูดภาษาของคุณ",
+    "nói ngôn ngữ của bạn",
+    "magsalita ng iyong wika",
   ];
   const placeholder = placeholders.join(`\n`);
   const [outputText, setOutputText] = useState(placeholder);
@@ -26,10 +27,11 @@ export const Simple = () => {
         </select>
       </div>
       <div className="textarea">
-        <p className={outputText === placeholder ? 'placeholder' : ''}>
+        <p className={outputText === placeholder ? "placeholder" : ""}>
           <span>{outputText}</span>
         </p>
       </div>
+      <Recording />
     </section>
   );
 };
