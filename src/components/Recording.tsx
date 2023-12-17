@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaMicrophone } from "react-icons/fa6";
-import { RiRectangleFill } from "react-icons/ri";
+import { FaStop } from "react-icons/fa";
 
 const audioBlobToBase64 = (blob: Blob) => {
   return new Promise((resolve, reject) => {
@@ -21,10 +21,28 @@ const audioBlobToBase64 = (blob: Blob) => {
   });
 };
 
-export const Recording = () => {
+export const Recording = ({
+  setTranscription,
+  setLanguage,
+  setOutputText,
+}: {
+  setTranscription: React.Dispatch<React.SetStateAction<string>>;
+  setLanguage: React.Dispatch<React.SetStateAction<string>>;
+  setOutputText: React.Dispatch<React.SetStateAction<string>>;
+}) => {
+  const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+  const SPEECH_TO_TEXT_URL = import.meta.env.VITE_SPEECH_TO_TEXT_URL;
+  const TRANSLATE_URL = import.meta.env.VITE_TRANSLATE_URL;
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<any>(null);
-  const [transcription, setTranscription] = useState("");
+
+  const languageCode = {
+    "en-US": "en",
+    "ja-JP": "ja",
+    "yue-Hant-HK": "zh-TW",
+    "cmn-Hant-TW": "zh-TW",
+    "cmn-Hans-CN": "zh-CN",
+  };
 
   useEffect(() => {
     return () => {
@@ -34,8 +52,6 @@ export const Recording = () => {
     };
   }, [mediaRecorder]);
 
-  const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
-  const URL = import.meta.env.VITE_SPEECH_TO_TEXT_URL;
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -49,20 +65,46 @@ export const Recording = () => {
         const base64audio = await audioBlobToBase64(audioBlob);
 
         try {
-          const response = await axios
-            .post(`${URL}?key=${API_KEY}`, {
+          axios
+            .post(`${SPEECH_TO_TEXT_URL}?key=${API_KEY}`, {
               config: {
                 encoding: "WEBM_OPUS",
                 sampleRateHertz: 48000,
-                languageCode: "en-US",
-                alternativeLanguageCodes: ["ja-JP"],
+                languageCode: "ja-JP",
+                alternativeLanguageCodes: [
+                  "en-US",
+                  "zh",
+                  "zh-TW",
+                  "yue-Hant-HK",
+                ],
               },
               audio: {
                 content: base64audio,
               },
             })
             .then((res) => {
-              setTranscription(res.data.results[0]);
+              const result = res.data.results[0];
+              const languageCode = result.languageCode;
+              const text = result.alternatives[0].transcript;
+
+              setLanguage(languageCode);
+              setTranscription(text);
+
+              axios
+                .post(`${TRANSLATE_URL}?key=${API_KEY}`, {
+                  q: text,
+                  source: languageCode[languageCode],
+                  target: "en",
+                  format: "text",
+                })
+                .then((res) => {
+                  console.log(res.data);
+                  setOutputText(res.data.data.translations[0].translatedText);
+                });
+            })
+            .catch(() => {
+              setTranscription("Recording failed");
+              setRecording(false);
             });
         } catch {
           console.log("error");
@@ -84,11 +126,10 @@ export const Recording = () => {
 
   return (
     <>
-      <p>{transcription}</p>
       {recording ? (
         <button onClick={stopRecording} className="stop-btn">
           <div>
-            <RiRectangleFill />
+            <FaStop />
           </div>
         </button>
       ) : (

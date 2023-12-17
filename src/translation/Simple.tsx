@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Recording } from "../components/Recording";
 
 export const Simple = () => {
@@ -14,24 +14,33 @@ export const Simple = () => {
     "magsalita ng iyong wika",
   ];
   const placeholder = placeholders.join(`\n`);
-  const [outputText, setOutputText] = useState(placeholder);
+  const [transcription, setTranscription] = useState(placeholder);
+  const [outputText, setOutputText] = useState("");
+  const [language, setLanguage] = useState("");
+
+  useEffect(() => {}, [transcription]);
 
   return (
     <section id="simple">
       <div className="select-box">
         <select>
-          <option key="default">言語を選択</option>
+          <option key="default">{language}</option>
           {Object.entries(languageList).map(([key, value]) => (
             <option key={key}>{`${key}(${value})`}</option>
           ))}
         </select>
       </div>
       <div className="textarea">
-        <p className={outputText === placeholder ? "placeholder" : ""}>
-          <span>{outputText}</span>
-        </p>
+        <div className={transcription === placeholder ? "placeholder" : ""}>
+          <p>{transcription}</p>
+          {outputText && <p>{outputText}</p>}
+        </div>
       </div>
-      <Recording />
+      <Recording
+        setTranscription={setTranscription}
+        setLanguage={setLanguage}
+        setOutputText={setOutputText}
+      />
     </section>
   );
 };

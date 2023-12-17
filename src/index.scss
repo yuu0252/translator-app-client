@@ -43,21 +43,29 @@
     background-color: #fff;
     border-radius: 15px;
     padding: 30px;
-    p {
+    & > div {
       display: flex;
       height: 100%;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
+      row-gap: 15px;
+      flex-wrap: wrap;
       font-size: 20px;
       font-weight: bold;
       line-height: 1.75em;
       white-space: pre-wrap;
       border: dashed 3px #555;
       border-radius: 15px;
+      padding: 15px;
 
       &.placeholder {
         color: #777;
         text-align: center;
+      }
+
+      & > p {
+        width: auto;
       }
     }
   }
