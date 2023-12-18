@@ -4,7 +4,7 @@ import { selectLanguage, setLanguage } from '../languageSlice';
 import { languageCodeList } from '../constants';
 import { FaMicrophone } from 'react-icons/fa6';
 import { FaStop } from 'react-icons/fa';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 export const Recording = ({
   setTranscription,
@@ -17,7 +17,6 @@ export const Recording = ({
   const stopBtn = useRef<HTMLButtonElement>(null);
   const language = useSelector(selectLanguage);
   const dispatch = useDispatch();
-  const [isRecording, setIsRecording] = useState(false);
 
   let audioSampleRate: number;
   let audioContext: AudioContext | null;
