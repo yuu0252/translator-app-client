@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Simple } from './translation/Simple';
+import { Calculate } from './Calculate';
 import { SimpleRecorder } from './components/SimpleRecorder';
 
 export const Router = () => {
