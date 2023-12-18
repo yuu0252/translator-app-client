@@ -116,7 +116,7 @@ export const Recording = ({
   }, [mediaBlobUrl]);
   return (
     <>
-      {status === 'stopped' || status === 'idle' ? (
+      {status === 'stopped' ? (
         <button onClick={startRecording} className="start-btn">
           <div>
             <FaMicrophone />

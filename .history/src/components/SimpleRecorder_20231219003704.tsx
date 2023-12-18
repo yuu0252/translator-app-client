@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import { FaMicrophone } from 'react-icons/fa6';
 import { FaStop } from 'react-icons/fa';
@@ -25,15 +25,13 @@ const audioBlobToBase64 = (blob: Blob) => {
   });
 };
 
-export const Recording = ({
+export const SimpleRecorder = ({
   setTranscription,
   setOutputText,
 }: {
   setTranscription: React.Dispatch<React.SetStateAction<string>>;
   setOutputText: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const language = useSelector(selectLanguage);
-  const dispatch = useDispatch();
   const {
     status,
     startRecording,
@@ -44,7 +42,6 @@ export const Recording = ({
   } = useReactMediaRecorder({ audio: true });
 
   useEffect(() => {
-    if (!mediaBlobUrl) return;
     (async () => {
       const blob = await fetch(mediaBlobUrl).then((res) => res.blob());
       const base64audio = await audioBlobToBase64(blob);
@@ -89,17 +86,12 @@ export const Recording = ({
           console.log(source + ':' + target);
 
           axios
-            .post(
-              `${import.meta.env.VITE_TRANSLATE_URL}?key=${
-                import.meta.env.VITE_GOOGLE_API_KEY
-              }`,
-              {
-                q: text,
-                source: source,
-                target: target,
-                format: 'text',
-              }
-            )
+            .post(`${TRANSLATE_URL}?key=${API_KEY}`, {
+              q: text,
+              source: source,
+              target: target,
+              format: 'text',
+            })
             .then((res) => {
               setOutputText(res.data.data.translations[0].translatedText);
             })
@@ -111,24 +103,24 @@ export const Recording = ({
         .catch((err) => {
           console.log(err);
           setTranscription('Recording failed');
+          setRecording(false);
         });
     })();
   }, [mediaBlobUrl]);
   return (
     <>
-      {status === 'stopped' || status === 'idle' ? (
-        <button onClick={startRecording} className="start-btn">
-          <div>
-            <FaMicrophone />
-          </div>
-        </button>
-      ) : (
-        <button onClick={stopRecording} className="stop-btn">
-          <div>
-            <FaStop />
-          </div>
-        </button>
-      )}
+      <p>{}</p>
+      <button onClick={stopRecording} className="stop-btn">
+        <div>
+          <FaStop />
+        </div>
+      </button>
+
+      <button onClick={startRecording} className="start-btn">
+        <div>
+          <FaMicrophone />
+        </div>
+      </button>
     </>
   );
 };

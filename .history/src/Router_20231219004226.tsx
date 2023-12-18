@@ -6,6 +6,8 @@ export const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Simple />} />
+
+        <Route path="/recorder" element={<SimpleRecorder />} />
       </Routes>
     </BrowserRouter>
   );

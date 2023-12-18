@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import { FaMicrophone } from 'react-icons/fa6';
 import { FaStop } from 'react-icons/fa';
@@ -25,7 +25,7 @@ const audioBlobToBase64 = (blob: Blob) => {
   });
 };
 
-export const Recording = ({
+export const SimpleRecorder = ({
   setTranscription,
   setOutputText,
 }: {
@@ -116,7 +116,7 @@ export const Recording = ({
   }, [mediaBlobUrl]);
   return (
     <>
-      {status === 'stopped' || status === 'idle' ? (
+      {status === 'stopped' ? (
         <button onClick={startRecording} className="start-btn">
           <div>
             <FaMicrophone />

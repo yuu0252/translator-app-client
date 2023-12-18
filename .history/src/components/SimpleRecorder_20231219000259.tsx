@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import { FaMicrophone } from 'react-icons/fa6';
 import { FaStop } from 'react-icons/fa';
@@ -25,15 +25,13 @@ const audioBlobToBase64 = (blob: Blob) => {
   });
 };
 
-export const Recording = ({
+export const SimpleRecorder = ({
   setTranscription,
   setOutputText,
 }: {
   setTranscription: React.Dispatch<React.SetStateAction<string>>;
   setOutputText: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const language = useSelector(selectLanguage);
-  const dispatch = useDispatch();
   const {
     status,
     startRecording,
@@ -44,7 +42,6 @@ export const Recording = ({
   } = useReactMediaRecorder({ audio: true });
 
   useEffect(() => {
-    if (!mediaBlobUrl) return;
     (async () => {
       const blob = await fetch(mediaBlobUrl).then((res) => res.blob());
       const base64audio = await audioBlobToBase64(blob);
@@ -58,7 +55,7 @@ export const Recording = ({
               encoding: 'WEBM_OPUS',
               sampleRateHertz: 48000,
               languageCode: 'ja-JP',
-              alternativeLanguageCodes: Object.keys(languageCodeList),
+              // alternativeLanguageCodes: Object.keys(languageCodeList),
             },
             audio: {
               content: base64audio,
@@ -66,66 +63,22 @@ export const Recording = ({
           }
         )
         .then((res) => {
-          const result = res.data.results[0];
-          const languageCode = result.languageCode;
-          const text = result.alternatives[0].transcript;
-
-          if (languageCode === 'ja-jp' && language.language === 'none') {
-            alert(
-              '相手に先にしゃべってもらうか(自動検出)、言語を選んでください(右上)'
-            );
-            return;
-          }
-
-          dispatch(setLanguage(languageCode));
-          setTranscription(text);
-
-          const source =
-            languageCode === 'ja-jp'
-              ? 'ja'
-              : languageCodeList[languageCode].code;
-          const target = languageCode === 'ja-jp' ? language.language : 'ja';
-
-          console.log(source + ':' + target);
-
-          axios
-            .post(
-              `${import.meta.env.VITE_TRANSLATE_URL}?key=${
-                import.meta.env.VITE_GOOGLE_API_KEY
-              }`,
-              {
-                q: text,
-                source: source,
-                target: target,
-                format: 'text',
-              }
-            )
-            .then((res) => {
-              setOutputText(res.data.data.translations[0].translatedText);
-            })
-            .catch((err) => {
-              console.log(err);
-              setOutputText('Translating failed');
-            });
-        })
-        .catch((err) => {
-          console.log(err);
-          setTranscription('Recording failed');
+          console.log(res.data.results[0]);
         });
     })();
   }, [mediaBlobUrl]);
   return (
     <>
-      {status === 'stopped' || status === 'idle' ? (
-        <button onClick={startRecording} className="start-btn">
-          <div>
-            <FaMicrophone />
-          </div>
-        </button>
-      ) : (
+      {status ? (
         <button onClick={stopRecording} className="stop-btn">
           <div>
             <FaStop />
+          </div>
+        </button>
+      ) : (
+        <button onClick={startRecording} className="start-btn">
+          <div>
+            <FaMicrophone />
           </div>
         </button>
       )}
