@@ -39,7 +39,7 @@ export const RecordingIos = ({
   }
 
   // 解析開始
-  function startRecording() {
+  function startRecording(evt_stream: any) {
     // 画面アクセス時にマイクを取得
     console.log('startRecording');
     recordingFlg = true;

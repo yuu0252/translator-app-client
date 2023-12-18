@@ -17,6 +17,8 @@ export const RecordingIos = ({
   // ///////////////////////////////////////////
 
   // 変数定義
+  let localMediaStream = null;
+  // let localScriptProcessor = null;
   let audioSampleRate: number;
   let audioContext: AudioContext | null;
   let bufferSize = 1024;
@@ -39,12 +41,13 @@ export const RecordingIos = ({
   }
 
   // 解析開始
-  function startRecording() {
+  function startRecording(evt_stream: any) {
     // 画面アクセス時にマイクを取得
     console.log('startRecording');
     recordingFlg = true;
 
     // 取得されている音声ストリームの録音を開始
+    localMediaStream = evt_stream;
 
     if (
       !navigator ||
@@ -60,6 +63,7 @@ export const RecordingIos = ({
     audioSampleRate = audioContext.sampleRate;
 
     let scriptProcessor = audioContext.createScriptProcessor(bufferSize, 1, 1);
+    localScriptProcessor = scriptProcessor;
 
     if (audioContext.createMediaStreamDestination) {
       destinationNode = audioContext.createMediaStreamDestination();
@@ -176,12 +180,17 @@ export const RecordingIos = ({
         });
     };
 
+    let myURL = window.URL || window.webkitURL;
+    let url = myURL.createObjectURL(blob);
+
     // console.log('wavefile');
     // console.log(url);
 
     // audioタグに録音データをセット
 
     // audioDataをクリア
+    localMediaStream = null;
+    localScriptProcessor = null;
     audioContext && audioContext.close();
     audioContext = null;
     audioData = []; // 録音データ

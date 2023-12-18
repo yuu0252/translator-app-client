@@ -39,12 +39,13 @@ export const RecordingIos = ({
   }
 
   // 解析開始
-  function startRecording() {
+  function startRecording(evt_stream: any) {
     // 画面アクセス時にマイクを取得
     console.log('startRecording');
     recordingFlg = true;
 
     // 取得されている音声ストリームの録音を開始
+    localMediaStream = evt_stream;
 
     if (
       !navigator ||
@@ -182,6 +183,7 @@ export const RecordingIos = ({
     // audioタグに録音データをセット
 
     // audioDataをクリア
+    localMediaStream = null;
     audioContext && audioContext.close();
     audioContext = null;
     audioData = []; // 録音データ
