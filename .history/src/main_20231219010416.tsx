@@ -7,6 +7,7 @@ import store from './store.ts';
 
 {
   () => {
+    // CSRでscriptを実行するために行う
     if (!window.MediaRecorder) {
       document.write(
         decodeURI('%3Cscript defer src="/polyfill.ts">%3C/script>')

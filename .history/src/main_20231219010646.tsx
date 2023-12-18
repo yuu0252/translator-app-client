@@ -5,15 +5,11 @@ import './index.scss';
 import { Provider } from 'react-redux';
 import store from './store.ts';
 
-{
-  () => {
-    if (!window.MediaRecorder) {
-      document.write(
-        decodeURI('%3Cscript defer src="/polyfill.ts">%3C/script>')
-      );
-    }
-  };
-}
++     if (!window.MediaRecorder) {
+  +       document.write(
+  +         decodeURI('%3Cscript defer src="/polyfill.js">%3C/script>')
+  +       )
+  +     }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
