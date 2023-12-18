@@ -30,6 +30,7 @@ body {
 }
 #header .select-box select {
   height: 100%;
+  color: #333;
   background-color: #fff;
   padding: 0 30px;
   border-radius: 5px;
@@ -46,7 +47,7 @@ body {
   width: 100%;
   height: calc(100vh - 60px);
   height: calc(100dvh - 60px);
-  padding: 30px 30px 15px;
+  padding: 30px;
 }
 #simple .textarea {
   width: 100%;
@@ -96,6 +97,9 @@ body {
 #simple button > div svg {
   width: 100%;
   height: auto;
+}
+#simple .start-btn svg {
+  color: #333;
 }
 #simple .stop-btn svg {
   color: #ff0000;
