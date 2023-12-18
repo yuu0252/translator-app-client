@@ -7,6 +7,7 @@ export const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Simple />} />
+        <Route path="/ios" element={<RecordingIos />} />
       </Routes>
     </BrowserRouter>
   );
