@@ -18,8 +18,9 @@ export const resizeImage = async (
     const { naturalHeight: beforeHeight, naturalWidth: beforeWidth } = image;
 
     const afterWidth: number = width;
+
     const afterHeight: number = Math.floor(
-      beforeHeight * (afterWidth / beforeHeight)
+      beforeHeight * (afterWidth / beforeWidth)
     );
 
     context.canvas.width = afterWidth;

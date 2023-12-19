@@ -1,7 +1,13 @@
 import axios from 'axios';
+import { resizeImage } from '../functions/resizeImage';
+import { useRef, useState } from 'react';
+import { Header } from '../components/Header';
 
 export const ImageTranslation = () => {
-  const fetch = (base64: string) => {
+  const [imageUrl, setImageUrl] = useState('');
+  const imageArea = useRef<HTMLDivElement>(null);
+
+  const fetchApi = (base64: string) => {
     if (!base64) return;
 
     const data = {
@@ -33,27 +39,45 @@ export const ImageTranslation = () => {
       });
   };
 
-  const onChangeImage = (e: any) => {
+  const onChangeImage = async (e: any) => {
     const file = e.target.files[0];
 
     if (!file) {
       return;
     }
 
+    const blobUrl = window.URL.createObjectURL(file);
+
+    const blob = await fetch(blobUrl).then((res) => res.blob());
+
+    const resizedFile = await resizeImage(
+      blob,
+      imageArea.current ? imageArea.current.clientWidth : 500
+    );
+    if (resizedFile) {
+      setImageUrl(window.URL.createObjectURL(resizedFile));
+    }
+
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    resizedFile && reader.readAsDataURL(resizedFile);
     reader.onload = () => {
       const result = reader.result as string;
       const base64 = result.replace('data:', '').replace(/^.+,/, '');
-      console.log(base64);
-      fetch(base64);
+      fetchApi(base64);
     };
   };
 
   return (
     <>
-      <input type="file" id="file" onChange={onChangeImage} />
-      <img src="" />
+      <Header />
+      <section id="image" className="container">
+        <div className="content-area">
+          <div ref={imageArea}>
+            {imageUrl ? <img src={imageUrl} /> : 'ファイルを選択してください'}
+          </div>
+        </div>
+        <input type="file" id="file" onChange={onChangeImage} />
+      </section>
     </>
   );
 };

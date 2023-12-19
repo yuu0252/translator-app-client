@@ -20,8 +20,8 @@ export const Simple = () => {
   return (
     <>
       <Header />
-      <section id="simple">
-        <div className="textarea">
+      <section id="simple" className="container">
+        <div className="content-area">
           <div className={transcription === placeholder ? 'placeholder' : ''}>
             <p>{transcription}</p>
             {outputText && <p>{outputText}</p>}

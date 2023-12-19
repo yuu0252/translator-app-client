@@ -2,6 +2,41 @@ body {
   background-color: #555;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
+  padding: 30px;
+}
+
+.content-area {
+  width: 100%;
+  height: 80%;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 30px;
+}
+.content-area > div {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  row-gap: 15px;
+  flex-wrap: wrap;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.75em;
+  white-space: pre-wrap;
+  border: dashed 3px #555;
+  border-radius: 15px;
+  padding: 15px;
+}
+
 #header {
   width: 100%;
   height: 60px;
@@ -39,47 +74,15 @@ body {
   text-align: center;
 }
 
-#simple {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: calc(100vh - 60px);
-  height: calc(100dvh - 60px);
-  padding: 30px;
-}
-#simple .textarea {
-  width: 100%;
-  height: 80%;
-  background-color: #fff;
-  border-radius: 15px;
-  padding: 30px;
-}
-#simple .textarea > div {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  row-gap: 15px;
-  flex-wrap: wrap;
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 1.75em;
-  white-space: pre-wrap;
-  border: dashed 3px #555;
-  border-radius: 15px;
-  padding: 15px;
-}
-#simple .textarea > div.placeholder {
+#simple .placeholder {
   color: #777;
   text-align: center;
 }
-#simple .textarea > div > p {
+#simple p {
   text-align: center;
 }
-#simple button {
+
+button {
   width: 75px;
   height: 75px;
   background-color: hsl(0deg, 0%, 100%);
@@ -87,26 +90,35 @@ body {
   border-radius: 100%;
   cursor: pointer;
 }
-#simple button.none {
+button.none {
   display: none;
 }
-#simple button > div {
+button > div {
   width: 100%;
   height: 100%;
   border: 3px solid #555;
   border-radius: 100%;
   padding: 10px;
 }
-#simple button > div svg {
+button > div svg {
   width: 100%;
   height: auto;
 }
-#simple .start-btn svg {
+button.start-btn svg {
   color: #333;
 }
-#simple .stop-btn {
+button.stop-btn {
   display: none;
 }
-#simple .stop-btn svg {
+button.stop-btn svg {
   color: #ff0000;
+}
+
+#image .content-area > div {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 0;
+}
+#image .content-area > div::-webkit-scrollbar {
+  display: none;
 }
