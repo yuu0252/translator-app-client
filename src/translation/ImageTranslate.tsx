@@ -5,12 +5,16 @@ export const ImageTranslation = () => {
     if (!base64) return;
 
     const data = {
-      image: {
-        content: base64,
-      },
-      features: [
+      requests: [
         {
-          type: 'TEXT_DETECTION',
+          image: {
+            content: base64,
+          },
+          features: [
+            {
+              type: 'TEXT_DETECTION',
+            },
+          ],
         },
       ],
     };
