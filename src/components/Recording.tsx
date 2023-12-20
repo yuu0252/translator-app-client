@@ -16,6 +16,7 @@ export const Recording = ({
   const startBtn = useRef<HTMLButtonElement>(null);
   const stopBtn = useRef<HTMLButtonElement>(null);
   const language = useSelector(selectLanguage);
+
   const dispatch = useDispatch();
 
   let audioSampleRate: number;
@@ -98,6 +99,13 @@ export const Recording = ({
     reader.onloadend = function () {
       const base64data = reader.result as string;
 
+      const altLanguageCodes =
+        language.language === 'none'
+          ? languageCodeList.map((language) => language.code)
+          : [language.language];
+
+      console.log(altLanguageCodes);
+
       axios
         .post(
           `${import.meta.env.VITE_SPEECH_TO_TEXT_URL}?key=${
@@ -106,9 +114,7 @@ export const Recording = ({
           {
             config: {
               languageCode: 'ja-JP',
-              alternativeLanguageCodes: languageCodeList.map(
-                (language) => language.code
-              ),
+              alternativeLanguageCodes: altLanguageCodes,
             },
             audio: {
               content: base64data.split(',')[1],
@@ -159,12 +165,12 @@ export const Recording = ({
             })
             .catch((err) => {
               console.log(err);
-              setOutputText('Translating failed');
+              setOutputText('翻訳に失敗しました');
             });
         })
         .catch((err) => {
           console.log(err);
-          setTranscription('Recording failed');
+          setTranscription('音声認識に失敗しました');
         });
     };
 
