@@ -106,7 +106,9 @@ export const Recording = ({
           {
             config: {
               languageCode: 'ja-JP',
-              alternativeLanguageCodes: Object.keys(languageCodeList),
+              alternativeLanguageCodes: languageCodeList.map(
+                (language) => language.code
+              ),
             },
             audio: {
               content: base64data.split(',')[1],
@@ -126,16 +128,17 @@ export const Recording = ({
           }
 
           languageCode === 'ja-jp' || dispatch(setLanguage(languageCode));
+          console.log(languageCode);
           setTranscription(text);
+          const sourceCode = languageCodeList.find(
+            (e) => e.code === languageCode
+          );
+          const targetCode = languageCodeList.find(
+            (e) => e.code === language.language
+          );
 
-          const source =
-            languageCode === 'ja-jp'
-              ? 'ja'
-              : languageCodeList[languageCode].code;
-          const target =
-            languageCode === 'ja-jp'
-              ? languageCodeList[language.language].code
-              : 'ja';
+          const source = languageCode === 'ja-jp' ? 'ja' : sourceCode?.query;
+          const target = languageCode === 'ja-jp' ? targetCode?.query : 'ja';
 
           console.log(source + ':' + target);
 

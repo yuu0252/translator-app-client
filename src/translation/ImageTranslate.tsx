@@ -72,11 +72,23 @@ export const ImageTranslation = () => {
       <Header />
       <section id="image" className="container">
         <div className="content-area">
-          <div ref={imageArea}>
-            {imageUrl ? <img src={imageUrl} /> : 'ファイルを選択してください'}
+          <div className="image-area">
+            {imageUrl ? (
+              <>
+                <img src={imageUrl} />
+                <button>翻訳する</button>
+              </>
+            ) : (
+              'ファイルを選択してください'
+            )}
           </div>
         </div>
-        <input type="file" id="file" onChange={onChangeImage} />
+        <div className="input-area">
+          <label>
+            <input type="file" id="file" onChange={onChangeImage} />
+            ファイルを選択
+          </label>
+        </div>
       </section>
     </>
   );

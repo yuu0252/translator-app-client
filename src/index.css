@@ -28,7 +28,7 @@ body {
   flex-direction: column;
   row-gap: 15px;
   flex-wrap: wrap;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: bold;
   line-height: 1.75em;
   white-space: pre-wrap;
@@ -78,6 +78,12 @@ body {
   color: #777;
   text-align: center;
 }
+#simple .placeholder > p {
+  overflow-y: scroll;
+}
+#simple .placeholder > p::-webkit-scrollbar {
+  display: none;
+}
 #simple p {
   text-align: center;
 }
@@ -114,11 +120,35 @@ button.stop-btn svg {
   color: #ff0000;
 }
 
-#image .content-area > div {
-  overflow-x: hidden;
-  overflow-y: scroll;
-  padding: 0;
+#image .image-area > img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
-#image .content-area > div::-webkit-scrollbar {
+#image .image-area > button {
+  width: auto;
+  height: auto;
+  position: absolute;
+  border-radius: 5px;
+  white-space: nowrap;
+  color: #fff;
+  background-image: linear-gradient(90deg, rgb(103, 126, 250), rgb(142, 84, 219));
+  border: #333 3px solid;
+  box-shadow: #fff 0 0 5px 5px;
+}
+#image .input-area {
+  padding: 15px;
+}
+#image .input-area label {
+  padding: 10px 40px;
+  color: #ffffff;
+  background-color: #384878;
+  cursor: pointer;
+  background-image: linear-gradient(90deg, rgb(103, 126, 250), rgb(142, 84, 219));
+  border-radius: 10px;
+  border: #fff solid 3px;
+}
+#image .input-area input[type=file] {
   display: none;
 }

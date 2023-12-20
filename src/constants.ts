@@ -1,21 +1,20 @@
 type obj = {
-  [key: string]: {
-    code: string;
-    name: string;
-  };
+  code: string;
+  query: string;
+  name: string;
 };
 
-export const languageCodeList: obj = {
-  'en-us': { code: 'en', name: 'English(英語)' },
-  'yue-hant-hk': { code: 'zh-tw', name: '繁体字(香港)' },
-  'cmn-hant-tw': { code: 'zh-tw', name: '繁体字(台湾)' },
-  'cmn-hans-cn': { code: 'zh-cn', name: '简体字(中国)' },
-  'fil-ph': { code: 'fil', name: 'Pilipinas(フィリピン)' },
-  'id-id': { code: 'id', name: 'Indonesia(インドネシア)' },
-  'ms-my': { code: 'ms', name: 'Melayu(マレーシア)' },
-  'ko-kr': { code: 'ko', name: '한국(韓国)' },
-  'vi-vn': { code: 'vi', name: 'Việt Nam(ベトナム)' },
-  'hi-in': { code: 'hi', name: 'हिंदी(インド)' },
-  'ru-ru': { code: 'ru', name: 'Россия(ロシア)' },
-  'ar-ae': { code: 'ar', name: 'عربي(アラビア)' },
-};
+export const languageCodeList: Array<obj> = [
+  { code: 'en-us', query: 'en', name: 'English(英語)' },
+  { code: 'yue-hant-hk', query: 'zh-tw', name: '繁体字(香港)' },
+  { code: 'cmn-hant-tw', query: 'zh-tw', name: '繁体字(台湾)' },
+  { code: 'cmn-hans-cn', query: 'zh-cn', name: '简体字(中国)' },
+  { code: 'fil-ph', query: 'fil', name: 'Pilipinas(フィリピン)' },
+  { code: 'id-id', query: 'id', name: 'Indonesia(インドネシア)' },
+  { code: 'ms-my', query: 'ms', name: 'Melayu(マレーシア)' },
+  { code: 'ko-kr', query: 'ko', name: '한국(韓国)' },
+  { code: 'vi-vn', query: 'vi', name: 'Việt Nam(ベトナム)' },
+  { code: 'hi-in', query: 'hi', name: 'हिंदी(インド)' },
+  { code: 'ru-ru', query: 'ru', name: 'Россия(ロシア)' },
+  { code: 'ar-ae', query: 'ar', name: 'عربي(アラビア)' },
+];
