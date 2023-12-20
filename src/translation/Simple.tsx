@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { Header } from '../components/Header';
 import { Recording } from '../components/Recording';
+import { languageCodeList } from '../constants';
 
 export const Simple = () => {
+  const placeholderList = languageCodeList.map(
+    (language) => language.placeholder
+  );
   const placeholders = [
     '相手に先に喋ってもらうか(自動検出)、',
     '言語を選んでください(右上)',
-    'Speak your language!',
-    '说你的语言',
-    '說你的語言',
-    'พูดภาษาของคุณ',
-    'nói ngôn ngữ của bạn',
-    'magsalita ng iyong wika',
+    ...placeholderList.filter((str) => str !== undefined),
   ];
   const placeholder = placeholders.join(`\n`);
   const [transcription, setTranscription] = useState(placeholder);
