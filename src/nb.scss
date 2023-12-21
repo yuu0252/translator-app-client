@@ -1,0 +1,111 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: calc(100vh - 100px);
+  height: calc(100dvh - 100px);
+  padding: 30px;
+}
+
+#header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100px;
+  padding: 0 30px;
+
+  & .header-link {
+    height: 30px;
+    display: flex;
+    column-gap: 5px;
+    align-items: center;
+    & > a {
+      background-color: #fff;
+      padding: 5px 15px;
+      border-radius: 0 0 5px 5px;
+      border: 3px solid #333;
+      text-decoration: none;
+      color: #555;
+    }
+  }
+  & .select-box {
+    width: fit-content;
+    height: 50px;
+    position: relative;
+    margin: 0 0 0 auto;
+    &::before {
+      content: '';
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 7px 7px 0 7px;
+      border-color: #555 transparent transparent transparent;
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    select {
+      height: 100%;
+      color: #333;
+      background-color: #fff;
+      padding: 0 30px;
+      border-radius: 5px;
+
+      & > option {
+        text-align: center;
+      }
+    }
+  }
+}
+
+#calculator {
+  & .content-area {
+    height: 60%;
+  }
+
+  & .input-area {
+    max-width: 500px;
+    width: 100%;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  & .btn-area {
+    margin-bottom: 15px;
+    display: flex;
+    column-gap: 15px;
+  }
+
+  & .user-input {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  & button {
+    width: 90px;
+    height: auto;
+    border-radius: 5px;
+    border: 2px solid #333;
+    font-weight: bold;
+    white-space: nowrap;
+
+    &.active {
+      color: #fff;
+      background-color: #3c87ff;
+    }
+  }
+
+  & input {
+    border: #333 2px solid;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+  }
+}
