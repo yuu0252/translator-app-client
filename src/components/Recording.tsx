@@ -1,18 +1,18 @@
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLanguage, setLanguage } from '../languageSlice';
+
+import { setTranscription, setOutputText } from '../reducer/translateSlice';
 import { languageCodeList } from '../constants';
 import { FaMicrophone } from 'react-icons/fa6';
 import { FaStop } from 'react-icons/fa';
 import { useRef } from 'react';
+import {
+  selectLanguage,
+  setIsJapanese,
+  setLanguage,
+} from '../reducer/languageSlice';
 
-export const Recording = ({
-  setTranscription,
-  setOutputText,
-}: {
-  setTranscription: React.Dispatch<React.SetStateAction<string>>;
-  setOutputText: React.Dispatch<React.SetStateAction<string>>;
-}) => {
+export const Recording = () => {
   const startBtn = useRef<HTMLButtonElement>(null);
   const stopBtn = useRef<HTMLButtonElement>(null);
   const language = useSelector(selectLanguage);
@@ -104,8 +104,6 @@ export const Recording = ({
           ? languageCodeList.map((language) => language.code)
           : [language.language];
 
-      console.log(altLanguageCodes);
-
       axios
         .post(
           `${import.meta.env.VITE_SPEECH_TO_TEXT_URL}?key=${
@@ -133,9 +131,10 @@ export const Recording = ({
             return;
           }
 
+          dispatch(setIsJapanese(languageCode === 'ja-jp' ? true : false));
+
           languageCode === 'ja-jp' || dispatch(setLanguage(languageCode));
-          console.log(languageCode);
-          setTranscription(text);
+          dispatch(setTranscription(text));
           const sourceCode = languageCodeList.find(
             (e) => e.code === languageCode
           );
@@ -161,16 +160,18 @@ export const Recording = ({
               }
             )
             .then((res) => {
-              setOutputText(res.data.data.translations[0].translatedText);
+              dispatch(
+                setOutputText(res.data.data.translations[0].translatedText)
+              );
             })
             .catch((err) => {
               console.log(err);
-              setOutputText('翻訳に失敗しました');
+              dispatch(setOutputText('翻訳に失敗しました'));
             });
         })
         .catch((err) => {
           console.log(err);
-          setTranscription('音声認識に失敗しました');
+          dispatch(setTranscription('音声認識に失敗しました'));
         });
     };
 

@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { languageCodeList } from '../constants';
-import { selectLanguage, setLanguage } from '../languageSlice';
+import { selectLanguage, setLanguage } from '../reducer/languageSlice';
 import { useDispatch } from 'react-redux';
 
 export const Header = () => {

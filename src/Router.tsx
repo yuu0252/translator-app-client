@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Simple } from './translation/Simple';
-import { ImageTranslation } from './translation/ImageTranslate';
+import { Simple } from './translate/Simple';
+import { ImageTranslation } from './translate/ImageTranslate';
 
 export const Router = () => {
   return (

@@ -74,14 +74,15 @@ body {
   text-align: center;
 }
 
-#simple .placeholder {
-  color: #777;
+#simple textarea {
   text-align: center;
-}
-#simple .placeholder > p {
   overflow-y: scroll;
 }
-#simple .placeholder > p::-webkit-scrollbar {
+#simple textarea.placeholder {
+  height: 100%;
+  color: #777;
+}
+#simple textarea::-webkit-scrollbar {
   display: none;
 }
 #simple p {
