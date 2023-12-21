@@ -25,12 +25,17 @@ export const Simple = () => {
   const customStyles = {
     content: {
       width: '80%',
+      height: '50%',
       top: '50%',
       left: '50%',
       right: 'auto',
       bottom: 'auto',
       marginRight: '-50%',
+      borderRadius: '10px',
       transform: 'translate(-50%, -50%)',
+    },
+    overlay: {
+      backgroundColor: 'rgba(0,0,0,0.5)',
     },
   };
 
@@ -90,9 +95,12 @@ export const Simple = () => {
           <button className="close-btn" onClick={() => setModalIsOpen(false)}>
             <AiFillCloseSquare />
           </button>
-          <h2>入力内容を編集</h2>
-          <textarea defaultValue={transcription} ref={textareaElement} />
+          <div>
+            <h2>入力内容を編集</h2>
+            <textarea defaultValue={transcription} ref={textareaElement} />
+          </div>
           <button
+            className="submit-btn"
             onClick={() => onClickModalSubmit(textareaElement.current?.value)}
           >
             決定
