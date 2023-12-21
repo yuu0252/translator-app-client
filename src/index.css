@@ -37,6 +37,28 @@ body {
   padding: 15px;
 }
 
+.ReactModal__Content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ReactModal__Content > textarea {
+  resize: none;
+  width: 100%;
+  border: 1px solid #777;
+  padding: 15px;
+}
+.ReactModal__Content .close-btn {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 0;
+  margin: 0 0 0 auto;
+}
+.ReactModal__Content .close-btn > svg {
+  color: #ff3c3c;
+}
+
 #header {
   width: 100%;
   height: 60px;
@@ -74,16 +96,30 @@ body {
   text-align: center;
 }
 
+#simple .content-area > div {
+  position: relative;
+}
+#simple .content-area .placeholder {
+  height: 100%;
+  color: #777;
+  overflow-y: scroll;
+}
+#simple .content-area .placeholder::-webkit-scrollbar {
+  display: none;
+}
 #simple textarea {
   text-align: center;
-  overflow-y: scroll;
+  overflow: scroll;
+  resize: none;
+  width: 100%;
+  height: 50%;
+}
+#simple textarea::-webkit-scrollbar {
+  display: none;
 }
 #simple textarea.placeholder {
   height: 100%;
   color: #777;
-}
-#simple textarea::-webkit-scrollbar {
-  display: none;
 }
 #simple p {
   text-align: center;
@@ -95,10 +131,15 @@ button {
   background-color: hsl(0deg, 0%, 100%);
   padding: 5px;
   border-radius: 100%;
+  color: inherit;
   cursor: pointer;
 }
 button.none {
   display: none;
+}
+button svg {
+  width: 100%;
+  height: auto;
 }
 button > div {
   width: 100%;
@@ -119,6 +160,19 @@ button.stop-btn {
 }
 button.stop-btn svg {
   color: #ff0000;
+}
+button.speaker-btn {
+  position: absolute;
+  bottom: 10%;
+  width: 50px;
+  height: 50px;
+  padding: 10px;
+  background-color: #333;
+}
+button.speaker-btn svg {
+  width: 100%;
+  height: 100%;
+  color: #fff;
 }
 
 #image .image-area > img {

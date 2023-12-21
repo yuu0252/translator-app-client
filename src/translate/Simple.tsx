@@ -10,10 +10,30 @@ import {
 import { translateText } from '../functions/translate/translateText';
 import { selectLanguage } from '../reducer/languageSlice';
 
+import Modal from 'react-modal';
+import { useRef, useState } from 'react';
+import { AiFillCloseSquare } from 'react-icons/ai';
+import { PlayAudio } from '../components/PlayAudio';
+
 export const Simple = () => {
   const dispatch = useDispatch();
   const translate = useSelector(selectTranslate);
   const language = useSelector(selectLanguage);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const textareaElement = useRef<HTMLTextAreaElement>(null);
+  const customStyles = {
+    content: {
+      width: '80%',
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
+
   const transcription = translate.transcription;
   const outputText = translate.outputText;
 
@@ -27,12 +47,12 @@ export const Simple = () => {
   ];
   const placeholder = placeholders.join(`\n`);
 
-  const onChangeTextarea = async (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    dispatch(setTranscription(e.target.value));
+  const onClickModalSubmit = async (text?: string) => {
+    if (!text) return;
+    setModalIsOpen(false);
+    dispatch(setTranscription(text));
     const translatedText = await translateText(
-      e.target.value,
+      text,
       language.language,
       language.isJapanese
     );
@@ -45,16 +65,39 @@ export const Simple = () => {
       <section id="simple" className="container">
         <div className="content-area">
           <div>
-            <textarea
-              value={transcription}
-              onChange={onChangeTextarea}
-              placeholder={placeholder}
+            <p
+              onClick={() => setModalIsOpen(true)}
               className={transcription ? '' : 'placeholder'}
-            />
-            {outputText && <p>{outputText}</p>}
+            >
+              {transcription ? transcription : placeholder}
+            </p>
+            {outputText && (
+              <>
+                <p>{outputText}</p>
+                <PlayAudio text={outputText} language={language} />
+              </>
+            )}
           </div>
         </div>
         <Recording />
+        <Modal
+          isOpen={modalIsOpen}
+          style={customStyles}
+          onRequestClose={() => setModalIsOpen(false)}
+          contentLabel="Modal"
+          ariaHideApp={false}
+        >
+          <button className="close-btn" onClick={() => setModalIsOpen(false)}>
+            <AiFillCloseSquare />
+          </button>
+          <h2>入力内容を編集</h2>
+          <textarea defaultValue={transcription} ref={textareaElement} />
+          <button
+            onClick={() => onClickModalSubmit(textareaElement.current?.value)}
+          >
+            決定
+          </button>
+        </Modal>
       </section>
     </>
   );
