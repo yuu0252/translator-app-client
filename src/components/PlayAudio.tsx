@@ -1,18 +1,25 @@
 import { HiSpeakerWave } from 'react-icons/hi2';
 import { textToSpeech } from '../functions/audio/textToSpeech';
+import { languageCodeList } from '../constants';
 
 type Props = {
   text: string;
   language: {
-    languageCode: string;
+    language: string;
     isJapanese: boolean;
   };
 };
 
 export const PlayAudio = ({ text, language }: Props) => {
-  const languageCode = language.isJapanese ? language.languageCode : 'ja';
-  const speaker = 
+  console.log(language);
+  const speak = languageCodeList.find(
+    (e) => e.code === language.language
+  )?.speak;
+  const languageCode = language.isJapanese ? speak?.code : 'ja';
+  const speaker = language.isJapanese ? speak?.speaker : 'ja-JP-Neural2-C';
   const onClickPlay = () => {
+    console.log(languageCode + ':' + speaker);
+    if (!languageCode || !speaker) return;
     textToSpeech(text, languageCode, speaker);
   };
 
