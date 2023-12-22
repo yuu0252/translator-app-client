@@ -50,6 +50,7 @@ export const textToSpeech = async (
           audio_buffer_node = audio_ctx.createBufferSource();
           audio_buffer_node.buffer = audio_buffer;
           audio_buffer_node.connect(audio_ctx.destination);
+          audio_buffer_node.gain.value = 1;
         }
       } catch {
         alert('音声合成に失敗しました');
