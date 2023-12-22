@@ -176,6 +176,8 @@ export const Recording = () => {
     };
 
     audioContext && audioContext.close();
+    destinationNode.disconnect();
+
     audioContext = null;
     audioData = [];
   }
