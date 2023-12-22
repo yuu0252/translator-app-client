@@ -31,9 +31,26 @@ export const textToSpeech = async (
     .then((res) => {
       try {
         const blobUrl = base64ToBlobUrl(res.data.audioContent);
-        const audio = new Audio();
-        audio.src = blobUrl;
-        audio.play();
+        const audio_ctx = new AudioContext();
+        let audio_buffer: any = null;
+        let audio_buffer_node: any = null;
+
+        (async () => {
+          const response = await fetch(blobUrl);
+          const response_buffer = await response.arrayBuffer();
+
+          audio_buffer = await audio_ctx.decodeAudioData(response_buffer);
+
+          prepareAudioBufferNode();
+
+          audio_buffer_node.start(0);
+        })();
+
+        function prepareAudioBufferNode() {
+          audio_buffer_node = audio_ctx.createBufferSource();
+          audio_buffer_node.buffer = audio_buffer;
+          audio_buffer_node.connect(audio_ctx.destination);
+        }
       } catch {
         alert('音声合成に失敗しました');
       }
