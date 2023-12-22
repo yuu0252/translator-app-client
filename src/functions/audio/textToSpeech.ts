@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Howl } from 'howler';
+import { isMobile, isTablet } from 'react-device-detect';
 
 export const textToSpeech = async (
   text: string,
@@ -33,9 +34,10 @@ export const textToSpeech = async (
     .then((res) => {
       const base64 = res.data.audioContent;
       const contentType = 'audio/mp3';
+      const volume = isMobile || isTablet ? 50 : 1;
       const sound = new Howl({
         src: [`data:${contentType};base64,${base64}`],
-        volume: 100,
+        volume: volume,
       });
       sound.play();
     })
