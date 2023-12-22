@@ -55,8 +55,7 @@ export const textToSpeech = async (
         alert('音声合成に失敗しました');
       }
     })
-    .catch((err) => {
-      console.log(err);
+    .catch(() => {
       alert('音声合成に失敗しました');
     });
 
