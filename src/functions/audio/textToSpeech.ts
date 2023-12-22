@@ -32,6 +32,7 @@ export const textToSpeech = async (
       try {
         const blobUrl = base64ToBlobUrl(res.data.audioContent);
         const audio_ctx = new AudioContext();
+        const gain = audio_ctx.createGain();
         let audio_buffer: any = null;
         let audio_buffer_node: any = null;
 
@@ -50,7 +51,7 @@ export const textToSpeech = async (
           audio_buffer_node = audio_ctx.createBufferSource();
           audio_buffer_node.buffer = audio_buffer;
           audio_buffer_node.connect(audio_ctx.destination);
-          audio_buffer_node.gain.value = 1;
+          gain.gain.value = 1;
         }
       } catch {
         alert('音声合成に失敗しました');
