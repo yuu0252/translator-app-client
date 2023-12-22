@@ -35,7 +35,7 @@ export const textToSpeech = async (
       const contentType = 'audio/mp3';
       const sound = new Howl({
         src: [`data:${contentType};base64,${base64}`],
-        volume: 1,
+        volume: 100,
       });
       sound.play();
     })
