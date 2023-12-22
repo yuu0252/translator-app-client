@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { base64ToBlobUrl } from './base64ToBlobUrl';
+import { Howl } from 'howler';
 
 export const textToSpeech = async (
   text: string,
@@ -8,7 +8,7 @@ export const textToSpeech = async (
 ) => {
   const data = {
     audioConfig: {
-      audioEncoding: 'LINEAR16',
+      audioEncoding: 'MP3',
       pitch: 0,
       speakingRate: 1,
     },
@@ -29,35 +29,15 @@ export const textToSpeech = async (
       data
     )
     .then((res) => {
-      try {
-        const blobUrl = base64ToBlobUrl(res.data.audioContent);
-        const audio_ctx = new AudioContext();
-        const gain = audio_ctx.createGain();
-        let audio_buffer: any = null;
-        let audio_buffer_node: any = null;
-
-        (async () => {
-          const response = await fetch(blobUrl);
-          const response_buffer = await response.arrayBuffer();
-
-          audio_buffer = await audio_ctx.decodeAudioData(response_buffer);
-
-          prepareAudioBufferNode();
-
-          audio_buffer_node.start(0);
-        })();
-
-        function prepareAudioBufferNode() {
-          audio_buffer_node = audio_ctx.createBufferSource();
-          audio_buffer_node.buffer = audio_buffer;
-          audio_buffer_node.connect(audio_ctx.destination);
-          gain.gain.value = 1;
-        }
-      } catch {
-        alert('音声合成に失敗しました');
-      }
+      const base64 = res.data.audioContent;
+      const contentType = 'audio/mp3';
+      const sound = new Howl({
+        src: [`data:${contentType};base64,${base64}`],
+      });
+      sound.play();
     })
-    .catch(() => {
+    .catch((err) => {
+      console.log(err);
       alert('音声合成に失敗しました');
     });
 
