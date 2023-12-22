@@ -15,7 +15,7 @@ export const PlayAudio = ({ text, language }: Props) => {
   const speak = languageCodeList.find(
     (e) => e.code === language.language
   )?.speak;
-  const languageCode = language.isJapanese ? speak?.code : 'ja';
+  const languageCode = language.isJapanese ? speak?.code : 'ja-JP';
   const speaker = language.isJapanese ? speak?.speaker : 'ja-JP-Neural2-C';
   const onClickPlay = () => {
     console.log(languageCode + ':' + speaker);
