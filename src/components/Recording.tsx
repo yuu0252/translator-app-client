@@ -25,6 +25,7 @@ export const Recording = () => {
   let audioData: Array<any> = [];
   let recordingFlg = false;
   let destinationNode: any;
+  let mediastreamsource: any;
 
   function onAudioProcess(e: any) {
     if (!recordingFlg) return;
@@ -79,7 +80,7 @@ export const Recording = () => {
     destinationNode: any,
     scriptProcessor: any
   ) {
-    let mediastreamsource = audioContext?.createMediaStreamSource(stream);
+    mediastreamsource = audioContext?.createMediaStreamSource(stream);
     mediastreamsource?.connect(scriptProcessor);
     scriptProcessor.onaudioprocess = onAudioProcess;
     console.log(
@@ -176,7 +177,7 @@ export const Recording = () => {
     };
 
     audioContext && audioContext.close();
-    destinationNode.disconnect();
+    mediastreamsource.disconnect();
 
     audioContext = null;
     audioData = [];
