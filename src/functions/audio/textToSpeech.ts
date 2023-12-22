@@ -8,6 +8,7 @@ export const textToSpeech = async (
 ) => {
   const data = {
     audioConfig: {
+      effectsProfileId: ['handset-class-device'],
       audioEncoding: 'MP3',
       pitch: 0,
       speakingRate: 1,
