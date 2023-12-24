@@ -1,10 +1,10 @@
-import axios from 'axios';
-import { resizeImage } from '../functions/resizeImage';
-import { useRef, useState } from 'react';
-import { Header } from '../components/Header';
+import axios from "axios";
+import { resizeImage } from "../functions/resizeImage";
+import { useRef, useState } from "react";
+import { Header } from "../components/Header";
 
 export const ImageTranslation = () => {
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
   const imageArea = useRef<HTMLDivElement>(null);
 
   const fetchApi = (base64: string) => {
@@ -18,7 +18,7 @@ export const ImageTranslation = () => {
           },
           features: [
             {
-              type: 'TEXT_DETECTION',
+              type: "TEXT_DETECTION",
             },
           ],
         },
@@ -62,7 +62,7 @@ export const ImageTranslation = () => {
     resizedFile && reader.readAsDataURL(resizedFile);
     reader.onload = () => {
       const result = reader.result as string;
-      const base64 = result.replace('data:', '').replace(/^.+,/, '');
+      const base64 = result.replace("data:", "").replace(/^.+,/, "");
       fetchApi(base64);
     };
   };
@@ -79,7 +79,7 @@ export const ImageTranslation = () => {
                 <button>翻訳する</button>
               </>
             ) : (
-              'ファイルを選択してください'
+              "ファイルを選択してください"
             )}
           </div>
         </div>

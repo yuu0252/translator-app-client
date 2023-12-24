@@ -1,19 +1,19 @@
-import { Header } from '../components/Header';
-import { Recording } from '../components/Recording';
-import { languageCodeList } from '../constants';
-import { useDispatch, useSelector } from 'react-redux';
+import { Header } from "../components/Header";
+import { Recording } from "../components/Recording";
+import { languageCodeList } from "../constants";
+import { useDispatch, useSelector } from "react-redux";
 import {
   selectTranslate,
   setOutputText,
   setTranscription,
-} from '../reducer/translateSlice';
-import { translateText } from '../functions/translate/translateText';
-import { selectLanguage } from '../reducer/languageSlice';
+} from "../reducer/translateSlice";
+import { translateText } from "../functions/translate/translateText";
+import { selectLanguage } from "../reducer/languageSlice";
 
-import Modal from 'react-modal';
-import { useRef, useState } from 'react';
-import { AiFillCloseSquare } from 'react-icons/ai';
-import { PlayAudio } from '../components/PlayAudio';
+import Modal from "react-modal";
+import { useEffect, useRef, useState } from "react";
+import { AiFillCloseSquare } from "react-icons/ai";
+import { PlayAudio } from "../components/PlayAudio";
 
 export const Simple = () => {
   const dispatch = useDispatch();
@@ -24,18 +24,18 @@ export const Simple = () => {
   const textareaElement = useRef<HTMLTextAreaElement>(null);
   const customStyles = {
     content: {
-      width: '80%',
-      height: '50%',
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      borderRadius: '10px',
-      transform: 'translate(-50%, -50%)',
+      width: "80%",
+      height: "50%",
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      borderRadius: "10px",
+      transform: "translate(-50%, -50%)",
     },
     overlay: {
-      backgroundColor: 'rgba(0,0,0,0.5)',
+      backgroundColor: "rgba(0,0,0,0.5)",
     },
   };
 
@@ -46,11 +46,23 @@ export const Simple = () => {
     (language) => language.placeholder
   );
   const placeholders = [
-    '相手に先に喋ってもらうか(自動検出)、',
-    '言語を選んでください(右上)',
+    "相手に先に喋ってもらうか(自動検出)、",
+    "言語を選んでください(右上)",
     ...placeholderList.filter((str) => str !== undefined),
   ];
   const placeholder = placeholders.join(`\n`);
+
+  useEffect(() => {
+    const fetchApi = async () => {
+      const text = await translateText(
+        transcription,
+        language.language,
+        language.isJapanese
+      );
+      dispatch(setOutputText(text));
+    };
+    fetchApi();
+  }, [language.language]);
 
   const onClickModalSubmit = async (text?: string) => {
     if (!text) return;
@@ -72,7 +84,7 @@ export const Simple = () => {
           <div>
             <p
               onClick={() => setModalIsOpen(true)}
-              className={transcription ? '' : 'placeholder'}
+              className={transcription ? "" : "placeholder"}
             >
               {transcription ? transcription : placeholder}
             </p>

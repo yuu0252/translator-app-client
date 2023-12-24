@@ -1,8 +1,8 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Simple } from './translate/Simple';
-import { ImageTranslation } from './translate/ImageTranslate';
-import { Calculator } from './calculator/Calculator';
-import { TestRecording } from './functions/audio/TestRecording';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Simple } from "./translate/Simple";
+import { ImageTranslation } from "./translate/ImageTranslate";
+import { Calculator } from "./calculator/Calculator";
+import { TestRecording } from "./components/TestRecording";
 
 export const Router = () => {
   return (

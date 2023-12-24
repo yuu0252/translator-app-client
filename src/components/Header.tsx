@@ -13,6 +13,7 @@ export const Header = () => {
       <div className="header-link">
         <Link to="/">Home</Link>
         <Link to="/calculator">Calculator</Link>
+        <Link to="/recorder">Recorder</Link>
       </div>
       <div className="select-box">
         <select
