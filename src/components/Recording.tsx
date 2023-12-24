@@ -92,6 +92,7 @@ export const Recording = () => {
 
   function stopRecording() {
     dispatch(setTranscription('処理中...'));
+    dispatch(setOutputText(''));
     if (startBtn.current) startBtn.current.style.display = 'block';
     console.log('endRecording');
     recordingFlg = false;
