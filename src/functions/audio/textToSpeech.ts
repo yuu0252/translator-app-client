@@ -34,7 +34,7 @@ export const textToSpeech = async (
     .then((res) => {
       const base64 = res.data.audioContent;
       const contentType = 'audio/mp3';
-      const volume = isMobile || isTablet ? 10 : 1;
+      const volume = isMobile || isTablet ? 2 : 1;
       const sound = new Howl({
         src: [`data:${contentType};base64,${base64}`],
         volume: volume,

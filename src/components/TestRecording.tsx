@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 export const TestRecording = () => {
   const audio = useRef<HTMLAudioElement>(null);
@@ -7,7 +7,8 @@ export const TestRecording = () => {
   let audioContext: AudioContext;
   let audioElement: HTMLAudioElement;
 
-  const onClickAudio = () => {
+  useEffect(() => {
+    if (audioContext) return;
     let track;
     const AudioContext =
       window.AudioContext || (window as any).webkitAudioContext;
@@ -24,18 +25,20 @@ export const TestRecording = () => {
     console.log(track);
 
     track.connect(audioContext.destination);
-  };
+  }, []);
 
   const onClickPlay = () => {
     if (!audioContext) return;
-    console.log("onClickPlay");
-    audioContext.state === "suspended" && audioContext.resume();
-    console.log(playBtn.dataset);
-    if (playBtn.dataset.playing === "false") {
-      playBtn.dataset.playing = "true";
-    } else if (playBtn.dataset.playing === "true") {
-      playBtn.pause();
-      playBtn.dataset.playing = "false";
+    console.log('onClickPlay');
+    audioContext.state === 'suspended' && audioContext.resume();
+    console.log(audioElement.dataset.playing);
+    if (audioElement.dataset.playing === 'false') {
+      audioElement.dataset.playing = 'true';
+      console.log(audioElement.dataset.playing);
+    } else if (audioElement.dataset.playing === 'true') {
+      audioElement.pause();
+      audioElement.dataset.playing = 'false';
+      console.log(audioElement.dataset.playing);
     }
   };
 
@@ -44,13 +47,10 @@ export const TestRecording = () => {
       <audio
         ref={audio}
         onEnded={() => {
-          if (playBtn.current) playBtn.current.dataset.playing = "false";
+          if (playBtn.current) playBtn.current.dataset.playing = 'false';
         }}
         src="./myCoolTrack.mp3"
       ></audio>
-      <button onClick={onClickAudio} ref={playBtn}>
-        audio
-      </button>
       <button onClick={onClickPlay}>Play/Pause</button>
     </div>
   );
