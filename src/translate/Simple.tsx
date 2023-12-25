@@ -57,9 +57,13 @@ export const Simple = () => {
 
   useEffect(() => {
     const fetchApi = async () => {
+      const source = languageCodeList.find(
+        (e) => e.code === language.language
+      )?.query;
+      if (!source) return;
       const text = await translateText(
         transcription,
-        language.language,
+        source,
         language.isJapanese
       );
       dispatch(setOutputText(text));
@@ -71,9 +75,13 @@ export const Simple = () => {
     if (!text) return;
     setModalIsOpen(false);
     dispatch(setTranscription(text));
+    const source = languageCodeList.find(
+      (e) => e.code === language.language
+    )?.query;
+    if (!source) return;
     const translatedText = await translateText(
       text,
-      language.language,
+      source,
       language.isJapanese
     );
     dispatch(setOutputText(translatedText));
