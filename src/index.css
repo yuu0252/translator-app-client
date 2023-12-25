@@ -68,61 +68,6 @@ body {
   padding: 10px 30px;
 }
 
-#header {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  height: 100px;
-  padding: 0 30px;
-}
-#header .header-link {
-  height: 30px;
-  display: flex;
-  -moz-column-gap: 5px;
-       column-gap: 5px;
-  align-items: center;
-}
-#header .header-link > a {
-  background-color: #fff;
-  padding: 5px 15px;
-  border-radius: 0 0 5px 5px;
-  border: 3px solid #333;
-  text-decoration: none;
-  color: #555;
-}
-#header .select-box {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-  height: 50px;
-  position: relative;
-  margin: 0 0 0 auto;
-}
-#header .select-box::before {
-  content: "";
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 7px 7px 0 7px;
-  border-color: #555 transparent transparent transparent;
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-#header .select-box select {
-  height: 100%;
-  color: #333;
-  background-color: #fff;
-  padding: 0 30px;
-  border-radius: 5px;
-}
-#header .select-box select > option {
-  text-align: center;
-}
-
 #simple .content-area > div {
   position: relative;
 }
@@ -283,7 +228,7 @@ button.speaker-btn svg {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: calc(100vh - 100px);
-  height: calc(100dvh - 100px);
+  height: calc(100vh - 120px);
+  height: calc(100dvh - 120px);
   padding: 30px;
 }

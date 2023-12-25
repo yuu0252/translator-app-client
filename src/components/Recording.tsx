@@ -11,6 +11,7 @@ import {
   setIsJapanese,
   setLanguage,
 } from '../reducer/languageSlice';
+import { setIsLoading } from '../reducer/loadingSlice';
 
 export const Recording = () => {
   const startBtn = useRef<HTMLButtonElement>(null);
@@ -91,8 +92,7 @@ export const Recording = () => {
   }
 
   function stopRecording() {
-    dispatch(setTranscription('処理中...'));
-    dispatch(setOutputText(''));
+    dispatch(setIsLoading(true));
     if (startBtn.current) startBtn.current.style.display = 'block';
     console.log('endRecording');
     recordingFlg = false;
@@ -129,6 +129,7 @@ export const Recording = () => {
           const text = result.alternatives[0].transcript;
 
           if (languageCode === 'ja-jp' && language.language === 'none') {
+            dispatch(setIsLoading(false));
             alert(
               '相手に先にしゃべってもらうか(自動検出)、言語を選んでください(右上)'
             );
@@ -167,15 +168,18 @@ export const Recording = () => {
               dispatch(
                 setOutputText(res.data.data.translations[0].translatedText)
               );
+              dispatch(setIsLoading(false));
             })
             .catch((err) => {
               console.log(err);
               dispatch(setOutputText('翻訳に失敗しました'));
+              dispatch(setIsLoading(false));
             });
         })
         .catch((err) => {
           console.log(err);
           dispatch(setTranscription('音声認識に失敗しました'));
+          dispatch(setIsLoading(false));
         });
     };
 
