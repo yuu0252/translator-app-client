@@ -14,7 +14,7 @@ export const resizeImage = async (
       image.addEventListener('error', reject);
       image.src = URL.createObjectURL(imageData);
     });
-
+    console.log(image.width);
     const { naturalHeight: beforeHeight, naturalWidth: beforeWidth } = image;
 
     const afterWidth: number = width;

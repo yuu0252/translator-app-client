@@ -1,10 +1,6 @@
-import { useLocation } from 'react-router';
-
-export const TranslatedImage = () => {
-  const location = useLocation();
-  const imageUrl = location.state.imageUrl;
-  const dataArr =
-    location.state.data.responses[0].fullTextAnnotation.pages[0].blocks;
+export const imageTranslatedData = (data: any) => {
+  console.log(data);
+  const dataArr = data.responses[0].fullTextAnnotation.pages[0].blocks;
   const result: any = [];
   dataArr.forEach((data: any) => {
     const fullTextArr: Array<string> = [];
@@ -19,10 +15,10 @@ export const TranslatedImage = () => {
         });
       });
     });
-    result.push([fullTextArr.join(''), boundingBox]);
+    result.push({ text: fullTextArr.join(''), boundingBox: boundingBox });
   });
 
   console.log(result);
 
-  return <img src={imageUrl} />;
+  return result;
 };

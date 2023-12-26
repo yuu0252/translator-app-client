@@ -1,46 +1,14 @@
-import axios from 'axios';
 import { resizeImage } from '../functions/image/resizeImage';
 import { useRef, useState } from 'react';
 import { Header } from '../components/Header';
 import { useNavigate } from 'react-router';
+import { translateImage } from '../functions/image/translateImage';
+import { imageTranslatedData } from '../functions/image/imageTranslatedData';
 
 export const ImageTranslation = () => {
   const [imageUrl, setImageUrl] = useState('');
-  const [resultData, setResultData] = useState();
-  const imageArea = useRef<HTMLDivElement>(null);
+  const [resizedFile, setResizedFile] = useState<Blob | null>();
   const navigate = useNavigate();
-
-  const fetchApi = (base64: string) => {
-    if (!base64) return;
-
-    const data = {
-      requests: [
-        {
-          image: {
-            content: base64,
-          },
-          features: [
-            {
-              type: 'TEXT_DETECTION',
-            },
-          ],
-        },
-      ],
-    };
-
-    console.log(data);
-
-    axios
-      .post(
-        `https://vision.googleapis.com/v1/images:annotate?key=${
-          import.meta.env.VITE_GOOGLE_API_KEY
-        }`,
-        data
-      )
-      .then((res) => {
-        setResultData(res.data);
-      });
-  };
 
   const onChangeImage = async (e: any) => {
     const file = e.target.files[0];
@@ -53,20 +21,24 @@ export const ImageTranslation = () => {
 
     const blob = await fetch(blobUrl).then((res) => res.blob());
 
-    const resizedFile = await resizeImage(
-      blob,
-      imageArea.current ? imageArea.current.clientWidth : 500
-    );
-    if (resizedFile) {
-      setImageUrl(window.URL.createObjectURL(resizedFile));
+    const resizedFileData = await resizeImage(blob, window.innerWidth);
+    setResizedFile(resizedFileData);
+    if (resizedFileData) {
+      setImageUrl(window.URL.createObjectURL(resizedFileData));
     }
+  };
 
+  const onClickTranslate = () => {
     const reader = new FileReader();
     resizedFile && reader.readAsDataURL(resizedFile);
-    reader.onload = () => {
+    reader.onload = async () => {
       const result = reader.result as string;
       const base64 = result.replace('data:', '').replace(/^.+,/, '');
-      fetchApi(base64);
+      const translatedData = await translateImage(base64);
+      const resultData = imageTranslatedData(translatedData);
+      navigate('/translatedImage', {
+        state: { imageUrl: imageUrl, data: resultData },
+      });
     };
   };
 
@@ -79,15 +51,7 @@ export const ImageTranslation = () => {
             {imageUrl ? (
               <>
                 <img src={imageUrl} />
-                <button
-                  onClick={() => {
-                    navigate('/translatedImage', {
-                      state: { imageUrl: imageUrl, data: resultData },
-                    });
-                  }}
-                >
-                  翻訳する
-                </button>
+                <button onClick={onClickTranslate}>翻訳する</button>
               </>
             ) : (
               'ファイルを選択してください'

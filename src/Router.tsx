@@ -3,7 +3,7 @@ import { Simple } from './translate/Simple';
 import { ImageTranslation } from './translate/ImageTranslate';
 import { Calculator } from './calculator/Calculator';
 import { TestRecording } from './components/TestRecording';
-import { TranslatedImage } from './translate/TranslatedImage';
+import { TranslatedImageArea } from './translate/TranslatedImageArea';
 
 export const Router = () => {
   return (
@@ -11,9 +11,9 @@ export const Router = () => {
       <Routes>
         <Route path="/" element={<Simple />} />
         <Route path="/image" element={<ImageTranslation />} />
+        <Route path="/translatedImage" element={<TranslatedImageArea />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/recorder" element={<TestRecording />} />
-        <Route path="/translatedImage" element={<TranslatedImage />} />
       </Routes>
     </BrowserRouter>
   );
