@@ -21,6 +21,9 @@ export const Header = () => {
         <Link to="/recorder">
           <span>Recorder</span>
         </Link>
+        <Link to="/image">
+          <span>Image</span>
+        </Link>
       </div>
       <div className="select-box">
         <select

@@ -1,11 +1,14 @@
-import axios from "axios";
-import { resizeImage } from "../functions/resizeImage";
-import { useRef, useState } from "react";
-import { Header } from "../components/Header";
+import axios from 'axios';
+import { resizeImage } from '../functions/image/resizeImage';
+import { useRef, useState } from 'react';
+import { Header } from '../components/Header';
+import { useNavigate } from 'react-router';
 
 export const ImageTranslation = () => {
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
+  const [resultData, setResultData] = useState();
   const imageArea = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const fetchApi = (base64: string) => {
     if (!base64) return;
@@ -18,7 +21,7 @@ export const ImageTranslation = () => {
           },
           features: [
             {
-              type: "TEXT_DETECTION",
+              type: 'TEXT_DETECTION',
             },
           ],
         },
@@ -35,7 +38,7 @@ export const ImageTranslation = () => {
         data
       )
       .then((res) => {
-        console.log(res);
+        setResultData(res.data);
       });
   };
 
@@ -62,7 +65,7 @@ export const ImageTranslation = () => {
     resizedFile && reader.readAsDataURL(resizedFile);
     reader.onload = () => {
       const result = reader.result as string;
-      const base64 = result.replace("data:", "").replace(/^.+,/, "");
+      const base64 = result.replace('data:', '').replace(/^.+,/, '');
       fetchApi(base64);
     };
   };
@@ -76,10 +79,18 @@ export const ImageTranslation = () => {
             {imageUrl ? (
               <>
                 <img src={imageUrl} />
-                <button>翻訳する</button>
+                <button
+                  onClick={() => {
+                    navigate('/translatedImage', {
+                      state: { imageUrl: imageUrl, data: resultData },
+                    });
+                  }}
+                >
+                  翻訳する
+                </button>
               </>
             ) : (
-              "ファイルを選択してください"
+              'ファイルを選択してください'
             )}
           </div>
         </div>
