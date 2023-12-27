@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const translateImage = async (base64: string) => {
+export const recognizeImage = async (base64: string) => {
   if (!base64) return;
 
   const data = {
@@ -18,11 +18,9 @@ export const translateImage = async (base64: string) => {
     ],
   };
 
-  console.log(data);
-
   const result = await axios
     .post(
-      `https://vision.googleapis.com/v1/images:annotate?key=${
+      `${import.meta.env.VITE_VISION_URL}?key=${
         import.meta.env.VITE_GOOGLE_API_KEY
       }`,
       data
