@@ -1,12 +1,12 @@
-import { resizeImage } from '../functions/image/resizeImage';
-import { useRef, useState } from 'react';
-import { Header } from '../components/Header';
-import { useNavigate } from 'react-router';
-import { translateImage } from '../functions/image/translateImage';
-import { imageTranslatedData } from '../functions/image/imageTranslatedData';
+import { resizeImage } from "../functions/image/resizeImage";
+import { useState } from "react";
+import { Header } from "../components/Header";
+import { useNavigate } from "react-router";
+import { translateImage } from "../functions/image/translateImage";
+import { imageTranslatedData } from "../functions/image/imageTranslatedData";
 
 export const ImageTranslation = () => {
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
   const [resizedFile, setResizedFile] = useState<Blob | null>();
   const navigate = useNavigate();
 
@@ -29,16 +29,23 @@ export const ImageTranslation = () => {
   };
 
   const onClickTranslate = () => {
+    console.log("before");
     const reader = new FileReader();
     resizedFile && reader.readAsDataURL(resizedFile);
     reader.onload = async () => {
       const result = reader.result as string;
-      const base64 = result.replace('data:', '').replace(/^.+,/, '');
+      const base64 = result.replace("data:", "").replace(/^.+,/, "");
       const translatedData = await translateImage(base64);
       const resultData = imageTranslatedData(translatedData);
-      navigate('/translatedImage', {
+      navigate("/translatedImage", {
         state: { imageUrl: imageUrl, data: resultData },
       });
+    };
+
+    console.log("after");
+
+    reader.onerror = (e) => {
+      console.log(e);
     };
   };
 
@@ -54,7 +61,7 @@ export const ImageTranslation = () => {
                 <button onClick={onClickTranslate}>翻訳する</button>
               </>
             ) : (
-              'ファイルを選択してください'
+              "ファイルを選択してください"
             )}
           </div>
         </div>

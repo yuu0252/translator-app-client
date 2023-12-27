@@ -1,3 +1,9 @@
+@mixin phone {
+  @media screen and (max-width: 767px) {
+    @content;
+  }
+}
+
 body {
   background-color: #555;
 }
@@ -23,6 +29,10 @@ body {
     border-radius: 10px;
     padding: 15px;
     font-size: 24px;
+
+    @include phone {
+      font-size: 16px;
+    }
   }
 }
 
@@ -203,7 +213,7 @@ button {
       border: #fff solid 3px;
     }
 
-    & input[type='file'] {
+    & input[type="file"] {
       display: none;
     }
   }
