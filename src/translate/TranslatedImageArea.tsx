@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
-import styled from "styled-components";
-import { Header } from "../components/Header";
-import { AiFillCloseSquare } from "react-icons/ai";
-import { translateText } from "../functions/translate/translateText";
-import { useSelector } from "react-redux";
-import { selectLanguage } from "../reducer/languageSlice";
-import { languageCodeList } from "../constants";
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import styled from 'styled-components';
+import { Header } from '../components/Header';
+import { AiFillCloseSquare } from 'react-icons/ai';
+import { translateText } from '../functions/translate/translateText';
+import { useSelector } from 'react-redux';
+import { selectLanguage } from '../reducer/languageSlice';
+import { languageCodeList } from '../constants';
 
 type outputData = {
   outputText: string;
@@ -31,7 +31,7 @@ export const TranslatedImageArea = () => {
   console.log(data);
 
   useEffect(() => {
-    console.log("useEffect");
+    console.log('useEffect');
     const outputData: Array<outputData> = [];
 
     const loadImage = (src: string) => {
@@ -59,34 +59,33 @@ export const TranslatedImageArea = () => {
               const width =
                 ((boundingBox[1].x - boundingBox[0].x) / res.naturalWidth) *
                   100 +
-                10 +
-                "%";
+                10;
               const height =
                 ((boundingBox[3].y - boundingBox[1].y) / res.naturalHeight) *
-                  100 +
-                "%";
-              const top = (boundingBox[0].y / res.naturalHeight) * 100 + "%";
+                100;
+              const top = (boundingBox[0].y / res.naturalHeight) * 100 + '%';
               const left =
-                (boundingBox[0].x / res.naturalWidth) * 100 - 5 + "%";
-              const fontSize = 16;
+                (boundingBox[0].x / res.naturalWidth) * 100 - 5 + '%';
+              const fontSize = (width + height) / 2;
               const style = {
-                display: "flex",
-                position: "absolute",
-                width: "auto",
-                minHeight: height,
+                display: 'flex',
+                position: 'absolute',
+                width: width + '%',
+                minHeight: height + '%',
                 top: top,
                 left: left,
-                backgroundColor: "rgba(0, 0, 0, 0.85)",
-                color: "#fff",
-                fontSize: fontSize + "px",
-                fontWeight: "bold",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
+                backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                color: '#fff',
+                fontSize: fontSize + 'px',
+                fontWeight: 'bold',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
               };
               const outputText = languageCode
                 ? await translateText(text, languageCode, isJapanese)
-                : "翻訳に失敗しました";
+                : '翻訳に失敗しました';
+              if (outputText === text) return;
               outputData.push({ outputText: outputText, style: style });
             }
           )
@@ -109,7 +108,7 @@ export const TranslatedImageArea = () => {
             </p>
           ))}
         <img src={imageUrl} ref={image} />
-        <button className="close-btn" onClick={() => navigate("/image")}>
+        <button className="close-btn" onClick={() => navigate('/image')}>
           <AiFillCloseSquare />
         </button>
       </StyledTranslatedImageArea>
