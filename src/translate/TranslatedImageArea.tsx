@@ -81,6 +81,7 @@ export const TranslatedImageArea = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 textAlign: 'center',
+                opacity: '0.8',
               };
               const outputText = languageCode
                 ? await translateText(text, languageCode, isJapanese)
