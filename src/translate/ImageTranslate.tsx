@@ -1,16 +1,16 @@
-import { resizeImage } from "../functions/image/resizeImage";
-import { useState } from "react";
-import { Header } from "../components/Header";
-import { useNavigate } from "react-router";
-import { recognizeImage } from "../functions/image/recognizeImage";
-import { imageRecognizedData } from "../functions/image/imageRecognizedData";
-import { useSelector } from "react-redux";
-import { selectLanguage } from "../reducer/languageSlice";
-import { languageCodeList } from "../constants";
-import styled from "styled-components";
+import { resizeImage } from '../functions/image/resizeImage';
+import { useState } from 'react';
+import { Header } from '../components/Header';
+import { useNavigate } from 'react-router';
+import { recognizeImage } from '../functions/image/recognizeImage';
+import { imageRecognizedData } from '../functions/image/imageRecognizedData';
+import { useSelector } from 'react-redux';
+import { selectLanguage } from '../reducer/languageSlice';
+import { languageCodeList } from '../constants';
+import styled from 'styled-components';
 
 export const ImageTranslation = () => {
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
   const [resizedFile, setResizedFile] = useState<Blob | null>();
   const navigate = useNavigate();
   const { language } = useSelector(selectLanguage);
@@ -39,10 +39,10 @@ export const ImageTranslation = () => {
     resizedFile && reader.readAsDataURL(resizedFile);
     reader.onload = async () => {
       const result = reader.result as string;
-      const base64 = result.replace("data:", "").replace(/^.+,/, "");
+      const base64 = result.replace('data:', '').replace(/^.+,/, '');
       const translatedData = await recognizeImage(base64);
       const resultData = imageRecognizedData(translatedData);
-      navigate("/translatedImage", {
+      navigate('/translatedImage', {
         state: { imageUrl: imageUrl, data: resultData, isJapanese: isJapanese },
       });
     };
@@ -80,7 +80,7 @@ export const ImageTranslation = () => {
                 </div>
               </>
             ) : (
-              "ファイルを選択してください"
+              'ファイルを選択してください'
             )}
           </div>
         </div>
@@ -122,23 +122,12 @@ const StyledImage = styled.section`
         box-shadow: #fff 0 0 5px 5px;
 
         &:first-of-type {
-          background: linear-gradient(
-            to bottom,
-            #f85032 0%,
-            #f16f5c 31%,
-            #f6290c 53%,
-            #f02f17 71%,
-            #e73827 100%
-          );
+          color: #000;
+          background-color: #fff;
         }
         &:last-of-type {
-          background: linear-gradient(
-            to bottom,
-            #b7deed 0%,
-            #71ceef 50%,
-            #21b4e2 51%,
-            #b7deed 100%
-          );
+          color: #fff;
+          background-color: #555;
         }
       }
     }
@@ -159,7 +148,7 @@ const StyledImage = styled.section`
       border: #fff solid 3px;
     }
 
-    & input[type="file"] {
+    & input[type='file'] {
       display: none;
     }
   }
