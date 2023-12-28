@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
-import styled from 'styled-components';
-import { Header } from '../components/Header';
-import { AiFillCloseSquare } from 'react-icons/ai';
-import { translateText } from '../functions/translate/translateText';
-import { useSelector } from 'react-redux';
-import { selectLanguage } from '../reducer/languageSlice';
-import { languageCodeList } from '../constants';
-import { setOutputText } from '../reducer/translateSlice';
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+import styled from "styled-components";
+import { Header } from "../components/Header";
+import { AiFillCloseSquare } from "react-icons/ai";
+import { translateText } from "../functions/translate/translateText";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../reducer/languageSlice";
+import { languageCodeList } from "../constants";
 
 type outputData = {
   outputText: string;
@@ -21,63 +20,81 @@ export const TranslatedImageArea = () => {
   const [imageHeight, setImageHeight] = useState<number>();
   const imageUrl = location.state.imageUrl;
   const data = location.state.data;
+  const isJapanese = location.state.isJapanese;
   const language = useSelector(selectLanguage);
   const languageCode = languageCodeList.find(
     (e) => e.code === language.language
   )?.query;
   const [translatedData, setTranslatedData] = useState<Array<object>>();
+  const image = useRef<HTMLImageElement>(null);
 
-  const img = new Image();
-  img.src = imageUrl;
-  img.onload = () => {
-    setImageWidth(img.naturalWidth);
-    setImageHeight(img.naturalHeight);
-  };
+  console.log(data);
 
   useEffect(() => {
-    console.log('useEffect');
+    console.log("useEffect");
     const outputData: Array<outputData> = [];
 
-    data.forEach(
-      async ({
-        text,
-        boundingBox,
-        isJapanese,
-      }: {
-        text: string;
-        boundingBox: Array<{ x: number; y: number }>;
-        isJapanese: boolean;
-      }) => {
-        console.log('before');
-        if (!imageHeight || !imageWidth) return;
-        console.log('after');
-        const width =
-          ((boundingBox[1].x - boundingBox[0].x) / imageWidth) * 100 + '%';
-        const height =
-          ((boundingBox[3].y - boundingBox[1].y) / imageHeight) * 100 + '%';
-        const top = (boundingBox[0].y / imageHeight) * 100 + '%';
-        const left = (boundingBox[0].x / imageWidth) * 100 + '%';
-        const fontSize = 16;
-        const style = {
-          display: 'flex',
-          position: 'absolute',
-          width: width,
-          minHeight: height,
-          top: top,
-          left: left,
-          backgroundColor: 'rgba(0, 0, 0, 0.85)',
-          color: '#fff',
-          fontSize: fontSize + 'px',
-          fontWeight: 'bold',
-          alignItems: 'center',
-          justifyContent: 'center',
-        };
-        const outputText = await translateText(text, languageCode, isJapanese);
-        outputData.push({ outputText, style });
-      }
-    );
-    setTranslatedData(outputData);
-  }, [imageWidth, imageHeight, languageCode]);
+    const loadImage = (src: string) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => resolve(img);
+        img.onerror = (e) => reject(e);
+      });
+    };
+
+    loadImage(imageUrl)
+      .then(async (res: any) => {
+        setImageWidth(res.naturalWidth);
+        setImageHeight(res.naturalHeight);
+        await Promise.all(
+          data.map(
+            async ({
+              text,
+              boundingBox,
+            }: {
+              text: string;
+              boundingBox: Array<{ x: number; y: number }>;
+            }) => {
+              const width =
+                ((boundingBox[1].x - boundingBox[0].x) / res.naturalWidth) *
+                  100 +
+                10 +
+                "%";
+              const height =
+                ((boundingBox[3].y - boundingBox[1].y) / res.naturalHeight) *
+                  100 +
+                "%";
+              const top = (boundingBox[0].y / res.naturalHeight) * 100 + "%";
+              const left =
+                (boundingBox[0].x / res.naturalWidth) * 100 - 5 + "%";
+              const fontSize = 16;
+              const style = {
+                display: "flex",
+                position: "absolute",
+                width: "auto",
+                minHeight: height,
+                top: top,
+                left: left,
+                backgroundColor: "rgba(0, 0, 0, 0.85)",
+                color: "#fff",
+                fontSize: fontSize + "px",
+                fontWeight: "bold",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+              };
+              const outputText = languageCode
+                ? await translateText(text, languageCode, isJapanese)
+                : "翻訳に失敗しました";
+              outputData.push({ outputText: outputText, style: style });
+            }
+          )
+        );
+        setTranslatedData(outputData);
+      })
+      .catch((err) => console.log(err));
+  }, [languageCode]);
 
   return (
     <>
@@ -86,13 +103,13 @@ export const TranslatedImageArea = () => {
         style={{ width: imageWidth, height: imageHeight }}
       >
         {translatedData &&
-          translatedData.map(({ outputText, style }: outputData) => (
-            <p key={outputText} style={style}>
-              {outputText}
+          translatedData.map((e: any) => (
+            <p key={e.outputText} style={e.style}>
+              {e.outputText}
             </p>
           ))}
-        <img src={imageUrl} />
-        <button className="close-btn" onClick={() => navigate('/image')}>
+        <img src={imageUrl} ref={image} />
+        <button className="close-btn" onClick={() => navigate("/image")}>
           <AiFillCloseSquare />
         </button>
       </StyledTranslatedImageArea>
