@@ -65,9 +65,6 @@ export const Calculator = () => {
     let num = Number(e.target.value);
     num = num / 1.1;
 
-    if (isCoupon) num = num * 0.95;
-    if (isHandlingCharge) num = num * 1.0155;
-
     let result = num;
 
     setPrice(result);
@@ -106,34 +103,6 @@ export const Calculator = () => {
           </div>
         </div>
         <div className="input-area">
-          <div className="btn-area">
-            <button
-              onClick={() => {
-                setIsCoupon(!isCoupon);
-                const result = !isCoupon ? price * 0.95 : price / 0.95;
-                setPrice(result);
-                const resultForeign = calculateForeign(result);
-                setForeignPrice(resultForeign);
-              }}
-              className={isCoupon ? 'check-btn active' : 'check-btn'}
-            >
-              クーポン
-            </button>
-            <button
-              onClick={() => {
-                setIsHandlingCharge(!isHandlingCharge);
-                const result = !isHandlingCharge
-                  ? price * 1.0155
-                  : price / 1.0155;
-                setPrice(result);
-                const resultForeign = calculateForeign(result);
-                setForeignPrice(resultForeign);
-              }}
-              className={isHandlingCharge ? 'check-btn active' : 'check-btn'}
-            >
-              手数料
-            </button>
-          </div>
           <div className="user-input">
             <input
               type="number"
@@ -166,12 +135,6 @@ const StyledCalculator = styled.div`
     background-color: #fff;
     padding: 15px;
     border-radius: 15px;
-  }
-
-  & .btn-area {
-    margin-bottom: 15px;
-    display: flex;
-    column-gap: 15px;
   }
 
   & .user-input {

@@ -7,6 +7,7 @@ import { translateText } from '../functions/translate/translateText';
 import { useSelector } from 'react-redux';
 import { selectLanguage } from '../reducer/languageSlice';
 import { languageCodeList } from '../constants';
+import { textToSpeech } from '../functions/audio/textToSpeech';
 
 type outputData = {
   outputText: string;
@@ -28,10 +29,7 @@ export const TranslatedImageArea = () => {
   const [translatedData, setTranslatedData] = useState<Array<object>>();
   const image = useRef<HTMLImageElement>(null);
 
-  console.log(data);
-
   useEffect(() => {
-    console.log('useEffect');
     const outputData: Array<outputData> = [];
 
     const loadImage = (src: string) => {
@@ -66,7 +64,7 @@ export const TranslatedImageArea = () => {
               const top = (boundingBox[0].y / res.naturalHeight) * 100 + '%';
               const left =
                 (boundingBox[0].x / res.naturalWidth) * 100 - 5 + '%';
-              const fontSize = (width + height) / 2;
+              const fontSize = '1rem';
               const style = {
                 display: 'flex',
                 position: 'absolute',
@@ -76,7 +74,7 @@ export const TranslatedImageArea = () => {
                 left: left,
                 backgroundColor: 'rgba(0, 0, 0, 0.85)',
                 color: '#fff',
-                fontSize: fontSize + 'px',
+                fontSize: fontSize,
                 fontWeight: 'bold',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -104,7 +102,17 @@ export const TranslatedImageArea = () => {
       >
         {translatedData &&
           translatedData.map((e: any) => (
-            <p key={e.outputText} style={e.style}>
+            <p
+              key={e.outputText}
+              style={e.style}
+              onClick={(e) =>
+                isJapanese === true
+                  ? language.language &&
+                    textToSpeech(e.currentTarget.outerText, language.language)
+                  : language.language &&
+                    textToSpeech(e.currentTarget.outerText, 'ja-JP')
+              }
+            >
               {e.outputText}
             </p>
           ))}

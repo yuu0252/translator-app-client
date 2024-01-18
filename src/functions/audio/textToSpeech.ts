@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { Howl } from 'howler';
 import { isMobile, isTablet } from 'react-device-detect';
+import { languageCodeList } from '../../constants';
 
-export const textToSpeech = async (
-  text: string,
-  languageCode: string,
-  speaker: string
-) => {
+export const textToSpeech = async (text: string, languageCode: string) => {
+  const speaker =
+    languageCode === 'ja-JP'
+      ? 'ja-JP-Neural2-C'
+      : languageCodeList.find((e) => e.code === languageCode)?.speak.speaker;
   const data = {
     audioConfig: {
       effectsProfileId: ['handset-class-device'],
