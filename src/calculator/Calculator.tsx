@@ -7,8 +7,6 @@ import { languageCodeList } from '../constants';
 import styled from 'styled-components';
 
 export const Calculator = () => {
-  const [isCoupon, setIsCoupon] = useState(false);
-  const [isHandlingCharge, setIsHandlingCharge] = useState(true);
   const [price, setPrice] = useState(0);
   const [foreignPrice, setForeignPrice] = useState<number>();
   const [inputPrice, setInputPrice] = useState<number | null>(null);
