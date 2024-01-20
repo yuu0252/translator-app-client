@@ -18,6 +18,8 @@ export const languageSlice = createSlice({
 
 export const { setLanguage, setIsJapanese } = languageSlice.actions;
 
-export const selectLanguage = (state: any) => state.language;
+export const selectLanguage = (state: {
+  language: { language: string; isJapanese: boolean };
+}) => state.language;
 
 export default languageSlice.reducer;

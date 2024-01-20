@@ -16,8 +16,9 @@ export const ImageTranslation = () => {
   const { language } = useSelector(selectLanguage);
   const languageName = languageCodeList.find((e) => e.code === language)?.name;
 
-  const onChangeImage = async (e: any) => {
-    const file = e.target.files[0];
+  const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    const file = (target.files as FileList)[0];
 
     if (!file) {
       return;
@@ -71,12 +72,18 @@ export const ImageTranslation = () => {
               <>
                 <img src={imageUrl} />
                 <div className="btn-area">
-                  <button onClick={onClickTranslateToForeign}>
-                    日本語に翻訳
-                  </button>
-                  <button onClick={onClickTranslatetoJapanese}>
-                    {languageName}に翻訳
-                  </button>
+                  {language === 'none' ? (
+                    <p className="alert">言語を選択してください</p>
+                  ) : (
+                    <>
+                      <button onClick={onClickTranslateToForeign}>
+                        日本語に翻訳
+                      </button>
+                      <button onClick={onClickTranslatetoJapanese}>
+                        {languageName}に翻訳
+                      </button>
+                    </>
+                  )}
                 </div>
               </>
             ) : (
@@ -129,6 +136,16 @@ const StyledImage = styled.section`
           color: #fff;
           background-color: #555;
         }
+      }
+
+      & .alert {
+        color: #fff;
+        background-color: #555;
+        padding: 15px;
+        box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.2);
+        border: solid 3px #fff;
+        border-radius: 5px;
+        text-align: center;
       }
     }
   }

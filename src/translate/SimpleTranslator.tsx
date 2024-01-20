@@ -2,45 +2,22 @@ import { Header } from '../components/Header';
 import { Recording } from '../components/Recording';
 import { languageCodeList } from '../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  selectTranslate,
-  setOutputText,
-  setTranscription,
-} from '../reducer/translateSlice';
+import { selectTranslate, setOutputText } from '../reducer/translateSlice';
 import { translateText } from '../functions/translate/translateText';
 import { selectLanguage } from '../reducer/languageSlice';
-
-import Modal from 'react-modal';
-import { useEffect, useRef, useState } from 'react';
-import { AiFillCloseSquare } from 'react-icons/ai';
+import { useEffect, useState } from 'react';
 import { PlayAudio } from '../components/PlayAudio';
 import { Loading } from '../components/Loading';
 import { selectLoading } from '../reducer/loadingSlice';
+import { EditModal } from '../components/EditModal';
+import styled from 'styled-components';
 
-export const Simple = () => {
+export const SimpleTranslator = () => {
   const dispatch = useDispatch();
   const translate = useSelector(selectTranslate);
   const language = useSelector(selectLanguage);
   const loading = useSelector(selectLoading);
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const textareaElement = useRef<HTMLTextAreaElement>(null);
-  const customStyles = {
-    content: {
-      width: '80%',
-      height: '50%',
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      borderRadius: '10px',
-      transform: 'translate(-50%, -50%)',
-    },
-    overlay: {
-      backgroundColor: 'rgba(0,0,0,0.5)',
-    },
-  };
 
   const transcription = translate.transcription;
   const outputText = translate.outputText;
@@ -56,7 +33,7 @@ export const Simple = () => {
   const placeholder = placeholders.join(`\n`);
 
   useEffect(() => {
-    const fetchApi = async () => {
+    async () => {
       const source = languageCodeList.find(
         (e) => e.code === language.language
       )?.query;
@@ -68,29 +45,12 @@ export const Simple = () => {
       );
       dispatch(setOutputText(text));
     };
-    fetchApi();
   }, [language.language]);
-
-  const onClickModalSubmit = async (text?: string) => {
-    if (!text) return;
-    setModalIsOpen(false);
-    dispatch(setTranscription(text));
-    const source = languageCodeList.find(
-      (e) => e.code === language.language
-    )?.query;
-    if (!source) return;
-    const translatedText = await translateText(
-      text,
-      source,
-      language.isJapanese
-    );
-    dispatch(setOutputText(translatedText));
-  };
 
   return (
     <>
       <Header />
-      <section id="simple" className="container">
+      <StyledSimpleTranslator className="container">
         <div className="content-area">
           <div>
             {loading.isLoading ? (
@@ -114,28 +74,42 @@ export const Simple = () => {
           </div>
         </div>
         <Recording />
-        <Modal
-          isOpen={modalIsOpen}
-          style={customStyles}
-          onRequestClose={() => setModalIsOpen(false)}
-          contentLabel="Modal"
-          ariaHideApp={false}
-        >
-          <button className="close-btn" onClick={() => setModalIsOpen(false)}>
-            <AiFillCloseSquare />
-          </button>
-          <div>
-            <h2>入力内容を編集</h2>
-            <textarea defaultValue={transcription} ref={textareaElement} />
-          </div>
-          <button
-            className="submit-btn"
-            onClick={() => onClickModalSubmit(textareaElement.current?.value)}
-          >
-            決定
-          </button>
-        </Modal>
-      </section>
+        <EditModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
+      </StyledSimpleTranslator>
     </>
   );
 };
+
+const StyledSimpleTranslator = styled.section`
+  & .content-area {
+    & > div {
+      position: relative;
+    }
+    & .placeholder {
+      height: 100%;
+      color: #777;
+      overflow-y: scroll;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+  & textarea {
+    text-align: center;
+    overflow: scroll;
+    resize: none;
+    width: 100%;
+    height: 50%;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    &.placeholder {
+      height: 100%;
+      color: #777;
+    }
+  }
+
+  & p {
+    text-align: center;
+  }
+`;

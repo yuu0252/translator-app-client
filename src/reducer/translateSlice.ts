@@ -18,6 +18,11 @@ export const translateSlice = createSlice({
 
 export const { setTranscription, setOutputText } = translateSlice.actions;
 
-export const selectTranslate = (state: any) => state.translate;
+export const selectTranslate = (state: {
+  translate: {
+    transcription: string;
+    outputText: string;
+  };
+}) => state.translate;
 
 export default translateSlice.reducer;

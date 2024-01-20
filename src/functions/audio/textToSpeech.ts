@@ -14,7 +14,7 @@ export const textToSpeech = async (text: string, languageCode: string) => {
       audioEncoding: 'MP3',
       pitch: 0,
       speakingRate: 1,
-      volumeGainDb: 16,
+      volumeGainDb: 1,
     },
     input: {
       text: text,

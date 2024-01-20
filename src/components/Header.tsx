@@ -15,12 +15,6 @@ export const Header = () => {
         <Link to="/">
           <span>Home</span>
         </Link>
-        <Link to="/calculator">
-          <span>Calculator</span>
-        </Link>
-        <Link to="/recorder">
-          <span>Recorder</span>
-        </Link>
         <Link to="/image">
           <span>Image</span>
         </Link>
@@ -47,8 +41,10 @@ const StyledHeader = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
+  max-width: 1000px;
   height: 120px;
   padding: 0 30px;
+  margin: 0 auto;
 
   & .header-link {
     height: 50px;

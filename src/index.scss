@@ -178,62 +178,15 @@ button {
   }
 }
 
-#calculator {
-  & .content-area {
-    height: 60%;
-  }
-
-  & .input-area {
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 15px;
-  }
-
-  & .btn-area {
-    margin-bottom: 15px;
-    display: flex;
-    column-gap: 15px;
-  }
-
-  & .user-input {
-    display: flex;
-    column-gap: 15px;
-  }
-
-  & button {
-    width: 90px;
-    height: auto;
-    border-radius: 5px;
-    border: 2px solid #333;
-    font-weight: bold;
-    white-space: nowrap;
-
-    &.active {
-      color: #fff;
-      background-color: #3c87ff;
-    }
-  }
-
-  & input {
-    border: #333 2px solid;
-    padding: 5px;
-    border-radius: 5px;
-    text-align: center;
-  }
-
-  & .time {
-    font-weight: normal;
-    font-size: 0.75em;
-  }
-}
-
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  max-width: 1000px;
   height: calc(100vh - 120px);
   height: calc(100dvh - 120px);
   padding: 30px;
+  margin: 0 auto;
 }

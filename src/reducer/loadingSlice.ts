@@ -14,6 +14,7 @@ export const loadingSlice = createSlice({
 
 export const { setIsLoading } = loadingSlice.actions;
 
-export const selectLoading = (state: any) => state.loading;
+export const selectLoading = (state: { loading: { isLoading: boolean } }) =>
+  state.loading;
 
 export default loadingSlice.reducer;
