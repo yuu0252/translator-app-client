@@ -8,10 +8,10 @@ export const translateSlice = createSlice({
   },
   reducers: {
     setTranscription: (state, action) => {
-      state.transcription = action.payload;
+      state.transcription = action.payload; // 音声認識後に出力されたテキストをtranscriptionステートに格納する
     },
     setOutputText: (state, action) => {
-      state.outputText = action.payload;
+      state.outputText = action.payload; // 翻訳処理後に出力されたテキストをoutputTextステートに格納する
     },
   },
 });
@@ -20,7 +20,7 @@ export const { setTranscription, setOutputText } = translateSlice.actions;
 
 export const selectTranslate = (state: {
   translate: {
-    transcription: string;
+    transcription: string; // 翻訳前
     outputText: string;
   };
 }) => state.translate;

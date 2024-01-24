@@ -35,6 +35,7 @@ export const textToSpeech = async (text: string, languageCode: string) => {
     .then((res) => {
       const base64 = res.data.audioContent;
       const contentType = 'audio/mp3';
+      // PC以外のデバイスだと音量が少し小さいので音量を大きめに出力
       const volume = isMobile || isTablet ? 2 : 1;
       const sound = new Howl({
         src: [`data:${contentType};base64,${base64}`],

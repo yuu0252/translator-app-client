@@ -11,41 +11,33 @@ import { Loading } from '../components/Loading';
 import { selectLoading } from '../reducer/loadingSlice';
 import { EditModal } from '../components/EditModal';
 import styled from 'styled-components';
+import { createTranslatePlaceholder } from '../functions/translate/createTranslatePlaceholder';
 
 export const SimpleTranslator = () => {
   const dispatch = useDispatch();
   const translate = useSelector(selectTranslate);
-  const language = useSelector(selectLanguage);
+  const { currentLanguage, isJapanese } = useSelector(selectLanguage);
   const loading = useSelector(selectLoading);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const transcription = translate.transcription;
   const outputText = translate.outputText;
 
-  const placeholderList = languageCodeList.map(
-    (language) => language.placeholder
-  );
-  const placeholders = [
-    '相手に先に喋ってもらうか(自動検出)、',
-    '言語を選んでください(右上)',
-    ...placeholderList.filter((str) => str !== undefined),
-  ];
-  const placeholder = placeholders.join(`\n`);
+  const isLoading = loading.isLoading;
 
+  const placeholder = createTranslatePlaceholder();
+
+  // ドロップダウンで言語変更される度に翻訳しなおす
   useEffect(() => {
     async () => {
       const source = languageCodeList.find(
-        (e) => e.code === language.language
-      )?.query;
+        (e) => e.code === currentLanguage
+      )?.shortCode;
       if (!source) return;
-      const text = await translateText(
-        transcription,
-        source,
-        language.isJapanese
-      );
+      const text = await translateText(transcription, source, isJapanese);
       dispatch(setOutputText(text));
     };
-  }, [language.language]);
+  }, [currentLanguage]);
 
   return (
     <>
@@ -53,7 +45,7 @@ export const SimpleTranslator = () => {
       <StyledSimpleTranslator className="container">
         <div className="content-area">
           <div>
-            {loading.isLoading ? (
+            {isLoading ? (
               <Loading />
             ) : (
               <>
@@ -66,7 +58,7 @@ export const SimpleTranslator = () => {
                 {outputText && (
                   <>
                     <p>{outputText}</p>
-                    <PlayAudio text={outputText} language={language} />
+                    <PlayAudio text={outputText} />
                   </>
                 )}
               </>

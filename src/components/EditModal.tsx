@@ -7,7 +7,6 @@ import {
 } from '../reducer/translateSlice';
 import { translateText } from '../functions/translate/translateText';
 import { selectLanguage } from '../reducer/languageSlice';
-
 import Modal from 'react-modal';
 import { useRef } from 'react';
 import { AiFillCloseSquare } from 'react-icons/ai';
@@ -34,25 +33,25 @@ const customStyles = {
   },
 };
 
+// 音声認識後のテキストを編集するためのモーダル
 export const EditModal = ({ modalIsOpen, setModalIsOpen }: Props) => {
   const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
   const textareaElement = useRef<HTMLTextAreaElement>(null);
   const transcription = useSelector(selectTranslate).transcription;
 
+  const currentLanguage = language.currentLanguage;
+  const isJapanese = language.isJapanese;
+
   const onClickModalSubmit = async (text?: string) => {
     if (!text) return;
     setModalIsOpen(false);
     dispatch(setTranscription(text));
     const source = languageCodeList.find(
-      (e) => e.code === language.language
-    )?.query;
+      (e) => e.code === currentLanguage
+    )?.shortCode;
     if (!source) return;
-    const translatedText = await translateText(
-      text,
-      source,
-      language.isJapanese
-    );
+    const translatedText = await translateText(text, source, isJapanese);
     dispatch(setOutputText(translatedText));
   };
 

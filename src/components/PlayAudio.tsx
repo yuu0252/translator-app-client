@@ -1,20 +1,13 @@
 import { HiSpeakerWave } from 'react-icons/hi2';
 import { textToSpeech } from '../functions/audio/textToSpeech';
 import { languageCodeList } from '../constants';
+import { useSelector } from 'react-redux';
+import { selectLanguage } from '../reducer/languageSlice';
 
-type Props = {
-  text: string;
-  language: {
-    language: string;
-    isJapanese: boolean;
-  };
-};
-
-export const PlayAudio = ({ text, language }: Props) => {
-  const speak = languageCodeList.find(
-    (e) => e.code === language.language
-  )?.speak;
-  const languageCode = language.isJapanese ? speak?.code : 'ja-JP';
+export const PlayAudio = ({ text }: { text: string }) => {
+  const { currentLanguage, isJapanese } = useSelector(selectLanguage);
+  const speak = languageCodeList.find((e) => e.code === currentLanguage)?.speak;
+  const languageCode = isJapanese ? speak?.code : 'ja-JP';
   const onClickPlay = () => {
     if (!languageCode) return;
     textToSpeech(text, languageCode);

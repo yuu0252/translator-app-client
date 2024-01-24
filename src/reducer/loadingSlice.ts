@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const loadingSlice = createSlice({
   name: 'loading',
   initialState: {
-    isLoading: false,
+    isLoading: false, // 録音後に翻訳後のテキストが出力されるまでfalse
   },
   reducers: {
     setIsLoading: (state, action) => {

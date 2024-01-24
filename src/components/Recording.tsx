@@ -9,14 +9,14 @@ import { useRef } from 'react';
 import {
   selectLanguage,
   setIsJapanese,
-  setLanguage,
+  setCurrentLanguage,
 } from '../reducer/languageSlice';
 import { setIsLoading } from '../reducer/loadingSlice';
 
 export const Recording = () => {
   const startBtn = useRef<HTMLButtonElement>(null);
   const stopBtn = useRef<HTMLButtonElement>(null);
-  const language = useSelector(selectLanguage);
+  const { currentLanguage } = useSelector(selectLanguage);
 
   const dispatch = useDispatch();
 
@@ -43,7 +43,6 @@ export const Recording = () => {
 
   const startRecording = async () => {
     if (stopBtn.current) stopBtn.current.style.display = 'block';
-    console.log('startRecording');
     recordingFlg = true;
 
     if (
@@ -85,16 +84,13 @@ export const Recording = () => {
     mediastreamsource = audioContext?.createMediaStreamSource(stream);
     mediastreamsource?.connect(scriptProcessor);
     scriptProcessor.onaudioprocess = onAudioProcess;
-    console.log(
-      'startRecording scriptProcessor.connect(audioContext.destination)'
-    );
     scriptProcessor.connect(destinationNode);
   }
 
   function stopRecording() {
     dispatch(setIsLoading(true));
+    // ストップボタンを押すとストップボタンを録音ボタンに変更
     if (startBtn.current) startBtn.current.style.display = 'block';
-    console.log('endRecording');
     recordingFlg = false;
     let blob = exportWAV(audioData);
 
@@ -103,11 +99,13 @@ export const Recording = () => {
     reader.onloadend = function () {
       const base64data = reader.result as string;
 
+      // google translate APIの複数言語設定
       const altLanguageCodes =
-        language.language === 'none'
+        currentLanguage === 'none'
           ? languageCodeList.map((language) => language.code)
-          : [language.language];
+          : [currentLanguage];
 
+      // 音声をテキストに変換
       axios
         .post(
           `${import.meta.env.VITE_SPEECH_TO_TEXT_URL}?key=${
@@ -125,33 +123,41 @@ export const Recording = () => {
         )
         .then((res) => {
           const result = res.data.results[0];
-          const languageCode = result.languageCode;
+          const detectedLanguage = result.languageCode;
           const text = result.alternatives[0].transcript;
 
-          if (languageCode === 'ja-jp' && language.language === 'none') {
-            dispatch(setIsLoading(false));
-            alert(
-              '相手に先にしゃべってもらうか(自動検出)、言語を選んでください(右上)'
+          // 入力言語が日本語かどうか
+          dispatch(setIsJapanese(detectedLanguage === 'ja-jp' ? true : false));
+
+          let sourceLanguage: string | undefined;
+          let targetLanguage: string | undefined;
+
+          // 入力が日本語であるときに出力言語が設定されていなければ英語に変換する
+          if (detectedLanguage === 'ja-jp' && currentLanguage === 'none') {
+            dispatch(setCurrentLanguage('en-us'));
+            sourceLanguage = 'ja';
+            targetLanguage = 'en';
+          } else if (detectedLanguage === 'ja-jp') {
+            dispatch(setCurrentLanguage(detectedLanguage));
+            const targetCode = languageCodeList.find(
+              (e) => e.code === currentLanguage
             );
-            return;
+            sourceLanguage = 'ja';
+            targetLanguage = targetCode?.shortCode;
+          } else {
+            if (detectedLanguage !== 'ja-jp' && currentLanguage === 'none') {
+              dispatch(setCurrentLanguage(detectedLanguage));
+            }
+            const sourceCode = languageCodeList.find(
+              (e) => e.code === detectedLanguage
+            );
+            sourceLanguage = sourceCode?.shortCode;
+            targetLanguage = 'ja';
           }
 
-          dispatch(setIsJapanese(languageCode === 'ja-jp' ? true : false));
-
-          languageCode === 'ja-jp' || dispatch(setLanguage(languageCode));
           dispatch(setTranscription(text));
-          const sourceCode = languageCodeList.find(
-            (e) => e.code === languageCode
-          );
-          const targetCode = languageCodeList.find(
-            (e) => e.code === language.language
-          );
 
-          const source = languageCode === 'ja-jp' ? 'ja' : sourceCode?.query;
-          const target = languageCode === 'ja-jp' ? targetCode?.query : 'ja';
-
-          console.log(source + ':' + target);
-
+          // 出力されたテキストを翻訳する
           axios
             .post(
               `${import.meta.env.VITE_TRANSLATE_URL}?key=${
@@ -159,8 +165,8 @@ export const Recording = () => {
               }`,
               {
                 q: text,
-                source: source,
-                target: target,
+                source: sourceLanguage,
+                target: targetLanguage,
                 format: 'text',
               }
             )
@@ -170,14 +176,12 @@ export const Recording = () => {
               );
               dispatch(setIsLoading(false));
             })
-            .catch((err) => {
-              console.log(err);
+            .catch(() => {
               dispatch(setOutputText('翻訳に失敗しました'));
               dispatch(setIsLoading(false));
             });
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           dispatch(setTranscription('音声認識に失敗しました'));
           dispatch(setIsLoading(false));
         });

@@ -22,10 +22,10 @@ export const TranslatedImageArea = () => {
   const imageUrl = location.state.imageUrl;
   const data = location.state.data;
   const isJapanese = location.state.isJapanese;
-  const language = useSelector(selectLanguage);
+  const { currentLanguage } = useSelector(selectLanguage);
   const languageCode = languageCodeList.find(
-    (e) => e.code === language.language
-  )?.query;
+    (e) => e.code === currentLanguage
+  )?.shortCode;
   const [translatedData, setTranslatedData] = useState<Array<object>>();
   const image = useRef<HTMLImageElement>(null);
 
@@ -107,9 +107,9 @@ export const TranslatedImageArea = () => {
               style={e.style}
               onClick={(e) =>
                 isJapanese === true
-                  ? language.language &&
-                    textToSpeech(e.currentTarget.outerText, language.language)
-                  : language.language &&
+                  ? currentLanguage &&
+                    textToSpeech(e.currentTarget.outerText, currentLanguage)
+                  : currentLanguage &&
                     textToSpeech(e.currentTarget.outerText, 'ja-JP')
               }
             >

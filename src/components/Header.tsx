@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { languageCodeList } from '../constants';
-import { selectLanguage, setLanguage } from '../reducer/languageSlice';
+import { selectLanguage, setCurrentLanguage } from '../reducer/languageSlice';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,7 +8,9 @@ import styled from 'styled-components';
 export const Header = () => {
   const dispatch = useDispatch();
   const language = useSelector(selectLanguage);
-  console.log(language);
+
+  const currentLanguage = language.currentLanguage;
+
   return (
     <StyledHeader id="header">
       <div className="header-link">
@@ -21,8 +23,8 @@ export const Header = () => {
       </div>
       <div className="select-box">
         <select
-          value={language.language}
-          onChange={(e) => dispatch(setLanguage(e.target.value))}
+          value={currentLanguage}
+          onChange={(e) => dispatch(setCurrentLanguage(e.target.value))}
         >
           <option key="default">{'言語を選択してください'}</option>
           {languageCodeList.map((language) => (

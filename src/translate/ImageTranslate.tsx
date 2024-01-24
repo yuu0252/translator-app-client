@@ -13,8 +13,10 @@ export const ImageTranslation = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [resizedFile, setResizedFile] = useState<Blob | null>();
   const navigate = useNavigate();
-  const { language } = useSelector(selectLanguage);
-  const languageName = languageCodeList.find((e) => e.code === language)?.name;
+  const { currentLanguage } = useSelector(selectLanguage);
+  const languageName = languageCodeList.find(
+    (e) => e.code === currentLanguage
+  )?.name;
 
   const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
@@ -72,7 +74,7 @@ export const ImageTranslation = () => {
               <>
                 <img src={imageUrl} />
                 <div className="btn-area">
-                  {language === 'none' ? (
+                  {currentLanguage === 'none' ? (
                     <p className="alert">言語を選択してください</p>
                   ) : (
                     <>

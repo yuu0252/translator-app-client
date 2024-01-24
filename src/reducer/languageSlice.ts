@@ -1,14 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+// union
+
 export const languageSlice = createSlice({
   name: 'language',
   initialState: {
-    language: 'none',
-    isJapanese: true,
+    currentLanguage: 'none', // ドロップダウンで選択されている言語
+    isJapanese: true, // 入力側が日本語であるか
   },
   reducers: {
-    setLanguage: (state, action) => {
-      state.language = action.payload;
+    setCurrentLanguage: (state, action) => {
+      state.currentLanguage = action.payload;
     },
     setIsJapanese: (state, action) => {
       state.isJapanese = action.payload;
@@ -16,10 +18,10 @@ export const languageSlice = createSlice({
   },
 });
 
-export const { setLanguage, setIsJapanese } = languageSlice.actions;
+export const { setCurrentLanguage, setIsJapanese } = languageSlice.actions;
 
 export const selectLanguage = (state: {
-  language: { language: string; isJapanese: boolean };
+  language: { currentLanguage: string; isJapanese: boolean };
 }) => state.language;
 
 export default languageSlice.reducer;
