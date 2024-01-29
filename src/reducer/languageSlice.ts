@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-// union
+import { currentLanguage } from '../type';
 
 export const languageSlice = createSlice({
   name: 'language',
@@ -21,7 +20,7 @@ export const languageSlice = createSlice({
 export const { setCurrentLanguage, setIsJapanese } = languageSlice.actions;
 
 export const selectLanguage = (state: {
-  language: { currentLanguage: string; isJapanese: boolean };
+  language: { currentLanguage: currentLanguage; isJapanese: boolean };
 }) => state.language;
 
 export default languageSlice.reducer;

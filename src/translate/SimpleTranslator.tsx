@@ -10,8 +10,8 @@ import { PlayAudio } from '../components/PlayAudio';
 import { Loading } from '../components/Loading';
 import { selectLoading } from '../reducer/loadingSlice';
 import { EditModal } from '../components/EditModal';
-import styled from 'styled-components';
 import { createTranslatePlaceholder } from '../functions/translate/createTranslatePlaceholder';
+import styled from 'styled-components';
 
 export const SimpleTranslator = () => {
   const dispatch = useDispatch();
@@ -25,6 +25,7 @@ export const SimpleTranslator = () => {
 
   const isLoading = loading.isLoading;
 
+  // プレースホルダーに各言語で「自分の言語で話してください」と設定する
   const placeholder = createTranslatePlaceholder();
 
   // ドロップダウンで言語変更される度に翻訳しなおす
