@@ -59,6 +59,7 @@ export const SimpleTranslator = () => {
                 {outputText && (
                   <>
                     <p>{outputText}</p>
+                    {/* PlayAudioボタンを押すとoutputTextの内容が設定言語で再生される */}
                     <PlayAudio text={outputText} />
                   </>
                 )}
