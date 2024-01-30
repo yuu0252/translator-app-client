@@ -45,6 +45,7 @@ export const ImageTranslation = () => {
       const base64 = result.replace('data:', '').replace(/^.+,/, '');
       const translatedData = await recognizeImage(base64);
       const resultData = imageRecognizedData(translatedData);
+      // 翻訳された画像を別のページで表示する
       navigate('/translatedImage', {
         state: { imageUrl: imageUrl, data: resultData, isJapanese: isJapanese },
       });

@@ -8,11 +8,7 @@ import { useSelector } from 'react-redux';
 import { selectLanguage } from '../reducer/languageSlice';
 import { languageCodeList } from '../constants';
 import { textToSpeech } from '../functions/audio/textToSpeech';
-
-type outputData = {
-  outputText: string;
-  style: object;
-};
+import { imageOutputData, imageTranslatedData, loadImageResult } from '../type';
 
 export const TranslatedImageArea = () => {
   const navigate = useNavigate();
@@ -26,11 +22,12 @@ export const TranslatedImageArea = () => {
   const languageCode = languageCodeList.find(
     (e) => e.code === currentLanguage
   )?.shortCode;
-  const [translatedData, setTranslatedData] = useState<Array<object>>();
+  const [imageTranslatedData, setimageTranslatedData] =
+    useState<Array<imageTranslatedData>>();
   const image = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    const outputData: Array<outputData> = [];
+    const imageOutputData: Array<imageOutputData> = [];
 
     const loadImage = (src: string) => {
       return new Promise((resolve, reject) => {
@@ -42,9 +39,10 @@ export const TranslatedImageArea = () => {
     };
 
     loadImage(imageUrl)
-      .then(async (res: any) => {
-        setImageWidth(res.naturalWidth);
-        setImageHeight(res.naturalHeight);
+      .then(async (res) => {
+        const image = res as loadImageResult;
+        setImageWidth(image.naturalWidth);
+        setImageHeight(image.naturalHeight);
         await Promise.all(
           data.map(
             async ({
@@ -55,15 +53,15 @@ export const TranslatedImageArea = () => {
               boundingBox: Array<{ x: number; y: number }>;
             }) => {
               const width =
-                ((boundingBox[1].x - boundingBox[0].x) / res.naturalWidth) *
+                ((boundingBox[1].x - boundingBox[0].x) / image.naturalWidth) *
                   100 +
                 10;
               const height =
-                ((boundingBox[3].y - boundingBox[1].y) / res.naturalHeight) *
+                ((boundingBox[3].y - boundingBox[1].y) / image.naturalHeight) *
                 100;
-              const top = (boundingBox[0].y / res.naturalHeight) * 100 + '%';
+              const top = (boundingBox[0].y / image.naturalHeight) * 100 + '%';
               const left =
-                (boundingBox[0].x / res.naturalWidth) * 100 - 5 + '%';
+                (boundingBox[0].x / image.naturalWidth) * 100 - 5 + '%';
               const fontSize = '1rem';
               const style = {
                 display: 'flex',
@@ -85,11 +83,11 @@ export const TranslatedImageArea = () => {
                 ? await translateText(text, languageCode, isJapanese)
                 : '翻訳に失敗しました';
               if (outputText === text) return;
-              outputData.push({ outputText: outputText, style: style });
+              imageOutputData.push({ outputText: outputText, style: style });
             }
           )
         );
-        setTranslatedData(outputData);
+        setimageTranslatedData(imageOutputData);
       })
       .catch((err) => console.log(err));
   }, [languageCode]);
@@ -100,8 +98,8 @@ export const TranslatedImageArea = () => {
       <StyledTranslatedImageArea
         style={{ width: imageWidth, height: imageHeight }}
       >
-        {translatedData &&
-          translatedData.map((e: any) => (
+        {imageTranslatedData &&
+          imageTranslatedData.map((e) => (
             <p
               key={e.outputText}
               style={e.style}

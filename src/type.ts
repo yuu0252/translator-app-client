@@ -37,3 +37,56 @@ export type currentLanguage =
   | 'en-au'
   | 'en-nz'
   | 'en-in';
+
+export type imageOutputData = {
+  outputText: string;
+  style: object;
+};
+
+export type loadImageResult = {
+  naturalWidth: number;
+  naturalHeight: number;
+};
+
+export type imageTranslatedData = {
+  outputText: string;
+  style: object;
+};
+
+export type recognizedData = {
+  responses: [
+    {
+      fullTextAnnotation: {
+        pages: [
+          {
+            blocks: [
+              {
+                paragraphs: [
+                  {
+                    words: [
+                      {
+                        symbols: [
+                          symbol: {
+                            text: string;
+                          }
+                        ];
+                      }
+                    ];
+                  }
+                ];
+                boundingBox: {
+                  vertices: [x: number, y: number];
+                };
+              }
+            ];
+          }
+        ];
+      };
+    }
+  ];
+};
+
+export type imageRecognizedResult = {
+  text: string;
+  boundingBox: [x: number, y: number];
+};

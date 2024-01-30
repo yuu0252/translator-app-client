@@ -1,13 +1,16 @@
-export const imageRecognizedData = (data: any) => {
-  const dataArr = data.responses[0].fullTextAnnotation.pages[0].blocks;
-  const result: any = [];
-  dataArr.forEach((data: any) => {
+import { imageRecognizedResult, recognizedData } from '../../type';
+
+export const imageRecognizedData = (recognizedData: recognizedData) => {
+  const dataArr =
+    recognizedData.responses[0].fullTextAnnotation.pages[0].blocks;
+  const result: Array<imageRecognizedResult> = [];
+  dataArr.forEach((block) => {
     const fullTextArr: Array<string> = [];
-    const arr = data.paragraphs;
-    const boundingBox = data.boundingBox.vertices;
-    arr.forEach((obj: any) => {
-      const wordArr = obj.words;
-      wordArr.forEach((word: any) => {
+    const arr = block.paragraphs;
+    const boundingBox = block.boundingBox.vertices;
+    arr.forEach((paragraphs) => {
+      const wordArr = paragraphs.words;
+      wordArr.forEach((word) => {
         const symbolArr = word.symbols;
         symbolArr.forEach((symbol: any) => {
           fullTextArr.push(symbol.text);
