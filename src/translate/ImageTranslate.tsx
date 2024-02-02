@@ -1,16 +1,16 @@
-import { resizeImage } from '../functions/image/resizeImage';
-import { useState } from 'react';
-import { Header } from '../components/Header';
-import { useNavigate } from 'react-router';
-import { recognizeImage } from '../functions/image/recognizeImage';
-import { imageRecognizedData } from '../functions/image/imageRecognizedData';
-import { useSelector } from 'react-redux';
-import { selectLanguage } from '../reducer/languageSlice';
-import { languageCodeList } from '../constants';
-import styled from 'styled-components';
+import { resizeImage } from "../functions/image/resizeImage";
+import { useState } from "react";
+import { Header } from "../components/Header";
+import { useNavigate } from "react-router";
+import { recognizeImage } from "../functions/image/recognizeImage";
+import { imageRecognizedData } from "../functions/image/imageRecognizedData";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../reducer/languageSlice";
+import { languageCodeList } from "../constants";
+import styled from "styled-components";
 
 export const ImageTranslation = () => {
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
   const [resizedFile, setResizedFile] = useState<Blob | null>();
   const navigate = useNavigate();
   const { currentLanguage } = useSelector(selectLanguage);
@@ -19,6 +19,7 @@ export const ImageTranslation = () => {
   )?.name;
 
   const onChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    // ファイルが変更されるとプレビューが表示される
     const target = e.target as HTMLInputElement;
     const file = (target.files as FileList)[0];
 
@@ -30,6 +31,7 @@ export const ImageTranslation = () => {
 
     const blob = await fetch(blobUrl).then((res) => res.blob());
 
+    // 画面の幅に合わせて画像のサイズを変更する
     const resizedFileData = await resizeImage(blob, window.innerWidth);
     setResizedFile(resizedFileData);
     if (resizedFileData) {
@@ -42,11 +44,13 @@ export const ImageTranslation = () => {
     resizedFile && reader.readAsDataURL(resizedFile);
     reader.onload = async () => {
       const result = reader.result as string;
-      const base64 = result.replace('data:', '').replace(/^.+,/, '');
+      const base64 = result.replace("data:", "").replace(/^.+,/, "");
+      // 画像のテキストを認識して翻訳する
       const translatedData = await recognizeImage(base64);
+      // APIから返ってきた値を読み取りやすい形式にする
       const resultData = imageRecognizedData(translatedData);
       // 翻訳された画像を別のページで表示する
-      navigate('/translatedImage', {
+      navigate("/translatedImage", {
         state: { imageUrl: imageUrl, data: resultData, isJapanese: isJapanese },
       });
     };
@@ -75,7 +79,7 @@ export const ImageTranslation = () => {
               <>
                 <img src={imageUrl} />
                 <div className="btn-area">
-                  {currentLanguage === 'none' ? (
+                  {currentLanguage === "none" ? (
                     <p className="alert">言語を選択してください</p>
                   ) : (
                     <>
@@ -90,7 +94,7 @@ export const ImageTranslation = () => {
                 </div>
               </>
             ) : (
-              'ファイルを選択してください'
+              "ファイルを選択してください"
             )}
           </div>
         </div>
@@ -168,7 +172,7 @@ const StyledImage = styled.section`
       border: #fff solid 3px;
     }
 
-    & input[type='file'] {
+    & input[type="file"] {
       display: none;
     }
   }

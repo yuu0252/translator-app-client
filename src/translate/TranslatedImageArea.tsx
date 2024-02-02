@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
-import styled from 'styled-components';
-import { Header } from '../components/Header';
-import { AiFillCloseSquare } from 'react-icons/ai';
-import { translateText } from '../functions/translate/translateText';
-import { useSelector } from 'react-redux';
-import { selectLanguage } from '../reducer/languageSlice';
-import { languageCodeList } from '../constants';
-import { textToSpeech } from '../functions/audio/textToSpeech';
-import { imageOutputData, imageTranslatedData, loadImageResult } from '../type';
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+import styled from "styled-components";
+import { Header } from "../components/Header";
+import { AiFillCloseSquare } from "react-icons/ai";
+import { translateText } from "../functions/translate/translateText";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../reducer/languageSlice";
+import { languageCodeList } from "../constants";
+import { textToSpeech } from "../functions/audio/textToSpeech";
+import { imageOutputData, imageTranslatedData, loadImageResult } from "../type";
 
 export const TranslatedImageArea = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export const TranslatedImageArea = () => {
   const languageCode = languageCodeList.find(
     (e) => e.code === currentLanguage
   )?.shortCode;
-  const [imageTranslatedData, setimageTranslatedData] =
+  const [imageTranslatedData, setImageTranslatedData] =
     useState<Array<imageTranslatedData>>();
   const image = useRef<HTMLImageElement>(null);
 
@@ -59,35 +59,35 @@ export const TranslatedImageArea = () => {
               const height =
                 ((boundingBox[3].y - boundingBox[1].y) / image.naturalHeight) *
                 100;
-              const top = (boundingBox[0].y / image.naturalHeight) * 100 + '%';
+              const top = (boundingBox[0].y / image.naturalHeight) * 100 + "%";
               const left =
-                (boundingBox[0].x / image.naturalWidth) * 100 - 5 + '%';
-              const fontSize = '1rem';
+                (boundingBox[0].x / image.naturalWidth) * 100 - 5 + "%";
+              const fontSize = "1rem";
               const style = {
-                display: 'flex',
-                position: 'absolute',
-                width: width + '%',
-                minHeight: height + '%',
+                display: "flex",
+                position: "absolute",
+                width: width + "%",
+                minHeight: height + "%",
                 top: top,
                 left: left,
-                backgroundColor: 'rgba(0, 0, 0, 0.85)',
-                color: '#fff',
+                backgroundColor: "rgba(0, 0, 0, 0.85)",
+                color: "#fff",
                 fontSize: fontSize,
-                fontWeight: 'bold',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                opacity: '0.8',
+                fontWeight: "bold",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+                opacity: "0.8",
               };
               const outputText = languageCode
                 ? await translateText(text, languageCode, isJapanese)
-                : '翻訳に失敗しました';
+                : "翻訳に失敗しました";
               if (outputText === text) return;
               imageOutputData.push({ outputText: outputText, style: style });
             }
           )
         );
-        setimageTranslatedData(imageOutputData);
+        setImageTranslatedData(imageOutputData);
       })
       .catch((err) => console.log(err));
   }, [languageCode]);
@@ -108,14 +108,14 @@ export const TranslatedImageArea = () => {
                   ? currentLanguage &&
                     textToSpeech(e.currentTarget.outerText, currentLanguage)
                   : currentLanguage &&
-                    textToSpeech(e.currentTarget.outerText, 'ja-JP')
+                    textToSpeech(e.currentTarget.outerText, "ja-JP")
               }
             >
               {e.outputText}
             </p>
           ))}
         <img src={imageUrl} ref={image} />
-        <button className="close-btn" onClick={() => navigate('/image')}>
+        <button className="close-btn" onClick={() => navigate("/image")}>
           <AiFillCloseSquare />
         </button>
       </StyledTranslatedImageArea>
