@@ -10,33 +10,42 @@ export type languageCode = {
 };
 
 export type currentLanguage =
-  | 'none'
-  | 'en-us'
-  | 'en-gb'
-  | 'en-sg'
-  | 'yue-hant-hk'
-  | 'cmn-hant-tw'
-  | 'cmn-hans-cn'
-  | 'fil-ph'
-  | 'th-th'
-  | 'id-id'
-  | 'ms-my'
-  | 'vi-vn'
-  | 'ko-kr'
-  | 'fr-fr'
-  | 'de-de'
-  | 'it-it'
-  | 'hi-in'
-  | 'pt-br'
-  | 'uk-ua'
-  | 'ru-ru'
-  | 'ar-ae'
-  | 'en-hk'
-  | 'en-ph'
-  | 'en-ca'
-  | 'en-au'
-  | 'en-nz'
-  | 'en-in';
+  | "none"
+  | "en-us"
+  | "en-gb"
+  | "en-sg"
+  | "yue-hant-hk"
+  | "cmn-hant-tw"
+  | "cmn-hans-cn"
+  | "fil-ph"
+  | "th-th"
+  | "id-id"
+  | "ms-my"
+  | "vi-vn"
+  | "ko-kr"
+  | "fr-fr"
+  | "de-de"
+  | "it-it"
+  | "hi-in"
+  | "pt-br"
+  | "uk-ua"
+  | "ru-ru"
+  | "ar-ae"
+  | "en-hk"
+  | "en-ph"
+  | "en-ca"
+  | "en-au"
+  | "en-nz"
+  | "en-in";
+
+export type TypeSpeechToTextResult = {
+  languageCode: string;
+  alternatives: [
+    {
+      transcript: string;
+    }
+  ];
+};
 
 export type imageOutputData = {
   outputText: string;
