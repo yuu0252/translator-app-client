@@ -2,14 +2,12 @@ import axios from "axios";
 import { languageCodeList } from "../../constants";
 import { setCurrentLanguage } from "../../reducer/languageSlice";
 import { setTranscription, setOutputText } from "../../reducer/translateSlice";
-import { selectLanguage } from "../../reducer/languageSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { setIsLoading } from "../../reducer/loadingSlice";
 import { speechToTextResult } from "./speechToTextResult";
+import store from "../../reducer/store";
 
 export const speechToText = (base64data: string) => {
-  const { currentLanguage } = useSelector(selectLanguage);
-  const dispatch = useDispatch();
+  const { currentLanguage } = store.getState().language;
 
   // google translate APIの複数言語設定
   const altLanguageCodes =
@@ -36,8 +34,8 @@ export const speechToText = (base64data: string) => {
       const result = res.data.results[0];
       const [sourceLanguage, targetLanguage, currentLanguage, text] =
         speechToTextResult(result);
-      dispatch(setCurrentLanguage(currentLanguage));
-      dispatch(setTranscription(text));
+      store.dispatch(setCurrentLanguage(currentLanguage));
+      store.dispatch(setTranscription(text));
 
       // 出力されたテキストを翻訳する
       axios
@@ -55,18 +53,18 @@ export const speechToText = (base64data: string) => {
         .then((res) => {
           const translatedText = res.data.data.translations[0].translatedText;
           const handleResultTranslate = (translatedText: string) => {
-            dispatch(setOutputText(translatedText));
-            dispatch(setIsLoading(false));
+            store.dispatch(setOutputText(translatedText));
+            store.dispatch(setIsLoading(false));
           };
           handleResultTranslate(translatedText);
         })
         .catch(() => {
-          dispatch(setOutputText("翻訳に失敗しました"));
-          dispatch(setIsLoading(false));
+          store.dispatch(setOutputText("翻訳に失敗しました"));
+          store.dispatch(setIsLoading(false));
         });
     })
     .catch(() => {
-      dispatch(setTranscription("音声認識に失敗しました"));
-      dispatch(setIsLoading(false));
+      store.dispatch(setTranscription("音声認識に失敗しました"));
+      store.dispatch(setIsLoading(false));
     });
 };
