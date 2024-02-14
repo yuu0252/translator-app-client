@@ -1,24 +1,22 @@
 import axios from "axios";
 
+type successHandlerType = (translatedText: string) => void;
+type errorHandlerType = () => void;
+
 export const translateText = async (
-  text: string,
-  language: string,
-  isJapanese: boolean
-  // 関数をそれぞれのものを渡す（成功と失敗)
+  text: string | undefined,
+  sourceLanguage: string | undefined,
+  targetLanguage: string | undefined,
+  // 使用する箇所によって違う処理を実行するのでそれぞれ関数で渡す
+  successHandler: successHandlerType,
+  errorHandler: errorHandlerType
 ) => {
-  const source = language !== "none" ? (isJapanese ? "ja" : language) : null;
-  const target = isJapanese ? language : "ja";
-
-  console.log(text + ":" + source + ":" + target);
-
-  const data = source
-    ? {
-        q: text,
-        source: source,
-        target: target,
-        format: "text",
-      }
-    : { q: text, target: "ja", format: "text" };
+  const data = {
+    q: text,
+    source: sourceLanguage,
+    target: targetLanguage,
+    format: "text",
+  };
 
   const result = await axios
     .post(
@@ -28,15 +26,11 @@ export const translateText = async (
       data
     )
     .then((res) => {
-      console.log(res.data);
-      const result = res.data.data.translations[0].translatedText;
-      // 場合わけ
-      // 引数にresult
-      return result; // 消す
+      const translatedText = res.data.data.translations[0].translatedText;
+      successHandler(translatedText);
     })
-    .catch((err) => {
-      console.log(err);
-      return "翻訳に失敗しました";
+    .catch(() => {
+      errorHandler();
     });
 
   return result;
