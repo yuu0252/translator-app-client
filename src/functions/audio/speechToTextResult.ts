@@ -1,16 +1,22 @@
 import { languageCodeList } from "../../constants";
 import { TypeSpeechToTextResult } from "../../type";
+import store from "../../reducer/store";
+import { setCurrentLanguage } from "../../reducer/languageSlice";
+import { setTranscription } from "../../reducer/translateSlice";
 
-export const speechToTextResult = (result: TypeSpeechToTextResult) => {
+// 入力された音声から翻訳するためのデータを抽出する
+export const speechToTextResult = (
+  result: TypeSpeechToTextResult,
+  currentLanguage: string | undefined
+) => {
+  console.log(currentLanguage);
   const detectedLanguage = result.languageCode;
   const text = result.alternatives[0].transcript;
 
-  // 入力言語が日本語かどうか
-  const isJapanese = detectedLanguage === "ja-jp" ? true : false;
+  store.dispatch(setTranscription(text)); // 翻訳する前のテキストをセット
 
   let sourceLanguage: string | undefined;
   let targetLanguage: string | undefined;
-  let currentLanguage: string | undefined;
 
   // 入力が日本語であるときに出力言語が設定されていなければ英語に変換する
   if (detectedLanguage === "ja-jp" && currentLanguage === "none") {
@@ -18,10 +24,10 @@ export const speechToTextResult = (result: TypeSpeechToTextResult) => {
     sourceLanguage = "ja";
     targetLanguage = "en";
   } else if (detectedLanguage === "ja-jp") {
-    currentLanguage = detectedLanguage;
     const targetCode = languageCodeList.find((e) => e.code === currentLanguage);
     sourceLanguage = "ja";
     targetLanguage = targetCode?.shortCode;
+    console.log(targetLanguage);
   } else {
     if (detectedLanguage !== "ja-jp" && currentLanguage === "none") {
       currentLanguage = detectedLanguage;
@@ -32,6 +38,6 @@ export const speechToTextResult = (result: TypeSpeechToTextResult) => {
     sourceLanguage = sourceCode?.shortCode;
     targetLanguage = "ja";
   }
-
-  return [sourceLanguage, targetLanguage, currentLanguage, text, isJapanese];
+  store.dispatch(setCurrentLanguage(currentLanguage)); // 翻訳する言語をセット
+  return [sourceLanguage, targetLanguage, text];
 };

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { languageCodeList } from "../../constants";
-import { setCurrentLanguage } from "../../reducer/languageSlice";
 import { setTranscription, setOutputText } from "../../reducer/translateSlice";
 import { setIsLoading } from "../../reducer/loadingSlice";
 import { speechToTextResult } from "./speechToTextResult";
@@ -32,10 +31,10 @@ export const speechToText = (base64data: string) => {
     )
     .then((res) => {
       const result = res.data.results[0];
-      const [sourceLanguage, targetLanguage, currentLanguage, text] =
-        speechToTextResult(result);
-      store.dispatch(setCurrentLanguage(currentLanguage));
-      store.dispatch(setTranscription(text));
+      const [sourceLanguage, targetLanguage, text] = speechToTextResult(
+        result,
+        currentLanguage
+      );
 
       // 出力されたテキストを翻訳する
       axios
