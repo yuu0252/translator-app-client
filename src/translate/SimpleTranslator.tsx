@@ -1,17 +1,17 @@
-import { Header } from "../components/Header";
-import { Recording } from "../components/Recording";
-import { languageCodeList } from "../constants";
-import { useDispatch, useSelector } from "react-redux";
-import { selectTranslate, setOutputText } from "../reducer/translateSlice";
-import { translateText } from "../functions/translate/translateText";
-import { selectLanguage } from "../reducer/languageSlice";
-import { useEffect, useState } from "react";
-import { PlayAudio } from "../components/PlayAudio";
-import { Loading } from "../components/Loading";
-import { selectLoading } from "../reducer/loadingSlice";
-import { EditModal } from "../components/EditModal";
-import { createTranslatePlaceholder } from "../functions/translate/createTranslatePlaceholder";
-import styled from "styled-components";
+import { Header } from '../components/Header';
+import { Recording } from '../components/Recording';
+import { languageCodeList } from '../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectTranslate, setOutputText } from '../reducer/translateSlice';
+import { translateText } from '../functions/translate/translateText';
+import { selectLanguage } from '../reducer/languageSlice';
+import { useEffect, useState } from 'react';
+import { PlayAudio } from '../components/PlayAudio';
+import { Loading } from '../components/Loading';
+import { selectLoading } from '../reducer/loadingSlice';
+import { EditModal } from '../components/EditModal';
+import { createTranslatePlaceholder } from '../functions/translate/createTranslatePlaceholder';
+import styled from 'styled-components';
 
 export const SimpleTranslator = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ export const SimpleTranslator = () => {
   };
 
   const errorHandlerTranslation = () => {
-    dispatch(setOutputText("翻訳に失敗しました"));
+    dispatch(setOutputText('翻訳に失敗しました'));
   };
 
   // プレースホルダーに各言語で「自分の言語で話してください」と設定する
@@ -36,11 +36,12 @@ export const SimpleTranslator = () => {
 
   // ドロップダウンで言語変更される度に翻訳しなおす
   useEffect(() => {
+    if (transcription === '' || currentLanguage === 'none') return;
     const chosenLanguage = languageCodeList.find(
       (e) => e.code === currentLanguage
     )?.shortCode;
-    const sourceLanguage = isJapanese ? "ja-jp" : chosenLanguage;
-    const targetLanguage = isJapanese ? chosenLanguage : "ja-jp";
+    const sourceLanguage = isJapanese ? 'ja-jp' : chosenLanguage;
+    const targetLanguage = isJapanese ? chosenLanguage : 'ja-jp';
     translateText(
       transcription,
       sourceLanguage,
@@ -62,7 +63,7 @@ export const SimpleTranslator = () => {
               <>
                 <p
                   onClick={() => setModalIsOpen(true)}
-                  className={transcription ? "" : "placeholder"}
+                  className={transcription ? '' : 'placeholder'}
                 >
                   {transcription ? transcription : placeholder}
                 </p>

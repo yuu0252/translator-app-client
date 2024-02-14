@@ -26,7 +26,9 @@ export const Header = () => {
           value={currentLanguage}
           onChange={(e) => dispatch(setCurrentLanguage(e.target.value))}
         >
-          <option key="default">{'言語を選択してください'}</option>
+          <option key="default" value="none">
+            {'言語を選択してください'}
+          </option>
           {languageCodeList.map((language) => (
             <option value={language.code} key={language.code}>
               {language.name}
