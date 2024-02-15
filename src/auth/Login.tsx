@@ -1,18 +1,19 @@
 import styled from 'styled-components';
+import { UserForm } from '../components/form/UserForm';
 
 export const Login = () => {
   return (
     <>
       <StyledLogin className="container">
-        <h2>ログイン</h2>
+        <UserForm buttonText="ログイン" />
       </StyledLogin>
     </>
   );
 };
 
 const StyledLogin = styled.div`
-  width: 30%;
+  width: 80%;
   min-width: 200px;
-  height: 50vh;
-  background-color: #fff;
+  max-width: 400px;
+  height: 100vh;
 `;
