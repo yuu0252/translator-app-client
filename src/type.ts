@@ -1,4 +1,4 @@
-export type languageCode = {
+export type TypeLanguageCode = {
   code: string;
   shortCode: string;
   name: string;
@@ -9,36 +9,36 @@ export type languageCode = {
   };
 };
 
-export type currentLanguage =
-  | "none"
-  | "en-us"
-  | "en-gb"
-  | "en-sg"
-  | "yue-hant-hk"
-  | "cmn-hant-tw"
-  | "cmn-hans-cn"
-  | "fil-ph"
-  | "th-th"
-  | "id-id"
-  | "ms-my"
-  | "vi-vn"
-  | "ko-kr"
-  | "fr-fr"
-  | "de-de"
-  | "it-it"
-  | "hi-in"
-  | "pt-br"
-  | "uk-ua"
-  | "ru-ru"
-  | "ar-ae"
-  | "en-hk"
-  | "en-ph"
-  | "en-ca"
-  | "en-au"
-  | "en-nz"
-  | "en-in";
+export type TypeCurrentLanguage =
+  | 'none'
+  | 'en-us'
+  | 'en-gb'
+  | 'en-sg'
+  | 'yue-hant-hk'
+  | 'cmn-hant-tw'
+  | 'cmn-hans-cn'
+  | 'fil-ph'
+  | 'th-th'
+  | 'id-id'
+  | 'ms-my'
+  | 'vi-vn'
+  | 'ko-kr'
+  | 'fr-fr'
+  | 'de-de'
+  | 'it-it'
+  | 'hi-in'
+  | 'pt-br'
+  | 'uk-ua'
+  | 'ru-ru'
+  | 'ar-ae'
+  | 'en-hk'
+  | 'en-ph'
+  | 'en-ca'
+  | 'en-au'
+  | 'en-nz'
+  | 'en-in';
 
-export type TypeSpeechToTextResult = {
+export type TypeResultSpeechToText = {
   languageCode: string;
   alternatives: [
     {
@@ -47,22 +47,22 @@ export type TypeSpeechToTextResult = {
   ];
 };
 
-export type imageOutputData = {
+export type TypeImageOutputData = {
   outputText: string;
   style: object;
 };
 
-export type loadImageResult = {
+export type TypeLoadImageResult = {
   naturalWidth: number;
   naturalHeight: number;
 };
 
-export type imageTranslatedData = {
+export type TypeImageTranslatedData = {
   outputText: string;
   style: object;
 };
 
-export type recognizedData = {
+export type TypeRecognizedData = {
   responses: [
     {
       fullTextAnnotation: {
@@ -95,7 +95,13 @@ export type recognizedData = {
   ];
 };
 
-export type imageRecognizedResult = {
+export type TypeImageRecognizedResult = {
   text: string;
   boundingBox: [x: number, y: number];
+};
+
+// ログイン
+export type TypeUserForm = {
+  username: string;
+  password: string;
 };

@@ -1,9 +1,9 @@
-import { imageRecognizedResult, recognizedData } from '../../type';
+import { TypeImageRecognizedResult, TypeRecognizedData } from '../../type';
 
-export const imageRecognizedData = (recognizedData: recognizedData) => {
+export const imageRecognizedData = (recognizedData: TypeRecognizedData) => {
   const dataArr =
     recognizedData.responses[0].fullTextAnnotation.pages[0].blocks;
-  const result: Array<imageRecognizedResult> = [];
+  const result: Array<TypeImageRecognizedResult> = [];
   dataArr.forEach((block) => {
     const fullTextArr: Array<string> = [];
     const arr = block.paragraphs;

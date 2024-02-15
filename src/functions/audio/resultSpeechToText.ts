@@ -1,12 +1,12 @@
 import { languageCodeList } from '../../constants';
-import { TypeSpeechToTextResult } from '../../type';
 import store from '../../reducer/store';
 import { setCurrentLanguage } from '../../reducer/languageSlice';
 import { setTranscription } from '../../reducer/translateSlice';
+import { TypeResultSpeechToText } from '../../type';
 
 // 入力された音声から翻訳するためのデータを抽出する
 export const resultSpeechToText = (
-  result: TypeSpeechToTextResult,
+  result: TypeResultSpeechToText,
   currentLanguage: string | undefined
 ) => {
   console.log(currentLanguage);
