@@ -164,16 +164,18 @@ const StyledImage = styled.section`
     padding: 15px;
     & label {
       padding: 10px 40px;
-      color: #ffffff;
-      background-color: #384878;
+      font-weight: bold;
       cursor: pointer;
-      background-image: linear-gradient(
-        90deg,
-        rgba(103, 126, 250, 1),
-        rgba(142, 84, 219, 1)
-      );
       border-radius: 10px;
+      color: #fff;
+      background-color: #000;
       border: #fff solid 3px;
+
+      &:hover {
+        color: #555;
+        background-color: #fff;
+        border: #000 solid 3px;
+      }
     }
 
     & input[type='file'] {

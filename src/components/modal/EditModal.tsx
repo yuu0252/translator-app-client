@@ -1,4 +1,3 @@
-import { languageCodeList } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectTranslate,
@@ -11,27 +10,11 @@ import Modal from 'react-modal';
 import { useRef } from 'react';
 import { AiFillCloseSquare } from 'react-icons/ai';
 import store from '../../reducer/store';
+import { styleEditModal } from '../../constants';
 
 type Props = {
   modalIsOpen: boolean;
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const customStyles = {
-  content: {
-    width: '80%',
-    height: '50%',
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    borderRadius: '10px',
-    transform: 'translate(-50%, -50%)',
-  },
-  overlay: {
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
 };
 
 // 音声認識後のテキストを編集するためのモーダル
@@ -67,7 +50,7 @@ export const EditModal = ({ modalIsOpen, setModalIsOpen }: Props) => {
   return (
     <Modal
       isOpen={modalIsOpen}
-      style={customStyles}
+      style={styleEditModal}
       onRequestClose={() => setModalIsOpen(false)}
       contentLabel="Modal"
       ariaHideApp={false}
