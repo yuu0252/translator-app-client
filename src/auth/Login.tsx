@@ -18,11 +18,11 @@ export const Login = () => {
   const onSubmit = (data: TypeUserForm) => {
     axios
       .post(import.meta.env.VITE_USER_LOGIN_URL, {
-        identifier: data.email,
+        email: data.email,
         password: data.password,
       })
       .then((res) => {
-        setCookie('token', res.data.jwt);
+        setCookie('token', res.data.token);
         dispacth(login());
         navigate('/');
       })
@@ -42,6 +42,7 @@ export const Login = () => {
         <Navigate to="/" />
       ) : (
         <StyledLogin className="container">
+          <h1>Multi Translator</h1>
           {errorMessage !== '' && (
             <p className="error-message">{errorMessage}</p>
           )}
@@ -60,6 +61,14 @@ const StyledLogin = styled.div`
   height: 100vh;
   align-items: center;
   justify-content: center;
+
+  & h1 {
+    margin-bottom: 30px;
+    color: #fff;
+    text-shadow: #aaa 0 0 15px;
+    font-family: 'Noto Serif JP', serif;
+    letter-spacing: 0.125em;
+  }
 
   & > p.error-message {
     color: #f08080;

@@ -28,6 +28,9 @@ export const Header = () => {
               <span>Image</span>
             </Link>
           </li>
+          <li>
+            <Logout />
+          </li>
         </ul>
       </nav>
       <div className="select-box">
@@ -48,12 +51,12 @@ export const Header = () => {
           </optgroup>
         </select>
       </div>
-      <Logout />
     </StyledHeader>
   );
 };
 
 const StyledHeader = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -71,6 +74,7 @@ const StyledHeader = styled.div`
       column-gap: 5px;
       align-items: center;
       & li {
+        width: 100px;
         height: 100%;
         padding: 5px 15px;
         border-radius: 0 0 5px 5px;
@@ -81,9 +85,18 @@ const StyledHeader = styled.div`
           color: #fff;
           background-color: #555;
         }
+        &:last-of-type {
+          margin-right: 0;
+          margin-left: auto;
+          &:hover {
+            color: #fff;
+            background-color: #555;
+          }
+        }
         & a {
           display: flex;
           height: 100%;
+          justify-content: center;
           align-items: center;
         }
       }
