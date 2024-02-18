@@ -119,11 +119,7 @@ body a {
 }
 
 button {
-  width: 75px;
-  height: 75px;
-  background-color: hsl(0deg, 0%, 100%);
   padding: 5px;
-  border-radius: 100%;
   color: inherit;
   cursor: pointer;
 }
@@ -144,15 +140,6 @@ button > div {
 button > div svg {
   width: 100%;
   height: auto;
-}
-button.start-btn svg {
-  color: #333;
-}
-button.stop-btn {
-  display: none;
-}
-button.stop-btn svg {
-  color: #ff0000;
 }
 button.speaker-btn {
   position: absolute;

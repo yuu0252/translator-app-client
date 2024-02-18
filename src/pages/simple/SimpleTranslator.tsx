@@ -1,7 +1,11 @@
 import { Header } from '../../components/Header';
 import { Recording } from '../../components/audio/Recording';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectTranslate, setOutputText } from '../../reducer/translateSlice';
+import {
+  selectTranslate,
+  setOutputText,
+  setTranscription,
+} from '../../reducer/translateSlice';
 import { translateText } from '../../functions/translate/translateText';
 import { selectLanguage } from '../../reducer/languageSlice';
 import { useEffect, useState } from 'react';
@@ -30,6 +34,27 @@ export const SimpleTranslator = () => {
 
   const errorHandlerTranslation = () => {
     dispatch(setOutputText('翻訳に失敗しました'));
+  };
+
+  const modalSubmitHandler = (text: string) => {
+    dispatch(setTranscription(text));
+    const successHandlerTranslation = (translatedText: string) => {
+      dispatch(setOutputText(translatedText));
+    };
+    const errorHandlerTranslation = () => {
+      dispatch(setOutputText('翻訳に失敗しました'));
+    };
+    const chosenLanguage =
+      currentLanguage === 'none' ? 'en-us' : currentLanguage;
+    const sourcelanguage = isJapanese ? 'ja-jp' : chosenLanguage;
+    const targetLanguage = isJapanese ? chosenLanguage : 'ja-jp';
+    translateText(
+      text,
+      sourcelanguage,
+      targetLanguage,
+      successHandlerTranslation,
+      errorHandlerTranslation
+    );
   };
 
   // プレースホルダーに各言語で「自分の言語で話してください」と設定する
@@ -77,7 +102,11 @@ export const SimpleTranslator = () => {
           </div>
         </div>
         <Recording />
-        <EditModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
+        <EditModal
+          modalIsOpen={modalIsOpen}
+          setModalIsOpen={setModalIsOpen}
+          submitHandler={modalSubmitHandler}
+        />
       </StyledSimpleTranslator>
     </>
   ) : (

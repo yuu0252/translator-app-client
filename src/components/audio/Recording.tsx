@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { setIsLoading } from '../../reducer/loadingSlice';
 import { useDispatch } from 'react-redux';
 import { speechToText } from '../../functions/audio/speechToText';
+import styled from 'styled-components';
 
 export const Recording = () => {
   const startBtn = useRef<HTMLButtonElement>(null);
@@ -177,7 +178,7 @@ export const Recording = () => {
 
   return (
     <>
-      <button
+      <StyledRecordingButton
         ref={stopBtn}
         onClick={(e) => {
           e.currentTarget.style.display = 'none';
@@ -188,8 +189,8 @@ export const Recording = () => {
         <div>
           <FaStop />
         </div>
-      </button>
-      <button
+      </StyledRecordingButton>
+      <StyledRecordingButton
         ref={startBtn}
         onClick={(e) => {
           e.currentTarget.style.display = 'none';
@@ -200,7 +201,26 @@ export const Recording = () => {
         <div>
           <FaMicrophone />
         </div>
-      </button>
+      </StyledRecordingButton>
     </>
   );
 };
+
+const StyledRecordingButton = styled.button`
+  width: 75px;
+  height: 75px;
+  background-color: #fff;
+  border-radius: 100%;
+  &.start-btn {
+    & svg {
+      color: #333;
+    }
+  }
+
+  &.stop-btn {
+    display: none;
+    & svg {
+      color: #ff0000;
+    }
+  }
+`;

@@ -28,6 +28,15 @@ export const Header = () => {
               <span>Image</span>
             </Link>
           </li>
+          <li
+            className={
+              pathname === '/favorite' ? 'favorite active' : 'favorite'
+            }
+          >
+            <Link to="/favorite">
+              <span>Favorite</span>
+            </Link>
+          </li>
           <li>
             <Logout />
           </li>

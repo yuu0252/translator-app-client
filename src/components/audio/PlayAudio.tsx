@@ -3,6 +3,7 @@ import { textToSpeech } from '../../functions/audio/textToSpeech';
 import { languageCodeList } from '../../constants';
 import { useSelector } from 'react-redux';
 import { selectLanguage } from '../../reducer/languageSlice';
+import styled from 'styled-components';
 
 export const PlayAudio = ({ text }: { text: string }) => {
   const { currentLanguage, isJapanese } = useSelector(selectLanguage);
@@ -14,8 +15,12 @@ export const PlayAudio = ({ text }: { text: string }) => {
   };
 
   return (
-    <button onClick={onClickPlay} className="speaker-btn">
+    <StyledPlayAudio onClick={onClickPlay} className="speaker-btn">
       <HiSpeakerWave />
-    </button>
+    </StyledPlayAudio>
   );
 };
+
+const StyledPlayAudio = styled.button`
+  border-radius: 100%;
+`;
