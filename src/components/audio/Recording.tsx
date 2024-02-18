@@ -1,9 +1,9 @@
 import { FaMicrophone } from 'react-icons/fa6';
 import { FaStop } from 'react-icons/fa';
 import { useRef } from 'react';
-import { setIsLoading } from '../reducer/loadingSlice';
+import { setIsLoading } from '../../reducer/loadingSlice';
 import { useDispatch } from 'react-redux';
-import { speechToText } from '../functions/audio/speechToText';
+import { speechToText } from '../../functions/audio/speechToText';
 
 export const Recording = () => {
   const startBtn = useRef<HTMLButtonElement>(null);

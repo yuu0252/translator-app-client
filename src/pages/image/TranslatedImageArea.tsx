@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
-import { Header } from '../components/Header';
+import { Header } from '../../components/Header';
 import { AiFillCloseSquare } from 'react-icons/ai';
-import { translateText } from '../functions/translate/translateText';
+import { translateText } from '../../functions/translate/translateText';
 import { useSelector } from 'react-redux';
-import { selectLanguage } from '../reducer/languageSlice';
-import { textToSpeech } from '../functions/audio/textToSpeech';
+import { selectLanguage } from '../../reducer/languageSlice';
+import { textToSpeech } from '../../functions/audio/textToSpeech';
 import {
   TypeImageOutputData,
   TypeImageTranslatedData,
   TypeLoadImageResult,
-} from '../type';
+} from '../../type';
 
 export const TranslatedImageArea = () => {
   const navigate = useNavigate();

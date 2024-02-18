@@ -1,14 +1,14 @@
-import { resizeImage } from '../functions/image/resizeImage';
+import { resizeImage } from '../../functions/image/resizeImage';
 import { useState } from 'react';
-import { Header } from '../components/Header';
+import { Header } from '../../components/Header';
 import { Navigate, useNavigate } from 'react-router';
-import { recognizeImage } from '../functions/image/recognizeImage';
-import { imageRecognizedData } from '../functions/image/imageRecognizedData';
+import { recognizeImage } from '../../functions/image/recognizeImage';
+import { imageRecognizedData } from '../../functions/image/imageRecognizedData';
 import { useSelector } from 'react-redux';
-import { selectLanguage } from '../reducer/languageSlice';
-import { languageCodeList } from '../constants';
+import { selectLanguage } from '../../reducer/languageSlice';
+import { languageCodeList } from '../../constants';
 import styled from 'styled-components';
-import { selectLogin } from '../reducer/loginSlice';
+import { selectLogin } from '../../reducer/loginSlice';
 
 export const ImageTranslation = () => {
   const [imageUrl, setImageUrl] = useState('');

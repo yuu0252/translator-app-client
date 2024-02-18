@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { SimpleTranslator } from './translate/SimpleTranslator';
-import { ImageTranslation } from './translate/ImageTranslate';
-import { TranslatedImageArea } from './translate/TranslatedImageArea';
+import { SimpleTranslator } from './pages/simple/SimpleTranslator';
+import { ImageTranslation } from './pages/image/ImageTranslate';
+import { TranslatedImageArea } from './pages/image/TranslatedImageArea';
 import { Login } from './auth/Login';
 
 export const Router = () => {

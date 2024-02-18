@@ -1,16 +1,16 @@
-import { languageCodeList } from '../constants';
+import { languageCodeList } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectTranslate,
   setOutputText,
   setTranscription,
-} from '../reducer/translateSlice';
-import { translateText } from '../functions/translate/translateText';
-import { selectLanguage } from '../reducer/languageSlice';
+} from '../../reducer/translateSlice';
+import { translateText } from '../../functions/translate/translateText';
+import { selectLanguage } from '../../reducer/languageSlice';
 import Modal from 'react-modal';
 import { useRef } from 'react';
 import { AiFillCloseSquare } from 'react-icons/ai';
-import store from '../reducer/store';
+import store from '../../reducer/store';
 
 type Props = {
   modalIsOpen: boolean;

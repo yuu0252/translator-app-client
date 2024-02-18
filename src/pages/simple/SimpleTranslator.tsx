@@ -1,17 +1,17 @@
-import { Header } from '../components/Header';
-import { Recording } from '../components/Recording';
+import { Header } from '../../components/Header';
+import { Recording } from '../../components/audio/Recording';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectTranslate, setOutputText } from '../reducer/translateSlice';
-import { translateText } from '../functions/translate/translateText';
-import { selectLanguage } from '../reducer/languageSlice';
+import { selectTranslate, setOutputText } from '../../reducer/translateSlice';
+import { translateText } from '../../functions/translate/translateText';
+import { selectLanguage } from '../../reducer/languageSlice';
 import { useEffect, useState } from 'react';
-import { PlayAudio } from '../components/PlayAudio';
-import { Loading } from '../components/Loading';
-import { selectLoading } from '../reducer/loadingSlice';
-import { EditModal } from '../components/EditModal';
-import { createTranslatePlaceholder } from '../functions/translate/createTranslatePlaceholder';
+import { PlayAudio } from '../../components/audio/PlayAudio';
+import { Loading } from '../../components/Loading';
+import { selectLoading } from '../../reducer/loadingSlice';
+import { EditModal } from '../../components/modal/EditModal';
+import { createTranslatePlaceholder } from '../../functions/translate/createTranslatePlaceholder';
 import styled from 'styled-components';
-import { selectLogin } from '../reducer/loginSlice';
+import { selectLogin } from '../../reducer/loginSlice';
 import { Navigate } from 'react-router';
 
 export const SimpleTranslator = () => {

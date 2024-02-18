@@ -1,8 +1,8 @@
 import { HiSpeakerWave } from 'react-icons/hi2';
-import { textToSpeech } from '../functions/audio/textToSpeech';
-import { languageCodeList } from '../constants';
+import { textToSpeech } from '../../functions/audio/textToSpeech';
+import { languageCodeList } from '../../constants';
 import { useSelector } from 'react-redux';
-import { selectLanguage } from '../reducer/languageSlice';
+import { selectLanguage } from '../../reducer/languageSlice';
 
 export const PlayAudio = ({ text }: { text: string }) => {
   const { currentLanguage, isJapanese } = useSelector(selectLanguage);
