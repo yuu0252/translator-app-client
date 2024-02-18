@@ -10,7 +10,10 @@ import { HiOutlinePencilAlt } from 'react-icons/hi';
 
 export const Favorite = () => {
   const [phrases, setPhrases] = useState([]);
+  const [phraseTitle, setPhraseTitle] = useState('');
+  const [phraseId, setPhraseId] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isNew, setIsNew] = useState(true);
 
   const getAllPhrases = () => {
     phraseApi
@@ -25,14 +28,19 @@ export const Favorite = () => {
 
   const modalSubmitHandler = (text: string) => {
     // 新しくフレーズを追加する
-    phraseApi
-      .create(text)
-      .then(() => {
-        getAllPhrases();
-      })
-      .catch(() => {
-        alert('お気に入りフレーズの作成に失敗しました');
-      });
+    isNew
+      ? phraseApi
+          .create(text)
+          .then(() => getAllPhrases())
+          .catch(() => {
+            alert('お気に入りフレーズの作成に失敗しました');
+          })
+      : phraseApi
+          .update(phraseId, { title: text })
+          .then(() => getAllPhrases())
+          .catch(() => {
+            alert('お気に入りフレーズの編集に失敗しました');
+          });
   };
 
   // ユーザのお気に入りフレーズを取得する
@@ -51,7 +59,12 @@ export const Favorite = () => {
                 <h2>お気に入りフレーズ</h2>
                 <button
                   className="add-btn"
-                  onClick={() => setModalIsOpen(true)}
+                  onClick={() => {
+                    setPhraseTitle('');
+                    setPhraseId('');
+                    setIsNew(true);
+                    setModalIsOpen(true);
+                  }}
                 >
                   <RiPlayListAddLine />
                   <span>追加</span>
@@ -64,7 +77,14 @@ export const Favorite = () => {
                     <li key={phrase._id}>
                       <p>{phrase.title}</p>
                       <div className="button-wrapper">
-                        <button>
+                        <button
+                          onClick={() => {
+                            setModalIsOpen(true);
+                            setPhraseId(phrase._id);
+                            setPhraseTitle(phrase.title);
+                            setIsNew(false);
+                          }}
+                        >
                           <HiOutlinePencilAlt />
                         </button>
                         <button className="caution">
@@ -82,6 +102,7 @@ export const Favorite = () => {
         </div>
       </StyledFavorite>
       <EditModal
+        defaultValue={phraseTitle}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
         submitHandler={modalSubmitHandler}

@@ -6,4 +6,10 @@ export const phraseApi = {
       title: title,
     }),
   getAll: () => axiosFetchServer.get('/phrases'),
+  update: (
+    id: string,
+    params: {
+      title: String;
+    }
+  ) => axiosFetchServer.put(`phrases/${id}`, params),
 };

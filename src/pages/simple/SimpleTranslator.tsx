@@ -103,6 +103,7 @@ export const SimpleTranslator = () => {
         </div>
         <Recording />
         <EditModal
+          defaultValue={transcription}
           modalIsOpen={modalIsOpen}
           setModalIsOpen={setModalIsOpen}
           submitHandler={modalSubmitHandler}

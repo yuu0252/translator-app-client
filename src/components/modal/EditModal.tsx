@@ -1,18 +1,10 @@
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  selectTranslate,
-  setOutputText,
-  setTranscription,
-} from '../../reducer/translateSlice';
-import { translateText } from '../../functions/translate/translateText';
-import { selectLanguage } from '../../reducer/languageSlice';
 import Modal from 'react-modal';
 import { useRef } from 'react';
-import { AiFillCloseSquare } from 'react-icons/ai';
-import store from '../../reducer/store';
 import { styleEditModal } from '../../constants';
+import { AiFillCloseSquare } from 'react-icons/ai';
 
 type Props = {
+  defaultValue?: string;
   modalIsOpen: boolean;
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   submitHandler: (text: string) => void;
@@ -20,15 +12,18 @@ type Props = {
 
 // 音声認識後のテキストを編集するためのモーダル
 export const EditModal = ({
+  defaultValue,
   modalIsOpen,
   setModalIsOpen,
   submitHandler,
 }: Props) => {
   const textareaElement = useRef<HTMLTextAreaElement>(null);
-  const transcription = useSelector(selectTranslate).transcription;
 
   const onClickModalSubmit = (text?: string) => {
-    if (!text) return;
+    if (!text || text.replace(/\r?\n/g, '') === '') {
+      alert('テキストを入力してください');
+      return;
+    }
     setModalIsOpen(false);
     submitHandler(text);
   };
@@ -46,7 +41,7 @@ export const EditModal = ({
       </button>
       <div>
         <h2>入力内容を編集</h2>
-        <textarea defaultValue={transcription} ref={textareaElement} />
+        <textarea defaultValue={defaultValue} ref={textareaElement} />
       </div>
       <button
         className="submit-btn"
