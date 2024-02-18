@@ -111,3 +111,9 @@ export type TypeOnSubmitUserForm = (data: TypeUserForm) => void;
 export type TypeLoginError = {
   msg: string;
 };
+
+// お気に入りフレーズ
+export type TypePhrase = {
+  _id: string;
+  title: string;
+};

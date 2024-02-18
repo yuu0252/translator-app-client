@@ -50,7 +50,6 @@ export const Header = () => {
           <option key="default" value="none">
             {'言語を選択してください'}
           </option>
-          <optgroup label="お気に入り言語"></optgroup>
           <optgroup label="全ての言語">
             {languageCodeList.map((language) => (
               <option value={language.code} key={language.code}>

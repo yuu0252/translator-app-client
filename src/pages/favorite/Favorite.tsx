@@ -1,9 +1,44 @@
 import styled from 'styled-components';
 import { Header } from '../../components/Header';
 import { RiPlayListAddLine } from 'react-icons/ri';
+import { EditModal } from '../../components/modal/EditModal';
+import { useEffect, useState } from 'react';
+import { phraseApi } from '../../api/phraseApi';
+import { TypePhrase } from '../../type';
+import { PiTrashBold } from 'react-icons/pi';
+import { HiOutlinePencilAlt } from 'react-icons/hi';
 
 export const Favorite = () => {
-  const onClickAddPhrase = () => {};
+  const [phrases, setPhrases] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const getAllPhrases = () => {
+    phraseApi
+      .getAll()
+      .then((res) => {
+        setPhrases(res.data.reverse());
+      })
+      .catch(() => {
+        alert('お気に入りフレーズの取得に失敗しました');
+      });
+  };
+
+  const modalSubmitHandler = (text: string) => {
+    // 新しくフレーズを追加する
+    phraseApi
+      .create(text)
+      .then(() => {
+        getAllPhrases();
+      })
+      .catch(() => {
+        alert('お気に入りフレーズの作成に失敗しました');
+      });
+  };
+
+  // ユーザのお気に入りフレーズを取得する
+  useEffect(() => {
+    getAllPhrases();
+  }, []);
 
   return (
     <>
@@ -12,30 +47,45 @@ export const Favorite = () => {
         <div className="content-area">
           <div>
             <div className="list-wrapper">
-              <h2>お気に入り言語</h2>
-              <ul>
-                <li>英語</li>
-                <li>中国語</li>
-              </ul>
-            </div>
-            <div className="list-wrapper">
               <div className="list-title">
                 <h2>お気に入りフレーズ</h2>
-                <button className="add-btn" onClick={onClickAddPhrase}>
+                <button
+                  className="add-btn"
+                  onClick={() => setModalIsOpen(true)}
+                >
                   <RiPlayListAddLine />
                   <span>追加</span>
                 </button>
               </div>
-              <ul>
-                <li>今日はとてもいい天気ですね</li>
-                <li>
-                  明日は雪が降るかもしれません。電車の遅延等がないかご確認ください。
-                </li>
-              </ul>
+
+              {phrases.length !== 0 ? (
+                <ul>
+                  {phrases.map((phrase: TypePhrase) => (
+                    <li key={phrase._id}>
+                      <p>{phrase.title}</p>
+                      <div className="button-wrapper">
+                        <button>
+                          <HiOutlinePencilAlt />
+                        </button>
+                        <button className="caution">
+                          <PiTrashBold />
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>まだお気に入りフレーズはありません</p>
+              )}
             </div>
           </div>
         </div>
       </StyledFavorite>
+      <EditModal
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        submitHandler={modalSubmitHandler}
+      />
     </>
   );
 };
@@ -47,19 +97,25 @@ const StyledFavorite = styled.section`
     width: 80%;
     text-align: center;
 
+    & > p {
+      font-size: 16px;
+      margin: 30px 0;
+    }
+
     & .list-title {
-      display: flex;
-      justify-content: center;
-      column-gap: 15px;
-      margin-left: 65px;
+      display: grid;
+      grid-template-columns: 10% 80% 10%;
+      margin-bottom: 30px;
       & h2 {
+        grid-column: 2/3;
         font-size: 20px;
         vertical-align: middle;
       }
       & .add-btn {
+        grid-column: 3/4;
         display: flex;
-        width: 50px;
-        font-size: 12px;
+        width: 100%;
+        font-size: 16px;
         align-items: center;
         padding: 0;
         column-gap: 5px;
@@ -72,13 +128,36 @@ const StyledFavorite = styled.section`
 
     & ul {
       & li {
+        display: grid;
+        grid-template-columns: 10% 80% 10%;
         font-weight: normal;
-        text-align: center;
+        padding: 5px 0;
         margin-top: 5px;
         font-size: 16px;
         border-bottom: dashed #555 1px;
         &:last-of-type {
           margin-bottom: 30px;
+        }
+
+        & > p {
+          grid-column: 2/3;
+        }
+
+        & .button-wrapper {
+          display: flex;
+          width: 100%;
+          grid-column: 3/4;
+          margin: 0 0 auto;
+          color: #555;
+
+          & > button {
+            display: flex;
+            width: 100%;
+          }
+
+          & .caution {
+            color: #ff0000;
+          }
         }
       }
     }
