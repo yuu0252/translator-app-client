@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { UserForm } from '../components/form/UserForm';
-import { TypeUserForm } from '../type';
+import { TypeLoginError, TypeUserForm } from '../type';
 import axios from 'axios';
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router';
@@ -12,7 +12,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const dispacth = useDispatch();
   const [, setCookie] = useCookies(['token']);
-  const [isFailed, setIsFailed] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { isLogin } = useSelector(selectLogin);
 
   const onSubmit = (data: TypeUserForm) => {
@@ -26,8 +26,13 @@ export const Login = () => {
         dispacth(login());
         navigate('/');
       })
-      .catch(() => {
-        setIsFailed(true);
+      .catch((err) => {
+        const res = err.response.data.errors;
+        const errors: Array<string> = [];
+        res.forEach((e: TypeLoginError) => {
+          errors.push(e.msg);
+        });
+        setErrorMessage(errors.join('\n'));
       });
   };
 
@@ -37,7 +42,9 @@ export const Login = () => {
         <Navigate to="/" />
       ) : (
         <StyledLogin className="container">
-          {isFailed && <p className="error-message">ログインに失敗しました</p>}
+          {errorMessage !== '' && (
+            <p className="error-message">{errorMessage}</p>
+          )}
           <UserForm buttonText="ログイン" onSubmit={onSubmit} />
         </StyledLogin>
       )}

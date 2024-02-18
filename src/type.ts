@@ -107,3 +107,7 @@ export type TypeUserForm = {
 };
 
 export type TypeOnSubmitUserForm = (data: TypeUserForm) => void;
+
+export type TypeLoginError = {
+  msg: string;
+};
