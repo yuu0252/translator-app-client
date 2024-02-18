@@ -12,4 +12,5 @@ export const phraseApi = {
       title: String;
     }
   ) => axiosFetchServer.put(`phrases/${id}`, params),
+  delete: (id: string) => axiosFetchServer.delete(`phrases/${id}`),
 };

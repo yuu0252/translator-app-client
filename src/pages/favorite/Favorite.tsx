@@ -21,9 +21,7 @@ export const Favorite = () => {
       .then((res) => {
         setPhrases(res.data.reverse());
       })
-      .catch(() => {
-        alert('お気に入りフレーズの取得に失敗しました');
-      });
+      .catch(() => alert('お気に入りフレーズの取得に失敗しました'));
   };
 
   const modalSubmitHandler = (text: string) => {
@@ -32,21 +30,25 @@ export const Favorite = () => {
       ? phraseApi
           .create(text)
           .then(() => getAllPhrases())
-          .catch(() => {
-            alert('お気に入りフレーズの作成に失敗しました');
-          })
+          .catch(() => alert('お気に入りフレーズの作成に失敗しました'))
       : phraseApi
           .update(phraseId, { title: text })
           .then(() => getAllPhrases())
-          .catch(() => {
-            alert('お気に入りフレーズの編集に失敗しました');
-          });
+          .catch(() => alert('お気に入りフレーズの編集に失敗しました'));
   };
 
   // ユーザのお気に入りフレーズを取得する
   useEffect(() => {
     getAllPhrases();
   }, []);
+
+  // フレーズを削除
+  const onClickDelete = (phraseId: string) => {
+    phraseApi
+      .delete(phraseId)
+      .then(() => getAllPhrases())
+      .catch(() => alert('フレーズの削除に失敗しました'));
+  };
 
   return (
     <>
@@ -87,7 +89,12 @@ export const Favorite = () => {
                         >
                           <HiOutlinePencilAlt />
                         </button>
-                        <button className="caution">
+                        <button
+                          className="caution"
+                          onClick={() => {
+                            onClickDelete(phrase._id);
+                          }}
+                        >
                           <PiTrashBold />
                         </button>
                       </div>
