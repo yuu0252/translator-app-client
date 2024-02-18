@@ -1,6 +1,5 @@
 import { Header } from '../components/Header';
 import { Recording } from '../components/Recording';
-import { languageCodeList } from '../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTranslate, setOutputText } from '../reducer/translateSlice';
 import { translateText } from '../functions/translate/translateText';
@@ -12,16 +11,18 @@ import { selectLoading } from '../reducer/loadingSlice';
 import { EditModal } from '../components/EditModal';
 import { createTranslatePlaceholder } from '../functions/translate/createTranslatePlaceholder';
 import styled from 'styled-components';
+import { selectLogin } from '../reducer/loginSlice';
+import { Navigate } from 'react-router';
 
 export const SimpleTranslator = () => {
   const dispatch = useDispatch();
   const translate = useSelector(selectTranslate);
   const { currentLanguage, isJapanese } = useSelector(selectLanguage);
-  const loading = useSelector(selectLoading);
+  const { isLoading } = useSelector(selectLoading);
+  const { isLogin } = useSelector(selectLogin);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const transcription = translate.transcription;
   const outputText = translate.outputText;
-  const isLoading = loading.isLoading;
 
   const successHandlerTranslation = (translatedText: string) => {
     dispatch(setOutputText(translatedText));
@@ -37,11 +38,8 @@ export const SimpleTranslator = () => {
   // ドロップダウンで言語変更される度に翻訳しなおす
   useEffect(() => {
     if (transcription === '' || currentLanguage === 'none') return;
-    const chosenLanguage = languageCodeList.find(
-      (e) => e.code === currentLanguage
-    )?.shortCode;
-    const sourceLanguage = isJapanese ? 'ja-jp' : chosenLanguage;
-    const targetLanguage = isJapanese ? chosenLanguage : 'ja-jp';
+    const sourceLanguage = isJapanese ? 'ja-jp' : currentLanguage;
+    const targetLanguage = isJapanese ? currentLanguage : 'ja-jp';
     translateText(
       transcription,
       sourceLanguage,
@@ -51,7 +49,7 @@ export const SimpleTranslator = () => {
     );
   }, [currentLanguage]);
 
-  return (
+  return isLogin ? (
     <>
       <Header />
       <StyledSimpleTranslator className="container">
@@ -82,6 +80,8 @@ export const SimpleTranslator = () => {
         <EditModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
       </StyledSimpleTranslator>
     </>
+  ) : (
+    <Navigate to="/login" />
   );
 };
 

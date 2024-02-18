@@ -2,8 +2,9 @@ import { useSelector } from 'react-redux';
 import { languageCodeList } from '../constants';
 import { selectLanguage, setCurrentLanguage } from '../reducer/languageSlice';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { Logout } from '../auth/Logout';
 
 export const Header = () => {
   const dispatch = useDispatch();
@@ -11,16 +12,24 @@ export const Header = () => {
 
   const currentLanguage = language.currentLanguage;
 
+  const pathname = useLocation().pathname;
+
   return (
     <StyledHeader id="header">
-      <div className="header-link">
-        <Link to="/">
-          <span>Home</span>
-        </Link>
-        <Link to="/image">
-          <span>Image</span>
-        </Link>
-      </div>
+      <nav className="header-link">
+        <ul>
+          <li className={pathname === '/' ? 'home active' : 'home'}>
+            <Link to="/">
+              <span>Home</span>
+            </Link>
+          </li>
+          <li className={pathname === '/image' ? 'image active' : 'image'}>
+            <Link to="/image">
+              <span>Image</span>
+            </Link>
+          </li>
+        </ul>
+      </nav>
       <div className="select-box">
         <select
           value={currentLanguage}
@@ -29,13 +38,17 @@ export const Header = () => {
           <option key="default" value="none">
             {'言語を選択してください'}
           </option>
-          {languageCodeList.map((language) => (
-            <option value={language.code} key={language.code}>
-              {language.name}
-            </option>
-          ))}
+          <optgroup label="お気に入り言語"></optgroup>
+          <optgroup label="全ての言語">
+            {languageCodeList.map((language) => (
+              <option value={language.code} key={language.code}>
+                {language.name}
+              </option>
+            ))}
+          </optgroup>
         </select>
       </div>
+      <Logout />
     </StyledHeader>
   );
 };
@@ -52,19 +65,28 @@ const StyledHeader = styled.div`
 
   & .header-link {
     height: 50px;
-    display: flex;
-    column-gap: 5px;
-    align-items: center;
-    & > a {
+    & ul {
       display: flex;
       height: 100%;
+      column-gap: 5px;
       align-items: center;
-      background-color: #fff;
-      padding: 5px 15px;
-      border-radius: 0 0 5px 5px;
-      border: 3px solid #333;
-      text-decoration: none;
-      color: #555;
+      & li {
+        height: 100%;
+        padding: 5px 15px;
+        border-radius: 0 0 5px 5px;
+        border: 3px solid #333;
+        color: #555;
+        background-color: #fff;
+        &.active {
+          color: #fff;
+          background-color: #555;
+        }
+        & a {
+          display: flex;
+          height: 100%;
+          align-items: center;
+        }
+      }
     }
   }
   & .select-box {

@@ -102,6 +102,8 @@ export type TypeImageRecognizedResult = {
 
 // ログイン
 export type TypeUserForm = {
-  username: string;
+  email: string;
   password: string;
 };
+
+export type TypeOnSubmitUserForm = (data: TypeUserForm) => void;

@@ -1,58 +1,115 @@
 import { useForm } from 'react-hook-form';
-import { TypeUserForm } from '../../type';
+import { TypeOnSubmitUserForm, TypeUserForm } from '../../type';
 import styled from 'styled-components';
+import { useState } from 'react';
+import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
 
-export const UserForm = ({ buttonText }: { buttonText: string }) => {
+export const UserForm = ({
+  buttonText,
+  onSubmit,
+}: {
+  buttonText: string;
+  onSubmit: TypeOnSubmitUserForm;
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<TypeUserForm>({
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   });
-  const onSubmit = (data: TypeUserForm) => console.log(data);
 
+  const [isVisiblePassword, setIsVisiblePassword] = useState(false);
   return (
     <StyledUserForm onSubmit={handleSubmit(onSubmit)}>
-      <label>ユーザ名</label>
-      <input type="text" {...register('username', { required: true })} />
-      {errors.username && <span>必須項目です！</span>}
+      <label>メールアドレス</label>
+      <input
+        type="email"
+        {...register('email', {
+          required: true,
+          pattern: {
+            value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+            message: '無効なメールアドレスです！',
+          },
+        })}
+      />
+
+      {errors.email?.type === 'required' && (
+        <p className="error-message">必須項目です！</p>
+      )}
+      {errors.email?.message && (
+        <p className="error-message">{errors.email?.message}</p>
+      )}
       <label>パスワード</label>
-      <input type="password" {...register('password', { required: true })} />
-      {errors.password && <span>必須項目です！</span>}
+      <div className="password-input">
+        <input
+          type={isVisiblePassword ? 'text' : 'password'}
+          {...register('password', { required: true, minLength: 4 })}
+        />
+        <div onClick={() => setIsVisiblePassword(!isVisiblePassword)}>
+          {isVisiblePassword ? <IoMdEyeOff /> : <IoMdEye />}
+        </div>
+      </div>
+      {errors.password?.type === 'required' && (
+        <p className="error-message">必須項目です！</p>
+      )}
+      {errors.password?.type === 'minLength' && (
+        <p className="error-message">4文字以上必要です！</p>
+      )}
       <input type="submit" value={buttonText} />
     </StyledUserForm>
   );
 };
 
 const StyledUserForm = styled.form`
-  margin: auto 0;
-
   & label {
     display: inline-block;
     color: #fff;
-    margin-bottom: 5px;
+    margin: 15px 0 5px;
   }
 
   & input {
     padding: 10px 15px;
     border-radius: 10px;
     background-color: #fff;
-    margin-bottom: 15px;
     width: 100%;
+  }
+
+  & .password-input {
+    position: relative;
+    & div {
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      cursor: pointer;
+
+      & svg {
+        color: #555;
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 
   & input[type='submit'] {
     display: block;
-    margin: 30px auto 0;
+    margin: 75px auto 0;
     width: 150px;
 
     &:hover {
       background-color: #000;
       color: #fff;
     }
+  }
+
+  & p.error-message {
+    color: #f08080;
+    margin-top: 10px;
   }
 `;

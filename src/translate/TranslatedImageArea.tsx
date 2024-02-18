@@ -6,7 +6,6 @@ import { AiFillCloseSquare } from 'react-icons/ai';
 import { translateText } from '../functions/translate/translateText';
 import { useSelector } from 'react-redux';
 import { selectLanguage } from '../reducer/languageSlice';
-import { languageCodeList } from '../constants';
 import { textToSpeech } from '../functions/audio/textToSpeech';
 import {
   TypeImageOutputData,

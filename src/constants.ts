@@ -1,6 +1,6 @@
-import { languageCode } from './type';
+import { TypeLanguageCode } from './type';
 
-export const languageCodeList: Array<languageCode> = [
+export const languageCodeList: Array<TypeLanguageCode> = [
   {
     code: 'en-us',
     shortCode: 'en',
