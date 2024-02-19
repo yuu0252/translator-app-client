@@ -1,18 +1,18 @@
-import styled from 'styled-components';
-import { UserForm } from '../components/form/UserForm';
-import { TypeLoginError, TypeUserForm } from '../type';
-import axios from 'axios';
-import { useState } from 'react';
-import { Navigate, useNavigate } from 'react-router';
-import { useCookies } from 'react-cookie';
-import { useDispatch, useSelector } from 'react-redux';
-import { login, selectLogin } from '../reducer/loginSlice';
+import styled from "styled-components";
+import { UserForm } from "../components/form/UserForm";
+import { TypeLoginError, TypeUserForm } from "../type";
+import axios from "axios";
+import { useState } from "react";
+import { Navigate, useNavigate } from "react-router";
+import { useCookies } from "react-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { login, selectLogin } from "../reducer/loginSlice";
 
 export const Login = () => {
   const navigate = useNavigate();
   const dispacth = useDispatch();
-  const [, setCookie] = useCookies(['token']);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [, setCookie] = useCookies(["token"]);
+  const [errorMessage, setErrorMessage] = useState("");
   const { isLogin } = useSelector(selectLogin);
 
   const onSubmit = (data: TypeUserForm) => {
@@ -22,17 +22,19 @@ export const Login = () => {
         password: data.password,
       })
       .then((res) => {
-        setCookie('token', res.data.token);
+        console.log(res);
+        setCookie("token", res.data.token);
         dispacth(login());
-        navigate('/');
+        navigate("/");
       })
       .catch((err) => {
+        console.log(err);
         const res = err.response.data.errors;
         const errors: Array<string> = [];
         res.forEach((e: TypeLoginError) => {
           errors.push(e.msg);
         });
-        setErrorMessage(errors.join('\n'));
+        setErrorMessage(errors.join("\n"));
       });
   };
 
@@ -43,7 +45,7 @@ export const Login = () => {
       ) : (
         <StyledLogin className="container">
           <h1>Multi Translator</h1>
-          {errorMessage !== '' && (
+          {errorMessage !== "" && (
             <p className="error-message">{errorMessage}</p>
           )}
           <UserForm buttonText="ログイン" onSubmit={onSubmit} />
@@ -66,7 +68,7 @@ const StyledLogin = styled.div`
     margin-bottom: 30px;
     color: #fff;
     text-shadow: #aaa 0 0 15px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: "Noto Serif JP", serif;
     letter-spacing: 0.125em;
   }
 

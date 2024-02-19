@@ -1,8 +1,8 @@
-import axios, { InternalAxiosRequestConfig } from 'axios';
-import { Cookies } from 'react-cookie';
+import axios, { InternalAxiosRequestConfig } from "axios";
+import { Cookies } from "react-cookie";
 
 const cookie = new Cookies();
-const token = cookie.get('token');
+const token = cookie.get("token");
 
 export const axiosFetchServer = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
@@ -13,7 +13,7 @@ axiosFetchServer.interceptors.request.use(async (config) => {
   return {
     ...config,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   } as InternalAxiosRequestConfig<any>;

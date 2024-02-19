@@ -1,19 +1,48 @@
-import styled from 'styled-components';
-import { Header } from '../../components/Header';
-import { RiPlayListAddLine } from 'react-icons/ri';
-import { EditModal } from '../../components/modal/EditModal';
-import { useEffect, useState } from 'react';
-import { phraseApi } from '../../api/phraseApi';
-import { TypePhrase } from '../../type';
-import { PiTrashBold } from 'react-icons/pi';
-import { HiOutlinePencilAlt } from 'react-icons/hi';
+import styled from "styled-components";
+import { Header } from "../../components/Header";
+import { RiPlayListAddLine } from "react-icons/ri";
+import { EditModal } from "../../components/modal/EditModal";
+import { useEffect, useState } from "react";
+import { phraseApi } from "../../api/phraseApi";
+import { TypePhrase } from "../../type";
+import { PiTrashBold } from "react-icons/pi";
+import { HiOutlinePencilAlt } from "react-icons/hi";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../../reducer/languageSlice";
+import { translateText } from "../../functions/translate/translateText";
 
 export const Favorite = () => {
   const [phrases, setPhrases] = useState([]);
-  const [phraseTitle, setPhraseTitle] = useState('');
-  const [phraseId, setPhraseId] = useState('');
+  const [phraseTitle, setPhraseTitle] = useState("");
+  const [phraseId, setPhraseId] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isNew, setIsNew] = useState(true);
+  const [translatedText, setTranslatedText] = useState("");
+  const { currentLanguage } = useSelector(selectLanguage);
+
+  const onClickPhrase = async (id: string, phrase: string) => {
+    if (phraseId === id) {
+      setTranslatedText("");
+      setPhraseId("");
+      return;
+    }
+    setPhraseId(id);
+    const targetLanguage =
+      currentLanguage === "none" ? "en-us" : currentLanguage;
+    const successHandler = (text: string) => {
+      setTranslatedText(text);
+    };
+    const errorHandler = () => {
+      setTranslatedText("翻訳に失敗しました");
+    };
+    await translateText(
+      phrase,
+      "ja-jp",
+      targetLanguage,
+      successHandler,
+      errorHandler
+    );
+  };
 
   const getAllPhrases = () => {
     phraseApi
@@ -21,7 +50,7 @@ export const Favorite = () => {
       .then((res) => {
         setPhrases(res.data.reverse());
       })
-      .catch(() => alert('お気に入りフレーズの取得に失敗しました'));
+      .catch(() => alert("お気に入りフレーズの取得に失敗しました"));
   };
 
   const modalSubmitHandler = (text: string) => {
@@ -30,11 +59,11 @@ export const Favorite = () => {
       ? phraseApi
           .create(text)
           .then(() => getAllPhrases())
-          .catch(() => alert('お気に入りフレーズの作成に失敗しました'))
+          .catch(() => alert("お気に入りフレーズの作成に失敗しました"))
       : phraseApi
           .update(phraseId, { title: text })
           .then(() => getAllPhrases())
-          .catch(() => alert('お気に入りフレーズの編集に失敗しました'));
+          .catch(() => alert("お気に入りフレーズの編集に失敗しました"));
   };
 
   // ユーザのお気に入りフレーズを取得する
@@ -47,8 +76,10 @@ export const Favorite = () => {
     phraseApi
       .delete(phraseId)
       .then(() => getAllPhrases())
-      .catch(() => alert('フレーズの削除に失敗しました'));
+      .catch(() => alert("フレーズの削除に失敗しました"));
   };
+
+  console.log(translatedText, phraseId);
 
   return (
     <>
@@ -62,8 +93,8 @@ export const Favorite = () => {
                 <button
                   className="add-btn"
                   onClick={() => {
-                    setPhraseTitle('');
-                    setPhraseId('');
+                    setPhraseTitle("");
+                    setPhraseId("");
                     setIsNew(true);
                     setModalIsOpen(true);
                   }}
@@ -77,7 +108,14 @@ export const Favorite = () => {
                 <ul>
                   {phrases.map((phrase: TypePhrase) => (
                     <li key={phrase._id}>
-                      <p>{phrase.title}</p>
+                      <p
+                        onClick={() => onClickPhrase(phrase._id, phrase.title)}
+                      >
+                        {phrase.title}
+                      </p>
+                      {translatedText !== "" && phraseId === phrase._id && (
+                        <p>{translatedText}</p>
+                      )}
                       <div className="button-wrapper">
                         <button
                           onClick={() => {
