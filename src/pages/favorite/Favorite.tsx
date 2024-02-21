@@ -1,43 +1,44 @@
-import styled from "styled-components";
-import { Header } from "../../components/Header";
-import { RiPlayListAddLine } from "react-icons/ri";
-import { EditModal } from "../../components/modal/EditModal";
-import { useEffect, useState } from "react";
-import { phraseApi } from "../../api/phraseApi";
-import { TypePhrase } from "../../type";
-import { PiTrashBold } from "react-icons/pi";
-import { HiOutlinePencilAlt } from "react-icons/hi";
-import { useSelector } from "react-redux";
-import { selectLanguage } from "../../reducer/languageSlice";
-import { translateText } from "../../functions/translate/translateText";
+import styled from 'styled-components';
+import { Header } from '../../components/Header';
+import { RiPlayListAddLine } from 'react-icons/ri';
+import { EditModal } from '../../components/modal/EditModal';
+import { useEffect, useState } from 'react';
+import { phraseApi } from '../../api/phraseApi';
+import { TypePhrase } from '../../type';
+import { PiTrashBold } from 'react-icons/pi';
+import { HiOutlinePencilAlt } from 'react-icons/hi';
+import { useSelector } from 'react-redux';
+import { selectLanguage } from '../../reducer/languageSlice';
+import { translateText } from '../../functions/translate/translateText';
+import { textToSpeech } from '../../functions/audio/textToSpeech';
 
 export const Favorite = () => {
   const [phrases, setPhrases] = useState([]);
-  const [phraseTitle, setPhraseTitle] = useState("");
-  const [phraseId, setPhraseId] = useState("");
+  const [phraseTitle, setPhraseTitle] = useState('');
+  const [phraseId, setPhraseId] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isNew, setIsNew] = useState(true);
-  const [translatedText, setTranslatedText] = useState("");
+  const [translatedText, setTranslatedText] = useState('');
   const { currentLanguage } = useSelector(selectLanguage);
 
   const onClickPhrase = async (id: string, phrase: string) => {
     if (phraseId === id) {
-      setTranslatedText("");
-      setPhraseId("");
+      setTranslatedText('');
+      setPhraseId('');
       return;
     }
     setPhraseId(id);
     const targetLanguage =
-      currentLanguage === "none" ? "en-us" : currentLanguage;
+      currentLanguage === 'none' ? 'en-us' : currentLanguage;
     const successHandler = (text: string) => {
       setTranslatedText(text);
     };
     const errorHandler = () => {
-      setTranslatedText("翻訳に失敗しました");
+      setTranslatedText('翻訳に失敗しました');
     };
     await translateText(
       phrase,
-      "ja-jp",
+      'ja-jp',
       targetLanguage,
       successHandler,
       errorHandler
@@ -50,7 +51,7 @@ export const Favorite = () => {
       .then((res) => {
         setPhrases(res.data.reverse());
       })
-      .catch(() => alert("お気に入りフレーズの取得に失敗しました"));
+      .catch(() => alert('お気に入りフレーズの取得に失敗しました'));
   };
 
   const modalSubmitHandler = (text: string) => {
@@ -59,11 +60,11 @@ export const Favorite = () => {
       ? phraseApi
           .create(text)
           .then(() => getAllPhrases())
-          .catch(() => alert("お気に入りフレーズの作成に失敗しました"))
+          .catch(() => alert('お気に入りフレーズの作成に失敗しました'))
       : phraseApi
           .update(phraseId, { title: text })
           .then(() => getAllPhrases())
-          .catch(() => alert("お気に入りフレーズの編集に失敗しました"));
+          .catch(() => alert('お気に入りフレーズの編集に失敗しました'));
   };
 
   // ユーザのお気に入りフレーズを取得する
@@ -76,7 +77,7 @@ export const Favorite = () => {
     phraseApi
       .delete(phraseId)
       .then(() => getAllPhrases())
-      .catch(() => alert("フレーズの削除に失敗しました"));
+      .catch(() => alert('フレーズの削除に失敗しました'));
   };
 
   console.log(translatedText, phraseId);
@@ -93,8 +94,8 @@ export const Favorite = () => {
                 <button
                   className="add-btn"
                   onClick={() => {
-                    setPhraseTitle("");
-                    setPhraseId("");
+                    setPhraseTitle('');
+                    setPhraseId('');
                     setIsNew(true);
                     setModalIsOpen(true);
                   }}
@@ -113,8 +114,14 @@ export const Favorite = () => {
                       >
                         {phrase.title}
                       </p>
-                      {translatedText !== "" && phraseId === phrase._id && (
-                        <p>{translatedText}</p>
+                      {translatedText !== '' && phraseId === phrase._id && (
+                        <p
+                          onClick={() =>
+                            textToSpeech(translatedText, currentLanguage)
+                          }
+                        >
+                          {translatedText}
+                        </p>
                       )}
                       <div className="button-wrapper">
                         <button
@@ -201,6 +208,7 @@ const StyledFavorite = styled.section`
         margin-top: 5px;
         font-size: 16px;
         border-bottom: dashed #555 1px;
+        cursor: pointer;
         &:last-of-type {
           margin-bottom: 30px;
         }
@@ -212,6 +220,7 @@ const StyledFavorite = styled.section`
         & .button-wrapper {
           display: flex;
           width: 100%;
+          min-width: 50px;
           grid-column: 3/4;
           margin: 0 0 auto;
           color: #555;

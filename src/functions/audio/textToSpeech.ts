@@ -4,10 +4,14 @@ import { isMobile, isTablet } from 'react-device-detect';
 import { languageCodeList } from '../../constants';
 
 export const textToSpeech = async (text: string, languageCode: string) => {
+  const sourceLanguage = languageCode === 'none' ? 'en-us' : languageCode;
+  console.log(languageCode);
+  console.log(sourceLanguage);
   const speaker =
-    languageCode === 'ja-JP'
+    sourceLanguage === 'ja-JP'
       ? 'ja-JP-Neural2-C'
       : languageCodeList.find((e) => e.code === languageCode)?.speak.speaker;
+  console.log(speaker);
   const data = {
     audioConfig: {
       effectsProfileId: ['handset-class-device'],
