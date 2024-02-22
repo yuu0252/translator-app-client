@@ -37,7 +37,7 @@ body a {
   border: dashed 3px #555;
   border-radius: 10px;
   padding: 15px;
-  font-size: 24px;
+  font-size: 18px;
 }
 @media screen and (max-width: 767px) {
   .content-area > div {
@@ -87,35 +87,6 @@ body a {
   border-radius: 5px;
   background-color: #333;
   padding: 10px 30px;
-}
-
-#simple .content-area > div {
-  position: relative;
-}
-#simple .content-area .placeholder {
-  height: 100%;
-  color: #777;
-  overflow-y: scroll;
-}
-#simple .content-area .placeholder::-webkit-scrollbar {
-  display: none;
-}
-#simple textarea {
-  text-align: center;
-  overflow: scroll;
-  resize: none;
-  width: 100%;
-  height: 50%;
-}
-#simple textarea::-webkit-scrollbar {
-  display: none;
-}
-#simple textarea.placeholder {
-  height: 100%;
-  color: #777;
-}
-#simple p {
-  text-align: center;
 }
 
 button {

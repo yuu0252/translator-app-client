@@ -38,12 +38,6 @@ export const SimpleTranslator = () => {
 
   const modalSubmitHandler = (text: string) => {
     dispatch(setTranscription(text));
-    const successHandlerTranslation = (translatedText: string) => {
-      dispatch(setOutputText(translatedText));
-    };
-    const errorHandlerTranslation = () => {
-      dispatch(setOutputText('翻訳に失敗しました'));
-    };
     const chosenLanguage =
       currentLanguage === 'none' ? 'en-us' : currentLanguage;
     const sourcelanguage = isJapanese ? 'ja-jp' : chosenLanguage;
