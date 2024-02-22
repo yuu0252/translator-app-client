@@ -10,7 +10,7 @@ type Props = {
   submitHandler: (text: string) => void;
 };
 
-// 音声認識後のテキストを編集するためのモーダル
+// テキストを編集するためのモーダル
 export const EditModal = ({
   defaultValue,
   modalIsOpen,

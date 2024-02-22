@@ -179,6 +179,7 @@ export const languageCodeList: Array<TypeLanguageCode> = [
 export const styleEditModal = {
   content: {
     width: '80%',
+    maxWidth: '800px',
     height: '50%',
     top: '50%',
     left: '50%',

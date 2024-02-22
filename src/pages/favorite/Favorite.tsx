@@ -28,6 +28,15 @@ export const Favorite = () => {
 
   const dispatch = useDispatch();
 
+  const successHandler = (text: string) => {
+    setTranslatedText(text);
+    setIsLoading(false);
+  };
+  const errorHandler = () => {
+    setTranslatedText('翻訳に失敗しました');
+    setIsLoading(false);
+  };
+
   const onClickPhrase = async (id: string, phrase: string) => {
     setIsLoading(true);
     if (currentLanguage === 'none') {
@@ -41,14 +50,6 @@ export const Favorite = () => {
     setPhraseId(id);
     const targetLanguage =
       currentLanguage === 'none' ? 'en-us' : currentLanguage;
-    const successHandler = (text: string) => {
-      setTranslatedText(text);
-      setIsLoading(false);
-    };
-    const errorHandler = () => {
-      setTranslatedText('翻訳に失敗しました');
-      setIsLoading(false);
-    };
     await translateText(
       phrase,
       'ja-jp',
@@ -86,12 +87,42 @@ export const Favorite = () => {
     getAllPhrases();
   }, []);
 
+  // 言語を変更するたびに翻訳しなおす
+  useEffect(() => {
+    if (phraseTitle == '') return;
+    const translate = async () => {
+      console.log(currentLanguage, phraseTitle);
+      await translateText(
+        phraseTitle,
+        'ja-jp',
+        currentLanguage,
+        successHandler,
+        errorHandler
+      );
+    };
+    translate();
+  }, [currentLanguage]);
+
   // フレーズを削除
   const onClickDelete = (phraseId: string) => {
     phraseApi
       .delete(phraseId)
       .then(() => getAllPhrases())
       .catch(() => alert('フレーズの削除に失敗しました'));
+  };
+
+  const onClickAddButton = () => {
+    setPhraseTitle('');
+    setPhraseId('');
+    setIsNew(true);
+    setModalIsOpen(true);
+  };
+
+  const onClickEditButton = (phrase: TypePhrase) => {
+    setModalIsOpen(true);
+    setPhraseId(phrase._id);
+    setPhraseTitle(phrase.title);
+    setIsNew(false);
   };
 
   return (
@@ -103,15 +134,7 @@ export const Favorite = () => {
             <div className="list-wrapper">
               <div className="list-title">
                 <h2>お気に入りフレーズ</h2>
-                <button
-                  className="add-btn"
-                  onClick={() => {
-                    setPhraseTitle('');
-                    setPhraseId('');
-                    setIsNew(true);
-                    setModalIsOpen(true);
-                  }}
-                >
+                <button className="add-btn" onClick={onClickAddButton}>
                   <RiPlayListAddLine />
                   <span>追加</span>
                 </button>
@@ -145,14 +168,7 @@ export const Favorite = () => {
                           </div>
                         ))}
                       <div className="button-wrapper">
-                        <button
-                          onClick={() => {
-                            setModalIsOpen(true);
-                            setPhraseId(phrase._id);
-                            setPhraseTitle(phrase.title);
-                            setIsNew(false);
-                          }}
-                        >
+                        <button onClick={() => onClickEditButton(phrase)}>
                           <HiOutlinePencilAlt />
                         </button>
                         <button
