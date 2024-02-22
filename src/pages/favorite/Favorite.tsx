@@ -7,8 +7,12 @@ import { phraseApi } from '../../api/phraseApi';
 import { TypePhrase } from '../../type';
 import { PiTrashBold } from 'react-icons/pi';
 import { HiOutlinePencilAlt } from 'react-icons/hi';
-import { useSelector } from 'react-redux';
-import { selectLanguage } from '../../reducer/languageSlice';
+import { SlArrowDown } from 'react-icons/sl';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectLanguage,
+  setCurrentLanguage,
+} from '../../reducer/languageSlice';
 import { translateText } from '../../functions/translate/translateText';
 import { textToSpeech } from '../../functions/audio/textToSpeech';
 
@@ -19,9 +23,16 @@ export const Favorite = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isNew, setIsNew] = useState(true);
   const [translatedText, setTranslatedText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { currentLanguage } = useSelector(selectLanguage);
 
+  const dispatch = useDispatch();
+
   const onClickPhrase = async (id: string, phrase: string) => {
+    setIsLoading(true);
+    if (currentLanguage === 'none') {
+      dispatch(setCurrentLanguage('en-us'));
+    }
     if (phraseId === id) {
       setTranslatedText('');
       setPhraseId('');
@@ -32,9 +43,11 @@ export const Favorite = () => {
       currentLanguage === 'none' ? 'en-us' : currentLanguage;
     const successHandler = (text: string) => {
       setTranslatedText(text);
+      setIsLoading(false);
     };
     const errorHandler = () => {
       setTranslatedText('翻訳に失敗しました');
+      setIsLoading(false);
     };
     await translateText(
       phrase,
@@ -55,13 +68,14 @@ export const Favorite = () => {
   };
 
   const modalSubmitHandler = (text: string) => {
-    // 新しくフレーズを追加する
     isNew
-      ? phraseApi
+      ? // 新しくフレーズを追加する
+        phraseApi
           .create(text)
           .then(() => getAllPhrases())
           .catch(() => alert('お気に入りフレーズの作成に失敗しました'))
-      : phraseApi
+      : // フレーズを編集する
+        phraseApi
           .update(phraseId, { title: text })
           .then(() => getAllPhrases())
           .catch(() => alert('お気に入りフレーズの編集に失敗しました'));
@@ -79,8 +93,6 @@ export const Favorite = () => {
       .then(() => getAllPhrases())
       .catch(() => alert('フレーズの削除に失敗しました'));
   };
-
-  console.log(translatedText, phraseId);
 
   return (
     <>
@@ -114,15 +126,24 @@ export const Favorite = () => {
                       >
                         {phrase.title}
                       </p>
-                      {translatedText !== '' && phraseId === phrase._id && (
-                        <p
-                          onClick={() =>
-                            textToSpeech(translatedText, currentLanguage)
-                          }
-                        >
-                          {translatedText}
-                        </p>
-                      )}
+                      {phraseId === phrase._id &&
+                        (isLoading ? (
+                          <div>
+                            <SlArrowDown />
+                            <p>翻訳中...</p>
+                          </div>
+                        ) : (
+                          <div>
+                            <SlArrowDown />
+                            <p
+                              onClick={() =>
+                                textToSpeech(translatedText, currentLanguage)
+                              }
+                            >
+                              {translatedText}
+                            </p>
+                          </div>
+                        ))}
                       <div className="button-wrapper">
                         <button
                           onClick={() => {
@@ -187,7 +208,7 @@ const StyledFavorite = styled.section`
       & .add-btn {
         grid-column: 3/4;
         display: flex;
-        width: 100%;
+        width: 60px;
         font-size: 16px;
         align-items: center;
         padding: 0;
@@ -213,15 +234,19 @@ const StyledFavorite = styled.section`
           margin-bottom: 30px;
         }
 
-        & > p {
+        & > p,
+        & > div {
           grid-column: 2/3;
         }
 
         & .button-wrapper {
           display: flex;
+          align-items: center;
           width: 100%;
+          height: 100%;
           min-width: 50px;
           grid-column: 3/4;
+          grid-row: 1/3;
           margin: 0 0 auto;
           color: #555;
 
