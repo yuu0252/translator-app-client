@@ -10,8 +10,7 @@ export const textToSpeech = async (text: string, languageCode: string) => {
   const speaker =
     sourceLanguage === 'ja-JP'
       ? 'ja-JP-Neural2-C'
-      : languageCodeList.find((e) => e.code === languageCode)?.speak.speaker;
-  console.log(speaker);
+      : languageCodeList.find((e) => e.code === sourceLanguage)?.speak.speaker;
   const data = {
     audioConfig: {
       effectsProfileId: ['handset-class-device'],
@@ -24,7 +23,7 @@ export const textToSpeech = async (text: string, languageCode: string) => {
       text: text,
     },
     voice: {
-      languageCode: languageCode,
+      languageCode: sourceLanguage,
       name: speaker,
     },
   };
