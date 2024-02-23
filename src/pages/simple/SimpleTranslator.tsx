@@ -28,7 +28,7 @@ export const SimpleTranslator = () => {
   const { isLoading } = useSelector(selectLoading);
   const { isLogin } = useSelector(selectLogin);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [favoritePhraseId, setFavoritePhraseId] = useState<string | null>(null);
   const transcription = translate.transcription;
   const outputText = translate.outputText;
 
@@ -60,8 +60,17 @@ export const SimpleTranslator = () => {
     const text = isJapanese ? transcription : outputText;
     phraseApi
       .create(text)
-      .then(() => setIsFavorite(true))
+      .then((res) => setFavoritePhraseId(res.data._id))
       .catch(() => alert('お気に入りフレーズの作成に失敗しました'));
+  };
+
+  // お気に入りボタンが登録状態で押されたらフレーズを削除
+  const onClickDeleteFavorite = () => {
+    if (!favoritePhraseId) return;
+    phraseApi
+      .delete(favoritePhraseId)
+      .then(() => setFavoritePhraseId(null))
+      .catch(() => alert('お気に入り解除に失敗しました'));
   };
 
   // プレースホルダーに各言語で「自分の言語で話してください」と設定する
@@ -87,8 +96,11 @@ export const SimpleTranslator = () => {
     phraseApi
       .getOne(text)
       .then((res) => {
-        console.log(res);
-        setIsFavorite(res.data);
+        if (res.data) {
+          setFavoritePhraseId(res.data._id);
+        } else {
+          setFavoritePhraseId(null);
+        }
       })
       .catch(() => {
         alert('お気に入り情報の取得に失敗しました');
@@ -106,10 +118,10 @@ export const SimpleTranslator = () => {
             ) : (
               <>
                 {transcription &&
-                  (isFavorite ? (
+                  (favoritePhraseId ? (
                     <button
                       className="favorite-btn"
-                      onClick={() => setIsFavorite(false)}
+                      onClick={() => onClickDeleteFavorite()}
                     >
                       <BiSolidBookmarkPlus />
                     </button>
