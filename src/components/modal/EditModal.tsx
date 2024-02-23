@@ -17,6 +17,8 @@ export const EditModal = ({
   setModalIsOpen,
   submitHandler,
 }: Props) => {
+  // redux
+  // const [modalIsOpen, setModalIsOpen] = useState(false);
   const textareaElement = useRef<HTMLTextAreaElement>(null);
 
   const onClickModalSubmit = (text?: string) => {

@@ -17,6 +17,9 @@ import { createTranslatePlaceholder } from '../../functions/translate/createTran
 import styled from 'styled-components';
 import { selectLogin } from '../../reducer/loginSlice';
 import { Navigate } from 'react-router';
+import { BiBookmarkPlus } from 'react-icons/bi';
+import { BiSolidBookmarkPlus } from 'react-icons/bi';
+import { phraseApi } from '../../api/phraseApi';
 
 export const SimpleTranslator = () => {
   const dispatch = useDispatch();
@@ -25,6 +28,7 @@ export const SimpleTranslator = () => {
   const { isLoading } = useSelector(selectLoading);
   const { isLogin } = useSelector(selectLogin);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   const transcription = translate.transcription;
   const outputText = translate.outputText;
 
@@ -51,6 +55,15 @@ export const SimpleTranslator = () => {
     );
   };
 
+  // お気に入りボタンが押されたら日本語の文を登録
+  const onClickFavorite = () => {
+    const text = isJapanese ? transcription : outputText;
+    phraseApi
+      .create(text)
+      .then(() => setIsFavorite(true))
+      .catch(() => alert('お気に入りフレーズの作成に失敗しました'));
+  };
+
   // プレースホルダーに各言語で「自分の言語で話してください」と設定する
   const placeholder = createTranslatePlaceholder();
 
@@ -68,6 +81,20 @@ export const SimpleTranslator = () => {
     );
   }, [currentLanguage]);
 
+  // 日本語がお気に入りに登録されているか
+  useEffect(() => {
+    const text = isJapanese ? transcription : outputText;
+    phraseApi
+      .getOne(text)
+      .then((res) => {
+        console.log(res);
+        setIsFavorite(res.data);
+      })
+      .catch(() => {
+        alert('お気に入り情報の取得に失敗しました');
+      });
+  }, [transcription]);
+
   return isLogin ? (
     <>
       <Header />
@@ -78,6 +105,22 @@ export const SimpleTranslator = () => {
               <Loading />
             ) : (
               <>
+                {transcription &&
+                  (isFavorite ? (
+                    <button
+                      className="favorite-btn"
+                      onClick={() => setIsFavorite(false)}
+                    >
+                      <BiSolidBookmarkPlus />
+                    </button>
+                  ) : (
+                    <button
+                      className="favorite-btn"
+                      onClick={() => onClickFavorite()}
+                    >
+                      <BiBookmarkPlus />
+                    </button>
+                  ))}
                 <p
                   onClick={() => setModalIsOpen(true)}
                   className={transcription ? '' : 'placeholder'}
@@ -113,7 +156,16 @@ const StyledSimpleTranslator = styled.section`
   & .content-area {
     & > div {
       position: relative;
+
+      & > .favorite-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+      }
     }
+
     & .placeholder {
       height: 100%;
       color: #777;

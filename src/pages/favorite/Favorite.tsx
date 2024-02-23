@@ -25,6 +25,7 @@ export const Favorite = () => {
   const [translatedText, setTranslatedText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { currentLanguage } = useSelector(selectLanguage);
+  const [openPhraseId, setOpenPhraseId] = useState('');
 
   const dispatch = useDispatch();
 
@@ -42,12 +43,12 @@ export const Favorite = () => {
     if (currentLanguage === 'none') {
       dispatch(setCurrentLanguage('en-us'));
     }
-    if (phraseId === id) {
+    if (openPhraseId === id) {
       setTranslatedText('');
-      setPhraseId('');
+      setOpenPhraseId('');
       return;
     }
-    setPhraseId(id);
+    setOpenPhraseId(id);
     const targetLanguage =
       currentLanguage === 'none' ? 'en-us' : currentLanguage;
     await translateText(
@@ -149,7 +150,7 @@ export const Favorite = () => {
                       >
                         {phrase.title}
                       </p>
-                      {phraseId === phrase._id &&
+                      {openPhraseId === phrase._id &&
                         (isLoading ? (
                           <div>
                             <SlArrowDown />

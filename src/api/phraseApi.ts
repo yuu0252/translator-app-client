@@ -6,6 +6,8 @@ export const phraseApi = {
       title: title,
     }),
   getAll: () => axiosFetchServer.get('/phrases'),
+  getOne: (title: string) =>
+    axiosFetchServer.post('/phrases/check', { title: title }),
   update: (
     id: string,
     params: {
