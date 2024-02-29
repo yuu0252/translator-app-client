@@ -1,19 +1,20 @@
-import axios, { InternalAxiosRequestConfig } from "axios";
-import { Cookies } from "react-cookie";
-
-const cookie = new Cookies();
-const token = cookie.get("token");
+import axios, { InternalAxiosRequestConfig } from 'axios';
+import { Cookies } from 'react-cookie';
 
 export const axiosFetchServer = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL,
 });
 
+const cookie = new Cookies();
+
 // APIの前処理
 axiosFetchServer.interceptors.request.use(async (config) => {
+  const token = cookie.get('token');
+  console.log(token);
   return {
     ...config,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
   } as InternalAxiosRequestConfig<any>;

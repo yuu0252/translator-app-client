@@ -175,21 +175,3 @@ export const languageCodeList: Array<TypeLanguageCode> = [
     speak: { code: 'en-IN', speaker: 'en-IN-Wavenet-D' },
   },
 ];
-
-export const styleEditModal = {
-  content: {
-    width: '80%',
-    maxWidth: '800px',
-    height: '50%',
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    borderRadius: '10px',
-    transform: 'translate(-50%, -50%)',
-  },
-  overlay: {
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-};

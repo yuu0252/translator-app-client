@@ -56,8 +56,8 @@ export const Recording = () => {
           bufferSize
         );
       })
-      .catch((error) => {
-        alert('Error with getUserMedia: ' + error.message);
+      .catch(() => {
+        alert('権限の取得に失敗しました');
       });
   };
 

@@ -92,6 +92,7 @@ export const SimpleTranslator = () => {
 
   // 日本語がお気に入りに登録されているか
   useEffect(() => {
+    if (outputText === '') return;
     const text = isJapanese ? transcription : outputText;
     phraseApi
       .getOne(text)
@@ -105,7 +106,7 @@ export const SimpleTranslator = () => {
       .catch(() => {
         alert('お気に入り情報の取得に失敗しました');
       });
-  }, [transcription]);
+  }, [outputText]);
 
   return isLogin ? (
     <>
