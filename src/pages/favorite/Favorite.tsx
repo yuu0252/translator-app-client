@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import { Header } from "../../components/Header";
-import { RiPlayListAddLine } from "react-icons/ri";
+import { RiFolderAddFill } from "react-icons/ri";
 import { EditModal } from "../../components/modal/EditModal";
 import { useEffect, useState } from "react";
 import { categoryApi } from "../../api/categoryApi";
 import { TypeCategory } from "../../type";
 import { Phrase } from "./Phrase";
-import { phraseApi } from "../../api/phraseApi";
 
 export const Favorite = () => {
   const [categories, setCategories] = useState([]);
@@ -14,7 +13,6 @@ export const Favorite = () => {
   const [isNew, setIsNew] = useState(true);
   const [categoryId, setCategoryId] = useState("");
   const [categoryTitle, setCategoryTitle] = useState("");
-  const [isAddPhrase, setIsAddPhrase] = useState(false);
 
   const getAllCategories = () => {
     categoryApi
@@ -25,24 +23,9 @@ export const Favorite = () => {
       .catch(() => alert("カテゴリの取得に失敗しました"));
   };
 
-  const modalSubmitCategory = (text: string) => {
-    isNew
-      ? // 新しくカテゴリを追加する
-        categoryApi
-          .create(text)
-          .then(() => getAllCategories())
-          .catch(() => alert("カテゴリの作成に失敗しました"))
-      : // カテゴリを編集する
-        categoryApi
-          .update(categoryId, { title: text })
-          .then(() => getAllCategories())
-          .catch(() => alert("カテゴリの編集に失敗しました"));
-  };
-
-  const modalSubmitPhrase = (text: string) => {
-    // ボタンの押されたカテゴリにフレーズを追加する
-    phraseApi
-      .create(categoryId, { title: text })
+  const modalSubmitHandler = (text: string) => {
+    categoryApi
+      .create(text)
       .then(() => getAllCategories())
       .catch(() => alert("カテゴリの作成に失敗しました"));
   };
@@ -51,20 +34,6 @@ export const Favorite = () => {
   useEffect(() => {
     getAllCategories();
   }, []);
-
-  const onClickAddCategory = () => {
-    setCategoryTitle("");
-    setCategoryId("");
-    setIsNew(true);
-    setModalIsOpen(true);
-    setIsAddPhrase(false);
-  };
-
-  const onClickAddPhrase = () => {
-    setIsNew(true);
-    setModalIsOpen(true);
-    setIsAddPhrase(true);
-  };
 
   return (
     <>
@@ -75,27 +44,17 @@ export const Favorite = () => {
             <div className="list-wrapper">
               <div className="list-title">
                 <h2 className="serif">Phrases</h2>
-                <button className="add-btn" onClick={onClickAddCategory}>
-                  <RiPlayListAddLine />
-                  <span>追加</span>
+                <button
+                  className="add-btn"
+                  onClick={() => setModalIsOpen(true)}
+                >
+                  <RiFolderAddFill />
                 </button>
               </div>
               {categories.length !== 0 ? (
                 <ul>
                   {categories.map((category: TypeCategory) => (
-                    <li>
-                      <div className="list-title">
-                        <h3>{category.title}</h3>
-                        <button className="add-btn" onClick={onClickAddPhrase}>
-                          <RiPlayListAddLine />
-                          <span>追加</span>
-                        </button>
-                      </div>
-                      <Phrase
-                        category={category}
-                        getAllCategories={getAllCategories}
-                      />
-                    </li>
+                    <Phrase key={category._id} category={category} />
                   ))}
                 </ul>
               ) : (
@@ -106,10 +65,11 @@ export const Favorite = () => {
         </div>
       </StyledFavorite>
       <EditModal
+        title="カテゴリ新規作成"
         defaultValue={categoryTitle}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
-        submitHandler={isAddPhrase ? modalSubmitPhrase : modalSubmitCategory}
+        submitHandler={modalSubmitHandler}
       />
     </>
   );
