@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { UserForm } from "../components/form/UserForm";
-import { TypeLoginError, TypeUserForm } from "../type";
+import { UserForm } from "../../components/form/UserForm";
+import { TypeLoginError, TypeUserForm } from "../../type";
 import axios from "axios";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { login, selectLogin } from "../reducer/loginSlice";
+import { login, selectLogin } from "../../reducer/loginSlice";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -22,7 +22,6 @@ export const Login = () => {
         password: data.password,
       })
       .then((res) => {
-        console.log(res);
         setCookie("token", res.data.token);
         dispacth(login());
         navigate("/");
@@ -44,7 +43,7 @@ export const Login = () => {
         <Navigate to="/" />
       ) : (
         <StyledLogin className="container">
-          <h1>Multi Translator</h1>
+          <h1 className="serif">Multi Translator</h1>
           {errorMessage !== "" && (
             <p className="error-message">{errorMessage}</p>
           )}
@@ -68,7 +67,6 @@ const StyledLogin = styled.div`
     margin-bottom: 30px;
     color: #fff;
     text-shadow: #aaa 0 0 15px;
-    font-family: "Noto Serif JP", serif;
     letter-spacing: 0.125em;
   }
 

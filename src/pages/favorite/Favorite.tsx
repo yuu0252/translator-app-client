@@ -1,129 +1,69 @@
-import styled from 'styled-components';
-import { Header } from '../../components/Header';
-import { RiPlayListAddLine } from 'react-icons/ri';
-import { EditModal } from '../../components/modal/EditModal';
-import { useEffect, useState } from 'react';
-import { phraseApi } from '../../api/phraseApi';
-import { TypePhrase } from '../../type';
-import { PiTrashBold } from 'react-icons/pi';
-import { HiOutlinePencilAlt } from 'react-icons/hi';
-import { SlArrowDown } from 'react-icons/sl';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  selectLanguage,
-  setCurrentLanguage,
-} from '../../reducer/languageSlice';
-import { translateText } from '../../functions/translate/translateText';
-import { textToSpeech } from '../../functions/audio/textToSpeech';
+import styled from "styled-components";
+import { Header } from "../../components/Header";
+import { RiPlayListAddLine } from "react-icons/ri";
+import { EditModal } from "../../components/modal/EditModal";
+import { useEffect, useState } from "react";
+import { categoryApi } from "../../api/categoryApi";
+import { TypeCategory } from "../../type";
+import { Phrase } from "./Phrase";
+import { phraseApi } from "../../api/phraseApi";
 
 export const Favorite = () => {
-  const [phrases, setPhrases] = useState([]);
-  const [phraseTitle, setPhraseTitle] = useState('');
-  const [phraseId, setPhraseId] = useState('');
+  const [categories, setCategories] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isNew, setIsNew] = useState(true);
-  const [translatedText, setTranslatedText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { currentLanguage } = useSelector(selectLanguage);
-  const [openPhraseId, setOpenPhraseId] = useState('');
+  const [categoryId, setCategoryId] = useState("");
+  const [categoryTitle, setCategoryTitle] = useState("");
+  const [isAddPhrase, setIsAddPhrase] = useState(false);
 
-  const dispatch = useDispatch();
-
-  const successHandler = (text: string) => {
-    setTranslatedText(text);
-    setIsLoading(false);
-  };
-  const errorHandler = () => {
-    setTranslatedText('翻訳に失敗しました');
-    setIsLoading(false);
-  };
-
-  const onClickPhrase = async (id: string, phrase: string) => {
-    setIsLoading(true);
-    if (currentLanguage === 'none') {
-      dispatch(setCurrentLanguage('en-us'));
-    }
-    if (openPhraseId === id) {
-      setTranslatedText('');
-      setOpenPhraseId('');
-      return;
-    }
-    setOpenPhraseId(id);
-    const targetLanguage =
-      currentLanguage === 'none' ? 'en-us' : currentLanguage;
-    await translateText(
-      phrase,
-      'ja-jp',
-      targetLanguage,
-      successHandler,
-      errorHandler
-    );
-  };
-
-  const getAllPhrases = () => {
-    phraseApi
+  const getAllCategories = () => {
+    categoryApi
       .getAll()
       .then((res) => {
-        setPhrases(res.data.reverse());
+        setCategories(res.data.reverse());
       })
-      .catch(() => alert('お気に入りフレーズの取得に失敗しました'));
+      .catch(() => alert("カテゴリの取得に失敗しました"));
   };
 
-  const modalSubmitHandler = (text: string) => {
+  const modalSubmitCategory = (text: string) => {
     isNew
-      ? // 新しくフレーズを追加する
-        phraseApi
+      ? // 新しくカテゴリを追加する
+        categoryApi
           .create(text)
-          .then(() => getAllPhrases())
-          .catch(() => alert('お気に入りフレーズの作成に失敗しました'))
-      : // フレーズを編集する
-        phraseApi
-          .update(phraseId, { title: text })
-          .then(() => getAllPhrases())
-          .catch(() => alert('お気に入りフレーズの編集に失敗しました'));
+          .then(() => getAllCategories())
+          .catch(() => alert("カテゴリの作成に失敗しました"))
+      : // カテゴリを編集する
+        categoryApi
+          .update(categoryId, { title: text })
+          .then(() => getAllCategories())
+          .catch(() => alert("カテゴリの編集に失敗しました"));
   };
 
-  // ユーザのお気に入りフレーズを取得する
+  const modalSubmitPhrase = (text: string) => {
+    // ボタンの押されたカテゴリにフレーズを追加する
+    phraseApi
+      .create(categoryId, { title: text })
+      .then(() => getAllCategories())
+      .catch(() => alert("カテゴリの作成に失敗しました"));
+  };
+
+  // ユーザのカテゴリを取得する
   useEffect(() => {
-    getAllPhrases();
+    getAllCategories();
   }, []);
 
-  // 言語を変更するたびに翻訳しなおす
-  useEffect(() => {
-    if (phraseTitle == '') return;
-    const translate = async () => {
-      console.log(currentLanguage, phraseTitle);
-      await translateText(
-        phraseTitle,
-        'ja-jp',
-        currentLanguage,
-        successHandler,
-        errorHandler
-      );
-    };
-    translate();
-  }, [currentLanguage]);
-
-  // フレーズを削除
-  const onClickDelete = (phraseId: string) => {
-    phraseApi
-      .delete(phraseId)
-      .then(() => getAllPhrases())
-      .catch(() => alert('フレーズの削除に失敗しました'));
-  };
-
-  const onClickAddButton = () => {
-    setPhraseTitle('');
-    setPhraseId('');
+  const onClickAddCategory = () => {
+    setCategoryTitle("");
+    setCategoryId("");
     setIsNew(true);
     setModalIsOpen(true);
+    setIsAddPhrase(false);
   };
 
-  const onClickEditButton = (phrase: TypePhrase) => {
+  const onClickAddPhrase = () => {
+    setIsNew(true);
     setModalIsOpen(true);
-    setPhraseId(phrase._id);
-    setPhraseTitle(phrase.title);
-    setIsNew(false);
+    setIsAddPhrase(true);
   };
 
   return (
@@ -134,68 +74,42 @@ export const Favorite = () => {
           <div>
             <div className="list-wrapper">
               <div className="list-title">
-                <h2>お気に入りフレーズ</h2>
-                <button className="add-btn" onClick={onClickAddButton}>
+                <h2 className="serif">Phrases</h2>
+                <button className="add-btn" onClick={onClickAddCategory}>
                   <RiPlayListAddLine />
                   <span>追加</span>
                 </button>
               </div>
-
-              {phrases.length !== 0 ? (
+              {categories.length !== 0 ? (
                 <ul>
-                  {phrases.map((phrase: TypePhrase) => (
-                    <li key={phrase._id}>
-                      <p
-                        onClick={() => onClickPhrase(phrase._id, phrase.title)}
-                      >
-                        {phrase.title}
-                      </p>
-                      {openPhraseId === phrase._id &&
-                        (isLoading ? (
-                          <div>
-                            <SlArrowDown />
-                            <p>翻訳中...</p>
-                          </div>
-                        ) : (
-                          <div>
-                            <SlArrowDown />
-                            <p
-                              onClick={() =>
-                                textToSpeech(translatedText, currentLanguage)
-                              }
-                            >
-                              {translatedText}
-                            </p>
-                          </div>
-                        ))}
-                      <div className="button-wrapper">
-                        <button onClick={() => onClickEditButton(phrase)}>
-                          <HiOutlinePencilAlt />
-                        </button>
-                        <button
-                          className="caution"
-                          onClick={() => {
-                            onClickDelete(phrase._id);
-                          }}
-                        >
-                          <PiTrashBold />
+                  {categories.map((category: TypeCategory) => (
+                    <li>
+                      <div className="list-title">
+                        <h3>{category.title}</h3>
+                        <button className="add-btn" onClick={onClickAddPhrase}>
+                          <RiPlayListAddLine />
+                          <span>追加</span>
                         </button>
                       </div>
+                      <Phrase
+                        category={category}
+                        getAllCategories={getAllCategories}
+                      />
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p>まだお気に入りフレーズはありません</p>
+                <p className="caution-text">カテゴリがありません</p>
               )}
             </div>
           </div>
         </div>
       </StyledFavorite>
       <EditModal
-        defaultValue={phraseTitle}
+        defaultValue={categoryTitle}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
-        submitHandler={modalSubmitHandler}
+        submitHandler={isAddPhrase ? modalSubmitPhrase : modalSubmitCategory}
       />
     </>
   );
@@ -208,19 +122,26 @@ const StyledFavorite = styled.section`
     width: 80%;
     text-align: center;
 
-    & > p {
-      font-size: 16px;
-      margin: 30px 0;
+    & h2 {
+      margin: 15px 0 30px;
+      letter-spacing: 0.05em;
+    }
+
+    & .caution-text {
+      font-weight: normal;
+      padding: 0 0 15px 0;
+      border-bottom: dashed #555 1px;
+      margin-bottom: 30px;
     }
 
     & .list-title {
       display: grid;
       grid-template-columns: 10% 80% 10%;
-      margin-bottom: 30px;
-      & h2 {
+      & h3 {
         grid-column: 2/3;
-        font-size: 20px;
+        font-size: 16px;
         vertical-align: middle;
+        margin-bottom: 15px;
       }
       & .add-btn {
         grid-column: 3/4;
@@ -237,7 +158,7 @@ const StyledFavorite = styled.section`
       }
     }
 
-    & ul {
+    & .phrase-list {
       & li {
         display: grid;
         grid-template-columns: 10% 80% 10%;

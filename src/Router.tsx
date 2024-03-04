@@ -1,9 +1,9 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { SimpleTranslator } from './pages/simple/SimpleTranslator';
-import { ImageTranslation } from './pages/image/ImageTranslate';
-import { TranslatedImageArea } from './pages/image/TranslatedImageArea';
-import { Login } from './auth/Login';
-import { Favorite } from './pages/favorite/Favorite';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { SimpleTranslator } from "./pages/simple/SimpleTranslator";
+import { ImageTranslation } from "./pages/image/ImageTranslate";
+import { TranslatedImageArea } from "./pages/image/TranslatedImageArea";
+import { Login } from "./pages/auth/Login";
+import { Favorite } from "./pages/favorite/Favorite";
 
 export const Router = () => {
   return (

@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux';
-import { languageCodeList } from '../constants';
-import { selectLanguage, setCurrentLanguage } from '../reducer/languageSlice';
-import { useDispatch } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
-import { Logout } from '../auth/Logout';
+import { useSelector } from "react-redux";
+import { languageCodeList } from "../constants";
+import { selectLanguage, setCurrentLanguage } from "../reducer/languageSlice";
+import { useDispatch } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import { Logout } from "../pages/auth/Logout";
 
 export const Header = () => {
   const dispatch = useDispatch();
@@ -18,19 +18,19 @@ export const Header = () => {
     <StyledHeader id="header">
       <nav className="header-link">
         <ul>
-          <li className={pathname === '/' ? 'home active' : 'home'}>
+          <li className={pathname === "/" ? "home active" : "home"}>
             <Link to="/">
               <span>Home</span>
             </Link>
           </li>
-          <li className={pathname === '/image' ? 'image active' : 'image'}>
+          <li className={pathname === "/image" ? "image active" : "image"}>
             <Link to="/image">
               <span>Image</span>
             </Link>
           </li>
           <li
             className={
-              pathname === '/favorite' ? 'favorite active' : 'favorite'
+              pathname === "/favorite" ? "favorite active" : "favorite"
             }
           >
             <Link to="/favorite">
@@ -48,7 +48,7 @@ export const Header = () => {
           onChange={(e) => dispatch(setCurrentLanguage(e.target.value))}
         >
           <option key="default" value="none">
-            {'言語を選択してください'}
+            {"言語を選択してください"}
           </option>
           <optgroup label="全ての言語">
             {languageCodeList.map((language) => (
@@ -116,7 +116,7 @@ const StyledHeader = styled.div`
     position: relative;
     margin: 0 0 0 auto;
     &::before {
-      content: '';
+      content: "";
       width: 0;
       height: 0;
       border-style: solid;
