@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 
 type Props = {
+  title: string;
   defaultValue?: string;
   modalIsOpen: boolean;
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,6 +13,7 @@ type Props = {
 
 // テキストを編集するためのモーダル
 export const EditModal = ({
+  title,
   defaultValue,
   modalIsOpen,
   setModalIsOpen,
@@ -48,7 +50,7 @@ export const EditModal = ({
                   <AiFillCloseSquare />
                 </button>
                 <div>
-                  <h2>入力内容を編集</h2>
+                  <h2>{title}</h2>
                   <textarea defaultValue={defaultValue} ref={textareaElement} />
                 </div>
                 <button

@@ -1,4 +1,4 @@
-import { axiosFetchServer } from "./axiosFetchServer";
+import { axiosFetchServer } from './axiosFetchServer';
 
 export const phraseApi = {
   create: (category: string, params: { title: string }) =>
@@ -6,13 +6,18 @@ export const phraseApi = {
   getAll: (category: string) =>
     axiosFetchServer.get(`/categories/${category}/phrases`),
   getOne: (title: string) =>
-    axiosFetchServer.post("/phrases/check", { title: title }),
+    axiosFetchServer.post('/phrases/check', { title: title }),
   update: (
-    id: string,
+    categoryId: string,
+    phraseId: string,
     params: {
       title: String;
     }
-  ) => axiosFetchServer.put(`phrases/${id}`, params),
+  ) =>
+    axiosFetchServer.put(
+      `categories/${categoryId}/phrases/${phraseId}`,
+      params
+    ),
   delete: (categoryId: string, phraseId: string) =>
     axiosFetchServer.delete(`categories/${categoryId}/phrases/${phraseId}`),
 };
