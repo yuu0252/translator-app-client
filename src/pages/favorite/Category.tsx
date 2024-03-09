@@ -1,13 +1,12 @@
-import { RiPlayListAddLine } from 'react-icons/ri';
-import { TypeCategory } from '../../type';
-import { Phrase } from './Phrase';
-import { useState } from 'react';
-import { EditModal } from '../../components/modal/EditModal';
-import { HiOutlinePencilAlt } from 'react-icons/hi';
-import { phraseApi } from '../../api/phraseApi';
-import { categoryApi } from '../../api/categoryApi';
-import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
-import '@szhsin/react-menu/dist/index.css';
+import { TypeCategory } from "../../type";
+import { Phrase } from "./Phrase";
+import { useState } from "react";
+import { EditModal } from "../../components/modal/EditModal";
+import { HiOutlinePencilAlt } from "react-icons/hi";
+import { phraseApi } from "../../api/phraseApi";
+import { categoryApi } from "../../api/categoryApi";
+import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
+import "@szhsin/react-menu/dist/index.css";
 
 export const Category = ({
   categories,
@@ -16,8 +15,8 @@ export const Category = ({
   categories: Array<TypeCategory>;
   getAllCategories: () => void;
 }) => {
-  const [categoryTitle, setCategoryTitle] = useState('');
-  const [categoryId, setCategoryId] = useState('');
+  const [categoryTitle, setCategoryTitle] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isNew, setIsNew] = useState(true);
 
@@ -35,16 +34,29 @@ export const Category = ({
     setModalIsOpen(true);
   };
 
+  const onClickDeleteCategory = (category: TypeCategory) => {
+    // カテゴリの削除はユーザに確認してから実行する
+    const answer = confirm(
+      `カテゴリ「${category.title}」を削除してもよろしいですか？`
+    );
+    if (answer) {
+      categoryApi
+        .delete(category._id)
+        .then(() => getAllCategories())
+        .catch(() => alert("カテゴリの削除に失敗しました"));
+    }
+  };
+
   const modalSubmitHandler = (text: string) => {
     isNew
       ? phraseApi
           .create(categoryId, { title: text })
           .then(() => getAllCategories())
-          .catch(() => alert('カテゴリの取得に失敗しました'))
+          .catch(() => alert("カテゴリの取得に失敗しました"))
       : categoryApi
           .update(categoryId, { title: text })
           .then(() => getAllCategories())
-          .catch(() => alert('カテゴリの編集に失敗しました'));
+          .catch(() => alert("カテゴリの編集に失敗しました"));
   };
 
   return (
@@ -65,11 +77,14 @@ export const Category = ({
                       </MenuButton>
                     }
                   >
-                    <MenuItem>
-                      <MenuButton>New File</MenuButton>
+                    <MenuItem onClick={() => onClickAddPhrase(category)}>
+                      <MenuButton>フレーズを追加</MenuButton>
                     </MenuItem>
-                    <MenuItem>
-                      <MenuButton>Save</MenuButton>
+                    <MenuItem onClick={() => onClickEditCategory(category)}>
+                      <MenuButton>カテゴリ名を編集</MenuButton>
+                    </MenuItem>
+                    <MenuItem onClick={() => onClickDeleteCategory(category)}>
+                      <MenuButton>カテゴリを削除</MenuButton>
                     </MenuItem>
                   </Menu>
                 </div>
@@ -82,8 +97,8 @@ export const Category = ({
         <p className="caution-text">カテゴリがありません</p>
       )}
       <EditModal
-        title={isNew ? 'フレーズを追加' : 'カテゴリを編集'}
-        defaultValue={categoryTitle}
+        title={isNew ? "フレーズを追加" : "カテゴリを編集"}
+        defaultValue={isNew ? "" : categoryTitle}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
         submitHandler={modalSubmitHandler}

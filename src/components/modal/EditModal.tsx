@@ -1,7 +1,7 @@
-import { useRef } from 'react';
-import { AiFillCloseSquare } from 'react-icons/ai';
-import { createPortal } from 'react-dom';
-import styled from 'styled-components';
+import { useRef } from "react";
+import { AiFillCloseSquare } from "react-icons/ai";
+import { createPortal } from "react-dom";
+import styled from "styled-components";
 
 type Props = {
   title: string;
@@ -24,8 +24,8 @@ export const EditModal = ({
   const textareaElement = useRef<HTMLTextAreaElement>(null);
 
   const onClickModalSubmit = (text?: string) => {
-    if (!text || text.replace(/\r?\n/g, '') === '') {
-      alert('テキストを入力してください');
+    if (!text || text.replace(/\r?\n/g, "") === "") {
+      alert("テキストを入力してください");
       return;
     }
     setModalIsOpen(false);
@@ -71,7 +71,7 @@ export const EditModal = ({
 };
 
 const StyledEditModal = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;

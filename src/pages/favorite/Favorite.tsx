@@ -1,19 +1,14 @@
-import styled from 'styled-components';
-import { Header } from '../../components/Header';
-import { RiFolderAddFill } from 'react-icons/ri';
-import { EditModal } from '../../components/modal/EditModal';
-import { useEffect, useState } from 'react';
-import { categoryApi } from '../../api/categoryApi';
-import { TypeCategory } from '../../type';
-import { Phrase } from './Phrase';
-import { Category } from './Category';
+import styled from "styled-components";
+import { Header } from "../../components/Header";
+import { RiFolderAddFill } from "react-icons/ri";
+import { EditModal } from "../../components/modal/EditModal";
+import { useEffect, useState } from "react";
+import { categoryApi } from "../../api/categoryApi";
+import { Category } from "./Category";
 
 export const Favorite = () => {
   const [categories, setCategories] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [isNew, setIsNew] = useState(true);
-  const [categoryId, setCategoryId] = useState('');
-  const [categoryTitle, setCategoryTitle] = useState('');
 
   const getAllCategories = () => {
     categoryApi
@@ -21,14 +16,14 @@ export const Favorite = () => {
       .then((res) => {
         setCategories(res.data.reverse());
       })
-      .catch(() => alert('カテゴリの取得に失敗しました'));
+      .catch(() => alert("カテゴリの取得に失敗しました"));
   };
 
   const modalSubmitHandler = (text: string) => {
     categoryApi
       .create(text)
       .then(() => getAllCategories())
-      .catch(() => alert('カテゴリの作成に失敗しました'));
+      .catch(() => alert("カテゴリの作成に失敗しました"));
   };
 
   // ユーザのカテゴリを取得する
@@ -62,7 +57,6 @@ export const Favorite = () => {
       </StyledFavorite>
       <EditModal
         title="カテゴリ新規作成"
-        defaultValue={categoryTitle}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
         submitHandler={modalSubmitHandler}

@@ -1,25 +1,26 @@
-import { useEffect, useState } from 'react';
-import { TypePhrase } from '../../type';
+import { useEffect, useState } from "react";
+import { TypePhrase } from "../../type";
 import {
   selectLanguage,
   setCurrentLanguage,
-} from '../../reducer/languageSlice';
-import { translateText } from '../../functions/translate/translateText';
-import { PiTrashBold } from 'react-icons/pi';
-import { HiOutlinePencilAlt } from 'react-icons/hi';
-import { SlArrowDown } from 'react-icons/sl';
-import { textToSpeech } from '../../functions/audio/textToSpeech';
-import { useDispatch, useSelector } from 'react-redux';
-import { phraseApi } from '../../api/phraseApi';
-import { EditModal } from '../../components/modal/EditModal';
+} from "../../reducer/languageSlice";
+import { translateText } from "../../functions/translate/translateText";
+import { PiTrashBold } from "react-icons/pi";
+import { HiOutlinePencilAlt } from "react-icons/hi";
+import { SlArrowDown } from "react-icons/sl";
+import { textToSpeech } from "../../functions/audio/textToSpeech";
+import { useDispatch, useSelector } from "react-redux";
+import { phraseApi } from "../../api/phraseApi";
+import { EditModal } from "../../components/modal/EditModal";
+import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 
 export const Phrase = ({ category }: { category: TypePhrase }) => {
-  const [translatedText, setTranslatedText] = useState('');
+  const [translatedText, setTranslatedText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [openPhraseId, setOpenPhraseId] = useState('');
-  const [phraseTitle, setPhraseTitle] = useState('');
+  const [openPhraseId, setOpenPhraseId] = useState("");
+  const [phraseTitle, setPhraseTitle] = useState("");
   const [phrases, setPhrases] = useState([]);
-  const [phraseId, setPhraseId] = useState('');
+  const [phraseId, setPhraseId] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isNew, setIsNew] = useState(true);
 
@@ -42,27 +43,27 @@ export const Phrase = ({ category }: { category: TypePhrase }) => {
     setIsLoading(false);
   };
   const translationErrorHandler = () => {
-    setTranslatedText('翻訳に失敗しました');
+    setTranslatedText("翻訳に失敗しました");
     setIsLoading(false);
   };
 
   const onClickPhrase = async (id: string, phrase: string) => {
     setPhraseTitle(phrase);
     setIsLoading(true);
-    if (currentLanguage === 'none') {
-      dispatch(setCurrentLanguage('en-us'));
+    if (currentLanguage === "none") {
+      dispatch(setCurrentLanguage("en-us"));
     }
     if (openPhraseId === id) {
-      setTranslatedText('');
-      setOpenPhraseId('');
+      setTranslatedText("");
+      setOpenPhraseId("");
       return;
     }
     setOpenPhraseId(id);
     const targetLanguage =
-      currentLanguage === 'none' ? 'en-us' : currentLanguage;
+      currentLanguage === "none" ? "en-us" : currentLanguage;
     await translateText(
       phrase,
-      'ja-jp',
+      "ja-jp",
       targetLanguage,
       translationSuccessHandler,
       translationErrorHandler
@@ -70,7 +71,7 @@ export const Phrase = ({ category }: { category: TypePhrase }) => {
   };
 
   // カテゴリ内の選択されたフレーズを編集
-  const onClickEditButton = (phrase: TypePhrase) => {
+  const onClickEditPhrase = (phrase: TypePhrase) => {
     setModalIsOpen(true);
     setPhraseId(phrase._id);
     setPhraseTitle(phrase.title);
@@ -78,20 +79,20 @@ export const Phrase = ({ category }: { category: TypePhrase }) => {
   };
 
   // カテゴリ内の選択されたフレーズを削除
-  const onClickDelete = (phraseId: string) => {
+  const onClickDeletePhrase = (phrase: TypePhrase) => {
     phraseApi
-      .delete(category._id, phraseId)
+      .delete(category._id, phrase._id)
       .then(() => getAllPhrases())
-      .catch(() => alert('フレーズの削除に失敗しました'));
+      .catch(() => alert("フレーズの削除に失敗しました"));
   };
 
   // 言語を変更するたびに翻訳しなおす
   useEffect(() => {
-    if (openPhraseId == '') return;
+    if (openPhraseId == "") return;
     const translate = async () => {
       await translateText(
         phraseTitle,
-        'ja-jp',
+        "ja-jp",
         currentLanguage,
         translationSuccessHandler,
         translationErrorHandler
@@ -106,11 +107,11 @@ export const Phrase = ({ category }: { category: TypePhrase }) => {
       ? phraseApi
           .create(category._id, { title: text })
           .then(() => getAllPhrases())
-          .catch(() => alert('フレーズの作成に失敗しました'))
+          .catch(() => alert("フレーズの作成に失敗しました"))
       : phraseApi
           .update(category._id, phraseId, { title: text })
           .then(() => getAllPhrases())
-          .catch(() => alert('フレーズの編集に失敗しました'));
+          .catch(() => alert("フレーズの編集に失敗しました"));
   };
 
   useEffect(() => {
@@ -144,17 +145,23 @@ export const Phrase = ({ category }: { category: TypePhrase }) => {
                 </div>
               ))}
             <div className="button-wrapper">
-              <button onClick={() => onClickEditButton(phrase)}>
-                <HiOutlinePencilAlt />
-              </button>
-              <button
-                className="caution"
-                onClick={() => {
-                  onClickDelete(phrase._id);
-                }}
+              <Menu
+                className="btn-menu"
+                menuButton={
+                  <MenuButton>
+                    <HiOutlinePencilAlt />
+                  </MenuButton>
+                }
               >
-                <PiTrashBold />
-              </button>
+                <MenuItem onClick={() => onClickEditPhrase(phrase)}>
+                  <MenuButton>フレーズを編集</MenuButton>
+                </MenuItem>
+                <MenuItem>
+                  <MenuButton onClick={() => onClickDeletePhrase(phrase)}>
+                    フレーズを削除
+                  </MenuButton>
+                </MenuItem>
+              </Menu>
             </div>
           </li>
         ))
@@ -163,7 +170,7 @@ export const Phrase = ({ category }: { category: TypePhrase }) => {
       )}
 
       <EditModal
-        title={isNew ? 'フレーズを追加' : 'フレーズを編集'}
+        title={isNew ? "フレーズを追加" : "フレーズを編集"}
         defaultValue={phraseTitle}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
