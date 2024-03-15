@@ -17,14 +17,14 @@ export const Favorite = () => {
       .then((res) => {
         setCategories(res.data.reverse());
       })
-      .catch(() => alert('カテゴリの取得に失敗しました'));
+      .catch((err) => alert(err.data));
   };
 
   const modalSubmitHandler = (text: string) => {
     categoryApi
       .create(text)
       .then(() => getAllCategories())
-      .catch(() => alert('カテゴリの作成に失敗しました'));
+      .catch((err) => alert(err.data));
   };
 
   // ユーザのカテゴリを取得する

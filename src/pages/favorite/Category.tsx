@@ -40,7 +40,7 @@ export const Category = ({
       categoryApi
         .delete(category._id)
         .then(() => getAllCategories())
-        .catch(() => alert('カテゴリの削除に失敗しました'));
+        .catch((err) => alert(err.data));
     }
   };
 
@@ -49,11 +49,11 @@ export const Category = ({
       ? phraseApi
           .create(category._id, { title: text })
           .then(() => getAllCategories())
-          .catch(() => alert('カテゴリの取得に失敗しました'))
+          .catch((err) => alert(err.data))
       : categoryApi
           .update(category._id, { title: text })
           .then(() => getAllCategories())
-          .catch(() => alert('カテゴリの編集に失敗しました'));
+          .catch((err) => alert(err.data));
   };
 
   return (

@@ -20,6 +20,7 @@ import { Navigate } from 'react-router';
 import { BiBookmarkPlus } from 'react-icons/bi';
 import { BiSolidBookmarkPlus } from 'react-icons/bi';
 import { phraseApi } from '../../api/phraseApi';
+import { Menu, MenuButton, MenuItem, SubMenu } from '@szhsin/react-menu';
 
 export const SimpleTranslator = () => {
   const dispatch = useDispatch();
@@ -55,23 +56,23 @@ export const SimpleTranslator = () => {
     );
   };
 
-  // お気に入りボタンが押されたら日本語の文を登録
-  const onClickFavorite = () => {
-    const text = isJapanese ? transcription : outputText;
-    phraseApi
-      .create(text)
-      .then((res) => setFavoritePhraseId(res.data._id))
-      .catch(() => alert('お気に入りフレーズの作成に失敗しました'));
-  };
+  // // お気に入りボタンが押されたら日本語の文を登録
+  // const onClickFavorite = () => {
+  //   const text = isJapanese ? transcription : outputText;
+  //   phraseApi
+  //     .create(text)
+  //     .then((res) => setFavoritePhraseId(res.data._id))
+  //     .catch(() => alert('お気に入りフレーズの作成に失敗しました'));
+  // };
 
-  // お気に入りボタンが登録状態で押されたらフレーズを削除
-  const onClickDeleteFavorite = () => {
-    if (!favoritePhraseId) return;
-    phraseApi
-      .delete(favoritePhraseId)
-      .then(() => setFavoritePhraseId(null))
-      .catch(() => alert('お気に入り解除に失敗しました'));
-  };
+  // // お気に入りボタンが登録状態で押されたらフレーズを削除
+  // const onClickDeleteFavorite = () => {
+  //   if (!favoritePhraseId) return;
+  //   phraseApi
+  //     .delete(favoritePhraseId)
+  //     .then(() => setFavoritePhraseId(null))
+  //     .catch(() => alert('お気に入り解除に失敗しました'));
+  // };
 
   // プレースホルダーに各言語で「自分の言語で話してください」と設定する
   const placeholder = createTranslatePlaceholder();
@@ -103,9 +104,7 @@ export const SimpleTranslator = () => {
           setFavoritePhraseId(null);
         }
       })
-      .catch(() => {
-        alert('お気に入り情報の取得に失敗しました');
-      });
+      .catch((err) => alert(err.data));
   }, [outputText]);
 
   return isLogin ? (
@@ -118,22 +117,34 @@ export const SimpleTranslator = () => {
               <Loading />
             ) : (
               <>
-                {transcription &&
-                  (favoritePhraseId ? (
-                    <button
-                      className="favorite-btn"
-                      onClick={() => onClickDeleteFavorite()}
-                    >
-                      <BiSolidBookmarkPlus />
-                    </button>
-                  ) : (
-                    <button
-                      className="favorite-btn"
-                      onClick={() => onClickFavorite()}
-                    >
-                      <BiBookmarkPlus />
-                    </button>
-                  ))}
+                {
+                  transcription && (
+                    <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
+                      <MenuItem>New File</MenuItem>
+                      <MenuItem>Save</MenuItem>
+                      <SubMenu label="Edit">
+                        <MenuItem>Cut</MenuItem>
+                        <MenuItem>Copy</MenuItem>
+                        <MenuItem>Paste</MenuItem>
+                      </SubMenu>
+                      <MenuItem>Print...</MenuItem>
+                    </Menu>
+                  )
+                  // (favoritePhraseId ? (
+                  //   <button
+                  //     className="favorite-btn"
+                  //     onClick={() => onClickDeleteFavorite()}
+                  //   >
+                  //     <BiSolidBookmarkPlus />
+                  //   </button>
+                  // ) : (
+                  //   <button
+                  //     className="favorite-btn"
+                  //     onClick={() => onClickFavorite()}
+                  //   >
+                  //     <BiBookmarkPlus />
+                  //   </button>
+                }
                 <p
                   onClick={() => setModalIsOpen(true)}
                   className={transcription ? '' : 'placeholder'}
@@ -153,6 +164,7 @@ export const SimpleTranslator = () => {
         </div>
         <Recording />
         <EditModal
+          title="入力内容を編集"
           defaultValue={transcription}
           modalIsOpen={modalIsOpen}
           setModalIsOpen={setModalIsOpen}
