@@ -1,10 +1,11 @@
-import styled from "styled-components";
-import { Header } from "../../components/Header";
-import { RiFolderAddFill } from "react-icons/ri";
-import { EditModal } from "../../components/modal/EditModal";
-import { useEffect, useState } from "react";
-import { categoryApi } from "../../api/categoryApi";
-import { Category } from "./Category";
+import styled from 'styled-components';
+import { Header } from '../../components/Header';
+import { RiFolderAddFill } from 'react-icons/ri';
+import { EditModal } from '../../components/modal/EditModal';
+import { useEffect, useState } from 'react';
+import { categoryApi } from '../../api/categoryApi';
+import { Category } from './Category';
+import { TypeCategory } from '../../type';
 
 export const Favorite = () => {
   const [categories, setCategories] = useState([]);
@@ -16,14 +17,14 @@ export const Favorite = () => {
       .then((res) => {
         setCategories(res.data.reverse());
       })
-      .catch(() => alert("カテゴリの取得に失敗しました"));
+      .catch(() => alert('カテゴリの取得に失敗しました'));
   };
 
   const modalSubmitHandler = (text: string) => {
     categoryApi
       .create(text)
       .then(() => getAllCategories())
-      .catch(() => alert("カテゴリの作成に失敗しました"));
+      .catch(() => alert('カテゴリの作成に失敗しました'));
   };
 
   // ユーザのカテゴリを取得する
@@ -47,10 +48,18 @@ export const Favorite = () => {
                   <RiFolderAddFill />
                 </button>
               </div>
-              <Category
-                categories={categories}
-                getAllCategories={getAllCategories}
-              />
+              {categories.length !== 0 ? (
+                <ul>
+                  {categories.map((category: TypeCategory) => (
+                    <Category
+                      category={category}
+                      getAllCategories={getAllCategories}
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <p className="caution-text">カテゴリがありません</p>
+              )}
             </div>
           </div>
         </div>
@@ -88,6 +97,7 @@ const StyledFavorite = styled.section`
       display: grid;
       grid-template-columns: 10% 80% 10%;
       margin: 15px 0;
+      cursor: pointer;
       &.section-title {
         margin-bottom: 30px;
       }
@@ -142,11 +152,13 @@ const StyledFavorite = styled.section`
     & .phrase-list > li {
       display: grid;
       grid-template-columns: 10% 80% 10%;
+      padding: 0 0 15px 0;
+      margin: 0 0 15px 0;
+      border-bottom: dashed #555 1px;
       & .phrase-text {
         font-weight: normal;
-        padding: 0 0 15px 0;
-        border-bottom: dashed #555 1px;
         grid-column: 2/3;
+        cursor: pointer;
       }
     }
   }

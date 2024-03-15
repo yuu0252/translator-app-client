@@ -1,35 +1,32 @@
-import { TypeCategory } from "../../type";
-import { Phrase } from "./Phrase";
-import { useState } from "react";
-import { EditModal } from "../../components/modal/EditModal";
-import { HiOutlinePencilAlt } from "react-icons/hi";
-import { phraseApi } from "../../api/phraseApi";
-import { categoryApi } from "../../api/categoryApi";
-import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
-import "@szhsin/react-menu/dist/index.css";
+import { TypeCategory } from '../../type';
+import { Phrase } from './Phrase';
+import { useState } from 'react';
+import { EditModal } from '../../components/modal/EditModal';
+import { HiOutlinePencilAlt } from 'react-icons/hi';
+import { phraseApi } from '../../api/phraseApi';
+import { categoryApi } from '../../api/categoryApi';
+import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+import { IoIosArrowDown, IoIosArrowForward } from 'react-icons/io';
 
 export const Category = ({
-  categories,
+  category,
   getAllCategories,
 }: {
-  categories: Array<TypeCategory>;
+  category: TypeCategory;
   getAllCategories: () => void;
 }) => {
-  const [categoryTitle, setCategoryTitle] = useState("");
-  const [categoryId, setCategoryId] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isNew, setIsNew] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   // カテゴリ内にフレーズを追加
-  const onClickAddPhrase = (category: TypeCategory) => {
-    setCategoryId(category._id);
+  const onClickAddPhrase = () => {
     setIsNew(true);
     setModalIsOpen(true);
   };
 
-  const onClickEditCategory = (category: TypeCategory) => {
-    setCategoryId(category._id);
-    setCategoryTitle(category.title);
+  const onClickEditCategory = () => {
     setIsNew(false);
     setModalIsOpen(true);
   };
@@ -43,62 +40,58 @@ export const Category = ({
       categoryApi
         .delete(category._id)
         .then(() => getAllCategories())
-        .catch(() => alert("カテゴリの削除に失敗しました"));
+        .catch(() => alert('カテゴリの削除に失敗しました'));
     }
   };
 
   const modalSubmitHandler = (text: string) => {
     isNew
       ? phraseApi
-          .create(categoryId, { title: text })
+          .create(category._id, { title: text })
           .then(() => getAllCategories())
-          .catch(() => alert("カテゴリの取得に失敗しました"))
+          .catch(() => alert('カテゴリの取得に失敗しました'))
       : categoryApi
-          .update(categoryId, { title: text })
+          .update(category._id, { title: text })
           .then(() => getAllCategories())
-          .catch(() => alert("カテゴリの編集に失敗しました"));
+          .catch(() => alert('カテゴリの編集に失敗しました'));
   };
 
   return (
     <>
-      {categories.length !== 0 ? (
-        <ul>
-          {categories.map((category: TypeCategory) => (
-            <li key={category._id}>
-              <div className="list-title">
-                <h3>{category.title}</h3>
+      <li key={category._id}>
+        <div className="list-title">
+          <h3 onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? <IoIosArrowDown /> : <IoIosArrowForward />}
+            {` ${category.title}`}
+          </h3>
 
-                <div className="button-wrapper">
-                  <Menu
-                    className="btn-menu"
-                    menuButton={
-                      <MenuButton>
-                        <HiOutlinePencilAlt />
-                      </MenuButton>
-                    }
-                  >
-                    <MenuItem onClick={() => onClickAddPhrase(category)}>
-                      <MenuButton>フレーズを追加</MenuButton>
-                    </MenuItem>
-                    <MenuItem onClick={() => onClickEditCategory(category)}>
-                      <MenuButton>カテゴリ名を編集</MenuButton>
-                    </MenuItem>
-                    <MenuItem onClick={() => onClickDeleteCategory(category)}>
-                      <MenuButton>カテゴリを削除</MenuButton>
-                    </MenuItem>
-                  </Menu>
-                </div>
-              </div>
-              <Phrase key={category._id} category={category} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="caution-text">カテゴリがありません</p>
-      )}
+          <div className="button-wrapper">
+            <Menu
+              className="btn-menu"
+              menuButton={
+                <MenuButton>
+                  <HiOutlinePencilAlt />
+                </MenuButton>
+              }
+            >
+              <MenuItem onClick={() => onClickAddPhrase()}>
+                <MenuButton>フレーズを追加</MenuButton>
+              </MenuItem>
+              <MenuItem onClick={() => onClickEditCategory()}>
+                <MenuButton>カテゴリ名を編集</MenuButton>
+              </MenuItem>
+              <MenuItem onClick={() => onClickDeleteCategory(category)}>
+                <MenuButton>カテゴリを削除</MenuButton>
+              </MenuItem>
+            </Menu>
+          </div>
+        </div>
+        {isOpen ? <Phrase key={category._id} category={category} /> : <></>}
+      </li>
+
       <EditModal
-        title={isNew ? "フレーズを追加" : "カテゴリを編集"}
-        defaultValue={isNew ? "" : categoryTitle}
+        title={isNew ? 'フレーズを追加' : 'カテゴリを編集'}
+        defaultValue={isNew ? '' : category.title}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
         submitHandler={modalSubmitHandler}
