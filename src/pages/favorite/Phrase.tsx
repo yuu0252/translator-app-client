@@ -5,7 +5,6 @@ import {
   setCurrentLanguage,
 } from "../../reducer/languageSlice";
 import { translateText } from "../../functions/translate/translateText";
-import { PiTrashBold } from "react-icons/pi";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { SlArrowDown } from "react-icons/sl";
 import { textToSpeech } from "../../functions/audio/textToSpeech";
@@ -123,27 +122,29 @@ export const Phrase = ({ category }: { category: TypePhrase }) => {
       {phrases.length !== 0 ? (
         phrases.map((phrase: TypePhrase) => (
           <li key={phrase._id}>
-            <p onClick={() => onClickPhrase(phrase._id, phrase.title)}>
-              {phrase.title}
-            </p>
-            {openPhraseId === phrase._id &&
-              (isLoading ? (
-                <div>
-                  <SlArrowDown />
-                  <p>翻訳中...</p>
-                </div>
-              ) : (
-                <div>
-                  <SlArrowDown />
-                  <p
-                    onClick={() =>
-                      textToSpeech(translatedText, currentLanguage)
-                    }
-                  >
-                    {translatedText}
-                  </p>
-                </div>
-              ))}
+            <div className="phrase-text">
+              <p onClick={() => onClickPhrase(phrase._id, phrase.title)}>
+                {phrase.title}
+              </p>
+              {openPhraseId === phrase._id &&
+                (isLoading ? (
+                  <div>
+                    <SlArrowDown />
+                    <p>翻訳中...</p>
+                  </div>
+                ) : (
+                  <div>
+                    <SlArrowDown />
+                    <p
+                      onClick={() =>
+                        textToSpeech(translatedText, currentLanguage)
+                      }
+                    >
+                      {translatedText}
+                    </p>
+                  </div>
+                ))}
+            </div>
             <div className="button-wrapper">
               <Menu
                 className="btn-menu"

@@ -101,6 +101,7 @@ const StyledFavorite = styled.section`
         font-size: 20px;
         margin: 0;
       }
+
       & .add-btn {
         grid-column: 3/4;
         display: flex;
@@ -135,6 +136,17 @@ const StyledFavorite = styled.section`
 
       & .caution {
         color: #ff0000;
+      }
+    }
+
+    & .phrase-list > li {
+      display: grid;
+      grid-template-columns: 10% 80% 10%;
+      & .phrase-text {
+        font-weight: normal;
+        padding: 0 0 15px 0;
+        border-bottom: dashed #555 1px;
+        grid-column: 2/3;
       }
     }
   }
