@@ -1,17 +1,17 @@
-import { resizeImage } from '../../functions/image/resizeImage';
-import { useState } from 'react';
-import { Header } from '../../components/Header';
-import { Navigate, useNavigate } from 'react-router';
-import { recognizeImage } from '../../functions/image/recognizeImage';
-import { imageRecognizedData } from '../../functions/image/imageRecognizedData';
-import { useSelector } from 'react-redux';
-import { selectLanguage } from '../../reducer/languageSlice';
-import { languageCodeList } from '../../constants';
-import styled from 'styled-components';
-import { selectLogin } from '../../reducer/loginSlice';
+import { resizeImage } from "../../functions/image/resizeImage";
+import { useState } from "react";
+import { Header } from "../../components/Header";
+import { Navigate, useNavigate } from "react-router";
+import { recognizeImage } from "../../functions/image/recognizeImage";
+import { imageRecognizedData } from "../../functions/image/imageRecognizedData";
+import { useSelector } from "react-redux";
+import { selectLanguage } from "../../reducer/languageSlice";
+import { languageCodeList } from "../../constants";
+import styled from "styled-components";
+import { selectLogin } from "../../reducer/loginSlice";
 
 export const ImageTranslation = () => {
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
   const [resizedFile, setResizedFile] = useState<Blob | null>();
   const navigate = useNavigate();
   const { isLogin } = useSelector(selectLogin);
@@ -46,13 +46,13 @@ export const ImageTranslation = () => {
     resizedFile && reader.readAsDataURL(resizedFile);
     reader.onload = async () => {
       const result = reader.result as string;
-      const base64 = result.replace('data:', '').replace(/^.+,/, '');
+      const base64 = result.replace("data:", "").replace(/^.+,/, "");
       // 画像のテキストを認識して翻訳する
       const translatedData = await recognizeImage(base64);
       // APIから返ってきた値を読み取りやすい形式にする
       const resultData = imageRecognizedData(translatedData);
       // 翻訳された画像を別のページで表示する
-      navigate('/translatedImage', {
+      navigate("/translatedImage", {
         state: { imageUrl: imageUrl, data: resultData, isJapanese: isJapanese },
       });
     };
@@ -72,42 +72,39 @@ export const ImageTranslation = () => {
   };
 
   return isLogin ? (
-    <>
-      <Header />
-      <StyledImage id="image" className="container">
-        <div className="content-area">
-          <div className="image-area">
-            {imageUrl ? (
-              <>
-                <img src={imageUrl} />
-                <div className="btn-area">
-                  {currentLanguage === 'none' ? (
-                    <p className="alert">言語を選択してください</p>
-                  ) : (
-                    <>
-                      <button onClick={onClickTranslateToForeign}>
-                        日本語に翻訳
-                      </button>
-                      <button onClick={onClickTranslatetoJapanese}>
-                        {languageName}に翻訳
-                      </button>
-                    </>
-                  )}
-                </div>
-              </>
-            ) : (
-              'ファイルを選択してください'
-            )}
-          </div>
+    <StyledImage id="image" className="container">
+      <div className="content-area">
+        <div className="image-area">
+          {imageUrl ? (
+            <>
+              <img src={imageUrl} />
+              <div className="btn-area">
+                {currentLanguage === "none" ? (
+                  <p className="alert">言語を選択してください</p>
+                ) : (
+                  <>
+                    <button onClick={onClickTranslateToForeign}>
+                      日本語に翻訳
+                    </button>
+                    <button onClick={onClickTranslatetoJapanese}>
+                      {languageName}に翻訳
+                    </button>
+                  </>
+                )}
+              </div>
+            </>
+          ) : (
+            "ファイルを選択してください"
+          )}
         </div>
-        <div className="input-area">
-          <label>
-            <input type="file" id="file" onChange={onChangeImage} />
-            ファイルを選択
-          </label>
-        </div>
-      </StyledImage>
-    </>
+      </div>
+      <div className="input-area">
+        <label>
+          <input type="file" id="file" onChange={onChangeImage} />
+          ファイルを選択
+        </label>
+      </div>
+    </StyledImage>
   ) : (
     <Navigate to="/login" />
   );
@@ -178,7 +175,7 @@ const StyledImage = styled.section`
       }
     }
 
-    & input[type='file'] {
+    & input[type="file"] {
       display: none;
     }
   }

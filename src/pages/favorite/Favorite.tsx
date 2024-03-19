@@ -1,11 +1,10 @@
-import styled from 'styled-components';
-import { Header } from '../../components/Header';
-import { RiFolderAddFill } from 'react-icons/ri';
-import { EditModal } from '../../components/modal/EditModal';
-import { useEffect, useState } from 'react';
-import { categoryApi } from '../../api/categoryApi';
-import { Category } from './Category';
-import { TypeCategory } from '../../type';
+import styled from "styled-components";
+import { RiFolderAddFill } from "react-icons/ri";
+import { EditModal } from "../../components/modal/EditModal";
+import { useEffect, useState } from "react";
+import { categoryApi } from "../../api/categoryApi";
+import { Category } from "./Category";
+import { TypeCategory } from "../../type";
 
 export const Favorite = () => {
   const [categories, setCategories] = useState([]);
@@ -34,7 +33,6 @@ export const Favorite = () => {
 
   return (
     <>
-      <Header />
       <StyledFavorite id="favorite" className="container">
         <div className="content-area">
           <div>
