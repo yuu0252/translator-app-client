@@ -79,7 +79,7 @@ const StyledEditModal = styled.div`
     padding: 30px;
     position: absolute;
     width: 80%;
-    maxwidth: 800px;
+    max-width: 800px;
     height: 60%;
     top: 50%;
     left: 50%;
