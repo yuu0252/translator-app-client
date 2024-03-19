@@ -4,16 +4,19 @@ import { ImageTranslation } from "./pages/image/ImageTranslate";
 import { TranslatedImageArea } from "./pages/image/TranslatedImageArea";
 import { Login } from "./pages/auth/Login";
 import { Favorite } from "./pages/favorite/Favorite";
+import { AppLayout } from "./components/layouts/AppLayout";
 
 export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<SimpleTranslator />} />
-        <Route path="/image" element={<ImageTranslation />} />
         <Route path="/translatedImage" element={<TranslatedImageArea />} />
-        <Route path="/favorite" element={<Favorite />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<SimpleTranslator />} />
+          <Route path="/image" element={<ImageTranslation />} />
+          <Route path="/favorite" element={<Favorite />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
