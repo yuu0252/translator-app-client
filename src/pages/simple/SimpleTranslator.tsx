@@ -1,4 +1,3 @@
-import { Header } from "../../components/Header";
 import { Recording } from "../../components/audio/Recording";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -18,7 +17,6 @@ import styled from "styled-components";
 import { selectLogin } from "../../reducer/loginSlice";
 import { Navigate } from "react-router";
 import { phraseApi } from "../../api/phraseApi";
-import { Menu, MenuButton, MenuItem, SubMenu } from "@szhsin/react-menu";
 import { BiSolidBookmarkPlus, BiBookmarkPlus } from "react-icons/bi";
 
 export const SimpleTranslator = () => {
@@ -77,7 +75,7 @@ export const SimpleTranslator = () => {
     phraseApi
       .checkExist(text)
       .then((res) => {
-        if (res.data) {
+        if (res.data.length != 0) {
           setIsFavorite(true);
         } else {
           setIsFavorite(false);
@@ -87,63 +85,48 @@ export const SimpleTranslator = () => {
   }, [outputText]);
 
   return isLogin ? (
-    <>
-      <Header />
-      <StyledSimpleTranslator className="container">
-        <div className="content-area">
-          <div>
-            {isLoading ? (
-              <Loading />
-            ) : (
-              <>
-                {transcription && (
-                  <Menu menuButton={<MenuButton>Open menu</MenuButton>}>
-                    <MenuItem>New File</MenuItem>
-                    <MenuItem>Save</MenuItem>
-                    <SubMenu label="Edit">
-                      <MenuItem>Cut</MenuItem>
-                      <MenuItem>Copy</MenuItem>
-                      <MenuItem>Paste</MenuItem>
-                    </SubMenu>
-                    <MenuItem>Print...</MenuItem>
-                  </Menu>
-                )}
-                {isFavorite ? (
-                  <button className="favorite-btn">
-                    <BiSolidBookmarkPlus />
-                  </button>
-                ) : (
-                  <button className="favorite-btn">
-                    <BiBookmarkPlus />
-                  </button>
-                )}
-                <p
-                  onClick={() => setModalIsOpen(true)}
-                  className={transcription ? "" : "placeholder"}
-                >
-                  {transcription ? transcription : placeholder}
-                </p>
-                {outputText && (
-                  <>
-                    <p>{outputText}</p>
-                    {/* PlayAudioボタンを押すとoutputTextの内容が設定言語で再生される */}
-                    <PlayAudio text={outputText} />
-                  </>
-                )}
-              </>
-            )}
-          </div>
+    <StyledSimpleTranslator className="container">
+      <div className="content-area">
+        <div>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {isFavorite ? (
+                <button className="favorite-btn favorite-btn--yellow">
+                  <BiSolidBookmarkPlus />
+                </button>
+              ) : (
+                <button className="favorite-btn">
+                  <BiBookmarkPlus />
+                </button>
+              )}
+              <p
+                onClick={() => setModalIsOpen(true)}
+                className={transcription ? "" : "placeholder"}
+              >
+                {transcription ? transcription : placeholder}
+              </p>
+              {outputText && (
+                <>
+                  <p>{outputText}</p>
+                  {/* PlayAudioボタンを押すとoutputTextの内容が設定言語で再生される */}
+                  <PlayAudio text={outputText} />
+                </>
+              )}
+            </>
+          )}
         </div>
-        <Recording />
-        <EditModal
-          title="入力内容を編集"
-          defaultValue={transcription}
-          modalIsOpen={modalIsOpen}
-          setModalIsOpen={setModalIsOpen}
-          submitHandler={modalSubmitHandler}
-        />
-      </StyledSimpleTranslator>
-    </>
+      </div>
+      <Recording />
+      <EditModal
+        title="入力内容を編集"
+        defaultValue={transcription}
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        submitHandler={modalSubmitHandler}
+      />
+    </StyledSimpleTranslator>
   ) : (
     <Navigate to="/login" />
   );
@@ -158,8 +141,16 @@ const StyledSimpleTranslator = styled.section`
         position: absolute;
         top: 15px;
         right: 15px;
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
+
+        &--yellow {
+          color: #ffcc00;
+          & svg {
+            stroke: #000;
+            stroke-width: 0.5;
+          }
+        }
       }
     }
 
