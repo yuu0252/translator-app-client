@@ -6,7 +6,7 @@ export const phraseApi = {
   getAll: (category: string) =>
     axiosFetchServer.get(`/categories/${category}/phrases`),
   checkExist: (title: string) =>
-    axiosFetchServer.post("/phrases/check", { title: title }),
+    axiosFetchServer.post("/categories/phrases/check", { title: title }),
   update: (
     categoryId: string,
     phraseId: string,
