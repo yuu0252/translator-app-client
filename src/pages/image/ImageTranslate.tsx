@@ -1,6 +1,5 @@
 import { resizeImage } from "../../functions/image/resizeImage";
 import { useState } from "react";
-import { Header } from "../../components/Header";
 import { Navigate, useNavigate } from "react-router";
 import { recognizeImage } from "../../functions/image/recognizeImage";
 import { imageRecognizedData } from "../../functions/image/imageRecognizedData";
