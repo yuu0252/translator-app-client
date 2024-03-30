@@ -49,10 +49,12 @@ export const Favorite = () => {
               {categories.length !== 0 ? (
                 <ul>
                   {categories.map((category: TypeCategory) => (
-                    <Category
-                      category={category}
-                      getAllCategories={getAllCategories}
-                    />
+                    <li key={category._id}>
+                      <Category
+                        category={category}
+                        getAllCategories={getAllCategories}
+                      />
+                    </li>
                   ))}
                 </ul>
               ) : (
