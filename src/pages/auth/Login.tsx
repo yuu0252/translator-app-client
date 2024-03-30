@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { UserForm } from "../../components/form/UserForm";
 import { TypeLoginError, TypeUserForm } from "../../type";
-import axios from "axios";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { login, selectLogin } from "../../reducer/loginSlice";
+import { axiosFetchServer } from "../../api/axiosFetchServer";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -16,8 +16,8 @@ export const Login = () => {
   const { isLogin } = useSelector(selectLogin);
 
   const onSubmit = (data: TypeUserForm) => {
-    axios
-      .post(import.meta.env.VITE_USER_LOGIN_URL, {
+    axiosFetchServer
+      .post("/login", {
         email: data.email,
         password: data.password,
       })
