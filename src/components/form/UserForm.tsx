@@ -1,8 +1,8 @@
-import { useForm } from 'react-hook-form';
-import { TypeOnSubmitUserForm, TypeUserForm } from '../../type';
-import styled from 'styled-components';
-import { useState } from 'react';
-import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
+import { useForm } from "react-hook-form";
+import { TypeOnSubmitUserForm, TypeUserForm } from "../../type";
+import styled from "styled-components";
+import { useState } from "react";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 export const UserForm = ({
   buttonText,
@@ -17,8 +17,8 @@ export const UserForm = ({
     formState: { errors },
   } = useForm<TypeUserForm>({
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
 
@@ -28,16 +28,16 @@ export const UserForm = ({
       <label>メールアドレス</label>
       <input
         type="email"
-        {...register('email', {
+        {...register("email", {
           required: true,
           pattern: {
             value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-            message: '無効なメールアドレスです！',
+            message: "無効なメールアドレスです！",
           },
         })}
       />
 
-      {errors.email?.type === 'required' && (
+      {errors.email?.type === "required" && (
         <p className="error-message">必須項目です！</p>
       )}
       {errors.email?.message && (
@@ -46,17 +46,17 @@ export const UserForm = ({
       <label>パスワード</label>
       <div className="password-input">
         <input
-          type={isVisiblePassword ? 'text' : 'password'}
-          {...register('password', { required: true, minLength: 4 })}
+          type={isVisiblePassword ? "text" : "password"}
+          {...register("password", { required: true, minLength: 4 })}
         />
         <div onClick={() => setIsVisiblePassword(!isVisiblePassword)}>
           {isVisiblePassword ? <IoMdEyeOff /> : <IoMdEye />}
         </div>
       </div>
-      {errors.password?.type === 'required' && (
+      {errors.password?.type === "required" && (
         <p className="error-message">必須項目です！</p>
       )}
-      {errors.password?.type === 'minLength' && (
+      {errors.password?.type === "minLength" && (
         <p className="error-message">4文字以上必要です！</p>
       )}
       <input type="submit" value={buttonText} />
@@ -97,10 +97,11 @@ const StyledUserForm = styled.form`
     }
   }
 
-  & input[type='submit'] {
+  & input[type="submit"] {
     display: block;
     margin: 75px auto 0;
     width: 150px;
+    color: inherit;
 
     &:hover {
       background-color: #000;
