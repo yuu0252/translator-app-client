@@ -17,7 +17,7 @@ import styled from "styled-components";
 import { selectLogin } from "../../reducer/loginSlice";
 import { Navigate } from "react-router";
 import { phraseApi } from "../../api/phraseApi";
-import { BiSolidBookmarkPlus, BiBookmarkPlus } from "react-icons/bi";
+import { FavoriteButton } from "../../components/favorite/FavoriteButton";
 
 export const SimpleTranslator = () => {
   const dispatch = useDispatch();
@@ -92,15 +92,14 @@ export const SimpleTranslator = () => {
             <Loading />
           ) : (
             <>
-              {isFavorite ? (
-                <button className="favorite-btn favorite-btn--yellow">
-                  <BiSolidBookmarkPlus />
-                </button>
-              ) : (
-                <button className="favorite-btn">
-                  <BiBookmarkPlus />
-                </button>
+              {transcription && (
+                <FavoriteButton
+                  setIsFavorite={setIsFavorite}
+                  isFavorite={isFavorite}
+                  phraseTitle={isJapanese ? transcription : outputText}
+                />
               )}
+
               <p
                 onClick={() => setModalIsOpen(true)}
                 className={transcription ? "" : "placeholder"}
@@ -136,22 +135,6 @@ const StyledSimpleTranslator = styled.section`
   & .content-area {
     & > div {
       position: relative;
-
-      & > .favorite-btn {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        width: 50px;
-        height: 50px;
-
-        &--yellow {
-          color: #ffcc00;
-          & svg {
-            stroke: #000;
-            stroke-width: 0.5;
-          }
-        }
-      }
     }
 
     & .placeholder {

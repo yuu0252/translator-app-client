@@ -89,8 +89,6 @@ const StyledFavorite = styled.section`
     & .caution-text {
       font-weight: normal;
       padding: 0 0 15px 0;
-      border-bottom: dashed #555 1px;
-      margin-bottom: 30px;
     }
 
     & .list-title {

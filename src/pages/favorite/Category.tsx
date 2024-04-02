@@ -116,7 +116,9 @@ export const Category = ({
             ))
           ) : (
             <li>
-              <p className="caution-text">フレーズがありません</p>
+              <div className="phrase-text">
+                <p className="caution-text">フレーズがありません</p>
+              </div>
             </li>
           )}
         </ul>
