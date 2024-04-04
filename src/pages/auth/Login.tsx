@@ -14,8 +14,10 @@ export const Login = () => {
   const [, setCookie] = useCookies(["token"]);
   const [errorMessage, setErrorMessage] = useState("");
   const { isLogin } = useSelector(selectLogin);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (data: TypeUserForm) => {
+    setIsLoading(true);
     axiosFetchServer
       .post("/login", {
         email: data.email,
@@ -34,7 +36,8 @@ export const Login = () => {
           errors.push(e.msg);
         });
         setErrorMessage(errors.join("\n"));
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -47,7 +50,11 @@ export const Login = () => {
           {errorMessage !== "" && (
             <p className="error-message">{errorMessage}</p>
           )}
-          <UserForm buttonText="ログイン" onSubmit={onSubmit} />
+          <UserForm
+            buttonText="ログイン"
+            onSubmit={onSubmit}
+            isLoading={isLoading}
+          />
         </StyledLogin>
       )}
     </>

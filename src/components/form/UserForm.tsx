@@ -3,13 +3,16 @@ import { TypeOnSubmitUserForm, TypeUserForm } from "../../type";
 import styled from "styled-components";
 import { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+import { BeatLoader } from "react-spinners";
 
 export const UserForm = ({
   buttonText,
   onSubmit,
+  isLoading,
 }: {
   buttonText: string;
   onSubmit: TypeOnSubmitUserForm;
+  isLoading: boolean;
 }) => {
   const {
     register,
@@ -31,7 +34,7 @@ export const UserForm = ({
         {...register("email", {
           required: true,
           pattern: {
-            value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+            value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,8}$/,
             message: "無効なメールアドレスです！",
           },
         })}
@@ -47,7 +50,7 @@ export const UserForm = ({
       <div className="password-input">
         <input
           type={isVisiblePassword ? "text" : "password"}
-          {...register("password", { required: true, minLength: 4 })}
+          {...register("password", { required: true, minLength: 8 })}
         />
         <div onClick={() => setIsVisiblePassword(!isVisiblePassword)}>
           {isVisiblePassword ? <IoMdEyeOff /> : <IoMdEye />}
@@ -57,9 +60,15 @@ export const UserForm = ({
         <p className="error-message">必須項目です！</p>
       )}
       {errors.password?.type === "minLength" && (
-        <p className="error-message">4文字以上必要です！</p>
+        <p className="error-message">8文字以上必要です！</p>
       )}
-      <input type="submit" value={buttonText} />
+      {isLoading ? (
+        <button type="submit" disabled>
+          <BeatLoader />
+        </button>
+      ) : (
+        <button type="submit">{buttonText}</button>
+      )}
     </StyledUserForm>
   );
 };
@@ -71,7 +80,8 @@ const StyledUserForm = styled.form`
     margin: 15px 0 5px;
   }
 
-  & input {
+  & input,
+  & button {
     padding: 10px 15px;
     border-radius: 10px;
     background-color: #fff;
@@ -97,15 +107,20 @@ const StyledUserForm = styled.form`
     }
   }
 
-  & input[type="submit"] {
+  & button[type="submit"] {
     display: block;
     margin: 75px auto 0;
     width: 150px;
     color: inherit;
+    cursor: pointer;
 
     &:hover {
       background-color: #000;
       color: #fff;
+
+      & span > span {
+        background-color: #fff !important;
+      }
     }
   }
 
