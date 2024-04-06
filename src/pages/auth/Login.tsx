@@ -22,7 +22,7 @@ export const Login = () => {
         password: data.password,
       })
       .then((res) => {
-        setCookie("token", res.data.token);
+        setCookie("token", res.data.token, { maxAge: 2592000 });
         dispacth(login());
         navigate("/");
       })
