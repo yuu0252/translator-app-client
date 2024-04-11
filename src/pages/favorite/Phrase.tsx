@@ -5,7 +5,7 @@ import {
   setCurrentLanguage,
 } from "../../reducer/languageSlice";
 import { translateText } from "../../functions/translate/translateText";
-import { HiOutlinePencilAlt } from "react-icons/hi";
+import { MdOutlineEditNote } from "react-icons/md";
 import { SlArrowDown } from "react-icons/sl";
 import { textToSpeech } from "../../functions/audio/textToSpeech";
 import { useDispatch, useSelector } from "react-redux";
@@ -128,7 +128,7 @@ export const Phrase = ({
           className="btn-menu"
           menuButton={
             <MenuButton>
-              <HiOutlinePencilAlt />
+              <MdOutlineEditNote />
             </MenuButton>
           }
         >
