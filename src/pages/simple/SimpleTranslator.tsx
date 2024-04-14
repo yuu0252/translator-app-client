@@ -27,13 +27,16 @@ export const SimpleTranslator = () => {
   const { isLogin } = useSelector(selectLogin);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const successHandlerTranslation = (translatedText: string) => {
     dispatch(setOutputText(translatedText));
+    setIsSuccess(true);
   };
 
   const errorHandlerTranslation = () => {
     dispatch(setOutputText("翻訳に失敗しました"));
+    setIsSuccess(false);
   };
 
   const modalSubmitHandler = (text: string) => {
@@ -92,7 +95,7 @@ export const SimpleTranslator = () => {
             <Loading />
           ) : (
             <>
-              {transcription && (
+              {transcription && isSuccess && (
                 <FavoriteButton
                   setIsFavorite={setIsFavorite}
                   isFavorite={isFavorite}
