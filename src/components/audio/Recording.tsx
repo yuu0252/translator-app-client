@@ -1,14 +1,16 @@
-import { FaMicrophone } from 'react-icons/fa6';
-import { FaStop } from 'react-icons/fa';
-import { useRef } from 'react';
-import { setIsLoading } from '../../reducer/loadingSlice';
-import { useDispatch } from 'react-redux';
-import { speechToText } from '../../functions/audio/speechToText';
-import styled from 'styled-components';
+import { FaMicrophone } from "react-icons/fa6";
+import { FaStop } from "react-icons/fa";
+import { useRef } from "react";
+import { setIsLoading } from "../../reducer/loadingSlice";
+import { useDispatch } from "react-redux";
+import { speechToText } from "../../functions/audio/speechToText";
+import styled from "styled-components";
+import { ClipLoader } from "react-spinners";
 
 export const Recording = () => {
   const startBtn = useRef<HTMLButtonElement>(null);
   const stopBtn = useRef<HTMLButtonElement>(null);
+  const loadingBtn = useRef<HTMLButtonElement>(null);
   const dispatch = useDispatch();
 
   let audioSampleRate: number;
@@ -20,7 +22,7 @@ export const Recording = () => {
   let scriptProcessor: any;
 
   const startRecording = async () => {
-    if (stopBtn.current) stopBtn.current.style.display = 'block';
+    if (loadingBtn.current) loadingBtn.current.style.display = "block";
     recordingFlg = true;
 
     if (
@@ -28,7 +30,6 @@ export const Recording = () => {
       !navigator.mediaDevices ||
       !navigator.mediaDevices.getUserMedia
     ) {
-      alert('Missing support for navigator.mediaDevices.getUserMedia');
       return;
     }
 
@@ -57,7 +58,7 @@ export const Recording = () => {
         );
       })
       .catch(() => {
-        alert('権限の取得に失敗しました');
+        alert("権限の取得に失敗しました");
       });
   };
 
@@ -87,10 +88,10 @@ export const Recording = () => {
         }
       };
 
-      writeString(view, 0, 'RIFF');
+      writeString(view, 0, "RIFF");
       view.setUint32(4, 32 + samples.length * 2, true);
-      writeString(view, 8, 'WAVE');
-      writeString(view, 12, 'fmt ');
+      writeString(view, 8, "WAVE");
+      writeString(view, 12, "fmt ");
       view.setUint32(16, 16, true);
       view.setUint16(20, 1, true);
       view.setUint16(22, 1, true);
@@ -98,7 +99,7 @@ export const Recording = () => {
       view.setUint32(28, sampleRate * 2, true);
       view.setUint16(32, 2, true);
       view.setUint16(34, 16, true);
-      writeString(view, 36, 'data');
+      writeString(view, 36, "data");
       view.setUint32(40, samples.length * 2, true);
       floatTo16BitPCM(view, 44, samples);
 
@@ -122,7 +123,7 @@ export const Recording = () => {
     };
 
     let dataview = encodeWAV(mergeBuffers(audioData), audioSampleRate);
-    let audioBlob = new Blob([dataview], { type: 'audio/wav' });
+    let audioBlob = new Blob([dataview], { type: "audio/wav" });
 
     return audioBlob;
   };
@@ -140,7 +141,7 @@ export const Recording = () => {
 
     function onAudioProcess(e: any) {
       if (!recordingFlg) return;
-      console.log('onAudioProcess');
+      console.log("onAudioProcess");
 
       let input = e.inputBuffer.getChannelData(0);
       let bufferData = new Float32Array(bufferSize);
@@ -154,12 +155,14 @@ export const Recording = () => {
     mediastreamsource?.connect(scriptProcessor);
     scriptProcessor.onaudioprocess = onAudioProcess;
     scriptProcessor.connect(destinationNode);
+    if (loadingBtn.current) loadingBtn.current.style.display = "none";
+    if (stopBtn.current) stopBtn.current.style.display = "block";
   };
 
   function stopRecording() {
     dispatch(setIsLoading(true));
     // ストップボタンを押すとストップボタンを録音ボタンに変更
-    if (startBtn.current) startBtn.current.style.display = 'block';
+    if (startBtn.current) startBtn.current.style.display = "block";
     recordingFlg = false;
     let blob = exportWAV(audioData, audioSampleRate);
 
@@ -181,7 +184,7 @@ export const Recording = () => {
       <StyledRecordingButton
         ref={stopBtn}
         onClick={(e) => {
-          e.currentTarget.style.display = 'none';
+          e.currentTarget.style.display = "none";
           stopRecording();
         }}
         className="stop-btn"
@@ -193,13 +196,18 @@ export const Recording = () => {
       <StyledRecordingButton
         ref={startBtn}
         onClick={(e) => {
-          e.currentTarget.style.display = 'none';
+          e.currentTarget.style.display = "none";
           startRecording();
         }}
         className="start-btn"
       >
         <div>
           <FaMicrophone />
+        </div>
+      </StyledRecordingButton>
+      <StyledRecordingButton ref={loadingBtn} className="loading-btn">
+        <div>
+          <ClipLoader />
         </div>
       </StyledRecordingButton>
     </>
@@ -211,10 +219,15 @@ const StyledRecordingButton = styled.button`
   height: 75px;
   background-color: #fff;
   border-radius: 100%;
-  &.start-btn {
+  &.start-btn,
+  &.loading-btn {
     & svg {
       color: #333;
     }
+  }
+
+  &.loading-btn {
+    display: none;
   }
 
   &.stop-btn {
