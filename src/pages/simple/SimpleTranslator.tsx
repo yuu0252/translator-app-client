@@ -110,7 +110,10 @@ export const SimpleTranslator = () => {
               )}
 
               <p
-                onClick={() => setModalIsOpen(true)}
+                onClick={() => {
+                  if (!isSuccess) return;
+                  setModalIsOpen(true);
+                }}
                 className={transcription ? "" : "placeholder"}
               >
                 {transcription ? transcription : placeholder}
