@@ -6,7 +6,10 @@ import {
   setTranscription,
 } from "../../reducer/translateSlice";
 import { translateText } from "../../functions/translate/translateText";
-import { selectLanguage } from "../../reducer/languageSlice";
+import {
+  selectLanguage,
+  setCurrentLanguage,
+} from "../../reducer/languageSlice";
 import { useEffect, useState } from "react";
 import { PlayAudio } from "../../components/audio/PlayAudio";
 import { Loading } from "../../components/Loading";
@@ -32,6 +35,9 @@ export const SimpleTranslator = () => {
   const successHandlerTranslation = (translatedText: string) => {
     dispatch(setOutputText(translatedText));
     setIsSuccess(true);
+    if (currentLanguage == "none") {
+      dispatch(setCurrentLanguage("en-us"));
+    }
   };
 
   const errorHandlerTranslation = () => {
