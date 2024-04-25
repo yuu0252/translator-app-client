@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { PlayAudio } from "../../components/audio/PlayAudio";
 import { Loading } from "../../components/Loading";
-import { selectLoading } from "../../reducer/loadingSlice";
+import { selectStatus } from "../../reducer/statusSlice";
 import { EditModal } from "../../components/modal/EditModal";
 import { createTranslatePlaceholder } from "../../functions/translate/createTranslatePlaceholder";
 import styled from "styled-components";
@@ -27,7 +27,7 @@ export const SimpleTranslator = () => {
   const dispatch = useDispatch();
   const { transcription, outputText } = useSelector(selectTranslate);
   const { currentLanguage, isJapanese } = useSelector(selectLanguage);
-  const { isLoading } = useSelector(selectLoading);
+  const { isLoading } = useSelector(selectStatus);
   const { isLogin } = useSelector(selectLogin);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);

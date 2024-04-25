@@ -1,7 +1,7 @@
 import axios from "axios";
 import { languageCodeList } from "../../constants";
 import { setTranscription, setOutputText } from "../../reducer/translateSlice";
-import { setIsLoading } from "../../reducer/loadingSlice";
+import { setIsLoading } from "../../reducer/statusSlice";
 import { resultSpeechToText } from "./resultSpeechToText";
 import store from "../../reducer/store";
 import { translateText } from "../translate/translateText";
