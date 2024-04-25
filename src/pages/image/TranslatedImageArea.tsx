@@ -12,6 +12,7 @@ import {
   TypeLoadImageResult,
 } from "../../type";
 
+// 翻訳された画像とその翻訳後のテキストを重ねて表示する
 export const TranslatedImageArea = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,6 +52,7 @@ export const TranslatedImageArea = () => {
               text: string;
               boundingBox: Array<{ x: number; y: number }>;
             }) => {
+              // テキストの表示エリアが適切になるよう調整する
               const width =
                 ((boundingBox[1].x - boundingBox[0].x) / image.naturalWidth) *
                   100 +

@@ -1,20 +1,20 @@
+// 画面に合わせて画像の大きさを調節する
 export const resizeImage = async (
   imageData: Blob,
   width: number
 ): Promise<Blob | null> => {
   try {
-    const context = document.createElement('canvas').getContext('2d');
+    const context = document.createElement("canvas").getContext("2d");
     if (context === null) {
       return null;
     }
 
     const image: HTMLImageElement = await new Promise((resolve, reject) => {
       const image = new Image();
-      image.addEventListener('load', () => resolve(image));
-      image.addEventListener('error', reject);
+      image.addEventListener("load", () => resolve(image));
+      image.addEventListener("error", reject);
       image.src = URL.createObjectURL(imageData);
     });
-    console.log(image.width);
     const { naturalHeight: beforeHeight, naturalWidth: beforeWidth } = image;
 
     const afterWidth: number = width;
@@ -38,7 +38,7 @@ export const resizeImage = async (
     );
 
     return await new Promise((resolve) => {
-      context.canvas.toBlob(resolve, 'image/jpeg', 0.9);
+      context.canvas.toBlob(resolve, "image/jpeg", 0.9);
     });
   } catch (err) {
     console.error(err);

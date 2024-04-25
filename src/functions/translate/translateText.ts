@@ -3,6 +3,7 @@ import axios from "axios";
 type successHandlerType = (translatedText: string) => void;
 type errorHandlerType = () => void;
 
+// テキストを設定言語に翻訳
 export const translateText = async (
   text: string | undefined,
   sourceLanguage: string | undefined,

@@ -1,5 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
+// base64の画像データからテキストやその位置などを識別
 export const recognizeImage = async (base64: string) => {
   if (!base64) return;
 
@@ -11,7 +12,7 @@ export const recognizeImage = async (base64: string) => {
         },
         features: [
           {
-            type: 'TEXT_DETECTION',
+            type: "TEXT_DETECTION",
           },
         ],
       },

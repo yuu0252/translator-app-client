@@ -1,14 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { Cookies } from 'react-cookie';
+import { createSlice } from "@reduxjs/toolkit";
+import { Cookies } from "react-cookie";
 
 const cookie = new Cookies();
 
+// トークンがクッキーに保存されていればログイン
 const initialState = {
-  isLogin: cookie.get('token') ? true : false,
+  isLogin: cookie.get("token") ? true : false,
 };
 
 export const loginSlice = createSlice({
-  name: 'login',
+  name: "login",
   initialState,
   reducers: {
     login: (state) => {

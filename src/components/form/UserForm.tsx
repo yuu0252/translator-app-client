@@ -5,6 +5,8 @@ import { useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { BeatLoader } from "react-spinners";
 
+// ログインの際のバリデーション
+// メールアドレスの形式とパスワードの文字数
 export const UserForm = ({
   buttonText,
   onSubmit,

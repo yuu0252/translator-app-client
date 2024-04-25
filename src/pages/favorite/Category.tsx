@@ -9,6 +9,7 @@ import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 
+// 各々のカテゴリを表示するコンポーネント
 export const Category = ({
   category,
   getAllCategories,
@@ -39,6 +40,7 @@ export const Category = ({
     setModalIsOpen(true);
   };
 
+  //　カテゴリ内の指定されたフレーズを編集
   const onClickEditCategory = () => {
     setIsNew(false);
     setModalIsOpen(true);
@@ -57,6 +59,8 @@ export const Category = ({
     }
   };
 
+  // モーダルの送信ボタンを押された際の処理
+  // isNewがTrueであればフレーズ新規作成　Falseであればカテゴリの編集
   const modalSubmitHandler = (text: string) => {
     isNew
       ? phraseApi
@@ -70,6 +74,7 @@ export const Category = ({
   };
 
   useEffect(() => {
+    // カテゴリ内のすべてのフレーズを取得
     getAllPhrases(category);
   }, []);
 

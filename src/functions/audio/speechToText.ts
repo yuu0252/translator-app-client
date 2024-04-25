@@ -1,11 +1,12 @@
-import axios from 'axios';
-import { languageCodeList } from '../../constants';
-import { setTranscription, setOutputText } from '../../reducer/translateSlice';
-import { setIsLoading } from '../../reducer/loadingSlice';
-import { resultSpeechToText } from './resultSpeechToText';
-import store from '../../reducer/store';
-import { translateText } from '../translate/translateText';
+import axios from "axios";
+import { languageCodeList } from "../../constants";
+import { setTranscription, setOutputText } from "../../reducer/translateSlice";
+import { setIsLoading } from "../../reducer/loadingSlice";
+import { resultSpeechToText } from "./resultSpeechToText";
+import store from "../../reducer/store";
+import { translateText } from "../translate/translateText";
 
+// 音声をテキストに変換する
 export const speechToText = (base64data: string) => {
   const { currentLanguage } = store.getState().language;
 
@@ -15,13 +16,13 @@ export const speechToText = (base64data: string) => {
   };
 
   const errorHandlerTranslation = () => {
-    store.dispatch(setOutputText('翻訳に失敗しました'));
+    store.dispatch(setOutputText("翻訳に失敗しました"));
     store.dispatch(setIsLoading(false));
   };
 
   // google translate APIの複数言語設定
   const altLanguageCodes =
-    currentLanguage === 'none'
+    currentLanguage === "none"
       ? languageCodeList.map((language) => language.code)
       : [currentLanguage];
   // 音声をテキストに変換
@@ -32,20 +33,22 @@ export const speechToText = (base64data: string) => {
       }`,
       {
         config: {
-          languageCode: 'ja-JP',
+          languageCode: "ja-JP",
           alternativeLanguageCodes: altLanguageCodes,
         },
         audio: {
-          content: base64data.split(',')[1],
+          content: base64data.split(",")[1],
         },
       }
     )
     .then((res) => {
       const result = res.data.results[0];
+      // 返ってきたデータの必要な部分を抽出する
       const [sourceLanguage, targetLanguage, text] = resultSpeechToText(
         result,
         currentLanguage
       );
+      console.log("source:" + sourceLanguage, "target:" + targetLanguage);
       // 出力されたテキストを翻訳する
       translateText(
         text,
@@ -56,7 +59,7 @@ export const speechToText = (base64data: string) => {
       );
     })
     .catch(() => {
-      store.dispatch(setTranscription('音声認識に失敗しました'));
+      store.dispatch(setTranscription("音声認識に失敗しました"));
       store.dispatch(setIsLoading(false));
     });
 };

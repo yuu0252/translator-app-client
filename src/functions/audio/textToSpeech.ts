@@ -1,20 +1,19 @@
-import axios from 'axios';
-import { Howl } from 'howler';
-import { isMobile, isTablet } from 'react-device-detect';
-import { languageCodeList } from '../../constants';
+import axios from "axios";
+import { Howl } from "howler";
+import { isMobile, isTablet } from "react-device-detect";
+import { languageCodeList } from "../../constants";
 
+// 翻訳後のテキストを出力
 export const textToSpeech = async (text: string, languageCode: string) => {
-  const sourceLanguage = languageCode === 'none' ? 'en-us' : languageCode;
-  console.log(languageCode);
-  console.log(sourceLanguage);
+  const sourceLanguage = languageCode === "none" ? "en-us" : languageCode;
   const speaker =
-    sourceLanguage === 'ja-JP'
-      ? 'ja-JP-Neural2-C'
+    sourceLanguage === "ja-JP"
+      ? "ja-JP-Neural2-C"
       : languageCodeList.find((e) => e.code === sourceLanguage)?.speak.speaker;
   const data = {
     audioConfig: {
-      effectsProfileId: ['handset-class-device'],
-      audioEncoding: 'MP3',
+      effectsProfileId: ["handset-class-device"],
+      audioEncoding: "MP3",
       pitch: 0,
       speakingRate: 1,
       volumeGainDb: 1,
@@ -37,7 +36,7 @@ export const textToSpeech = async (text: string, languageCode: string) => {
     )
     .then((res) => {
       const base64 = res.data.audioContent;
-      const contentType = 'audio/mp3';
+      const contentType = "audio/mp3";
       // PC以外のデバイスだと音量が少し小さいので音量を大きめに出力
       const volume = isMobile || isTablet ? 2 : 1;
       const sound = new Howl({
@@ -47,7 +46,7 @@ export const textToSpeech = async (text: string, languageCode: string) => {
       sound.play();
     })
     .catch(() => {
-      alert('音声合成に失敗しました');
+      alert("音声合成に失敗しました");
     });
 
   return result;

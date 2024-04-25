@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { phraseApi } from "../../api/phraseApi";
 import { categoryApi } from "../../api/categoryApi";
 
+// ホームで翻訳した際、お気に入りボタンを押してカテゴリを選択すると、日本語がお気に入りフレーズに登録される
 export const FavoriteButton = ({
   isFavorite,
   phraseTitle,
@@ -71,6 +72,7 @@ export const FavoriteButton = ({
             <h4 className="add-title">フレーズ登録</h4>
             <label htmlFor="select-category">カテゴリ:</label>
             <div>
+              {/* お気に入り追加ボタンを押した際、どのカテゴリに追加するか選択 */}
               <select name="categories" id="select-category">
                 {categories.map((category: TypeCategory) => (
                   <option value={category._id} key={category._id}>

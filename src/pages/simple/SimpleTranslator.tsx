@@ -22,6 +22,7 @@ import { Navigate } from "react-router";
 import { phraseApi } from "../../api/phraseApi";
 import { FavoriteButton } from "../../components/favorite/FavoriteButton";
 
+// 入力言語を設定言語に出力するコンポーネント（ホーム）
 export const SimpleTranslator = () => {
   const dispatch = useDispatch();
   const { transcription, outputText } = useSelector(selectTranslate);
@@ -45,6 +46,7 @@ export const SimpleTranslator = () => {
     setIsSuccess(false);
   };
 
+  // テキストの編集の際に使用するモーダルのサブミットハンドラー
   const modalSubmitHandler = (text: string) => {
     dispatch(setTranscription(text));
     const chosenLanguage =

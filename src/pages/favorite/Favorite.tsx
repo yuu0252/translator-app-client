@@ -6,6 +6,7 @@ import { categoryApi } from "../../api/categoryApi";
 import { Category } from "./Category";
 import { TypeCategory } from "../../type";
 
+// お気に入りフレーズの親コンポーネント
 export const Favorite = () => {
   const [categories, setCategories] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);

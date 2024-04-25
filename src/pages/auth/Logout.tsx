@@ -10,6 +10,7 @@ export const Logout = () => {
   const navigate = useNavigate();
 
   const onClickLogout = () => {
+    // ログアウトボタンが押されるとクッキーのトークンを削除しログイン画面にリダイレクト
     removeCookie("token");
     dispatch(logout());
     navigate("/login");

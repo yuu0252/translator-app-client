@@ -12,6 +12,7 @@ type Props = {
 };
 
 // テキストを編集するためのモーダル
+// フレーズやカテゴリの追加、編集の際にも使用
 export const EditModal = ({
   title,
   defaultValue,

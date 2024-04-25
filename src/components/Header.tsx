@@ -16,6 +16,7 @@ export const Header = () => {
 
   return (
     <StyledHeader id="header">
+      {/* 各機能のナビゲーションバー */}
       <nav className="header-link">
         <ul>
           <li className={pathname === "/" ? "home active" : "home"}>
@@ -42,6 +43,7 @@ export const Header = () => {
           </li>
         </ul>
       </nav>
+      {/* 翻訳先、翻訳元を指定するドロップダウンメニュー、言語の設定はReduxで管理 */}
       <div className="select-box">
         <select
           value={currentLanguage}

@@ -1,6 +1,7 @@
-import { ClockLoader } from 'react-spinners';
-import styled from 'styled-components';
+import { ClockLoader } from "react-spinners";
+import styled from "styled-components";
 
+// 音声、翻訳の処理中に表示するローディングコンポーネント
 export const Loading = () => {
   return (
     <StyledLoading>

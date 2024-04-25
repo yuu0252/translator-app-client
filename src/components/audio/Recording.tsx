@@ -155,6 +155,7 @@ export const Recording = () => {
     mediastreamsource?.connect(scriptProcessor);
     scriptProcessor.onaudioprocess = onAudioProcess;
     scriptProcessor.connect(destinationNode);
+    // 音声認識の準備ができるまでローディングボタンを表示
     if (loadingBtn.current) loadingBtn.current.style.display = "none";
     if (stopBtn.current) stopBtn.current.style.display = "block";
   };

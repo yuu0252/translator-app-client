@@ -17,7 +17,10 @@ export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = (data: TypeUserForm) => {
+    // ローディングボタンのロードをTrueにする
     setIsLoading(true);
+    // ログインに成功すればホームへ
+    // 失敗すればエラーメッセージをステートにセットする
     axiosFetchServer
       .post("/login", {
         email: data.email,
@@ -26,6 +29,7 @@ export const Login = () => {
       .then((res) => {
         setCookie("token", res.data.token, { maxAge: 2592000 });
         dispacth(login());
+        // ログイン成功後ホームへ
         navigate("/");
       })
       .catch((err) => {

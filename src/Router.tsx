@@ -12,6 +12,7 @@ export const Router = () => {
       <Routes>
         <Route path="/translatedImage" element={<TranslatedImageArea />} />
         <Route path="/login" element={<Login />} />
+        {/* ヘッダーが必要なコンポーネント */}
         <Route path="/" element={<AppLayout />}>
           <Route index element={<SimpleTranslator />} />
           <Route path="/image" element={<ImageTranslation />} />
