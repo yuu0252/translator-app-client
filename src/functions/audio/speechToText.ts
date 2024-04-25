@@ -1,7 +1,7 @@
 import axios from "axios";
 import { languageCodeList } from "../../constants";
 import { setTranscription, setOutputText } from "../../reducer/translateSlice";
-import { setIsLoading } from "../../reducer/statusSlice";
+import { setIsLoading, setIsSuccess } from "../../reducer/statusSlice";
 import { resultSpeechToText } from "./resultSpeechToText";
 import store from "../../reducer/store";
 import { translateText } from "../translate/translateText";
@@ -12,6 +12,7 @@ export const speechToText = (base64data: string) => {
 
   const successHandlerTranslation = (translatedText: string) => {
     store.dispatch(setOutputText(translatedText));
+    store.dispatch(setIsSuccess(true));
     store.dispatch(setIsLoading(false));
   };
 

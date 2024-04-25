@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { PlayAudio } from "../../components/audio/PlayAudio";
 import { Loading } from "../../components/Loading";
-import { selectStatus } from "../../reducer/statusSlice";
+import { selectStatus, setIsSuccess } from "../../reducer/statusSlice";
 import { EditModal } from "../../components/modal/EditModal";
 import { createTranslatePlaceholder } from "../../functions/translate/createTranslatePlaceholder";
 import styled from "styled-components";
@@ -27,15 +27,14 @@ export const SimpleTranslator = () => {
   const dispatch = useDispatch();
   const { transcription, outputText } = useSelector(selectTranslate);
   const { currentLanguage, isJapanese } = useSelector(selectLanguage);
-  const { isLoading } = useSelector(selectStatus);
+  const { isLoading, isSuccess } = useSelector(selectStatus);
   const { isLogin } = useSelector(selectLogin);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
 
   const successHandlerTranslation = (translatedText: string) => {
     dispatch(setOutputText(translatedText));
-    setIsSuccess(true);
+    dispatch(setIsSuccess(true));
     if (currentLanguage == "none") {
       dispatch(setCurrentLanguage("en-us"));
     }
@@ -43,7 +42,7 @@ export const SimpleTranslator = () => {
 
   const errorHandlerTranslation = () => {
     dispatch(setOutputText("翻訳に失敗しました"));
-    setIsSuccess(false);
+    dispatch(setIsSuccess(false));
   };
 
   // テキストの編集の際に使用するモーダルのサブミットハンドラー
