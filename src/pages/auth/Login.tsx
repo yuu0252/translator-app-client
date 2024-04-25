@@ -33,7 +33,7 @@ export const Login = () => {
         navigate("/");
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         const res = err.response.data.errors;
         const errors: Array<string> = [];
         res.forEach((e: TypeLoginError) => {

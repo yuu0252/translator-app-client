@@ -141,7 +141,7 @@ export const Recording = () => {
 
     function onAudioProcess(e: any) {
       if (!recordingFlg) return;
-      console.log("onAudioProcess");
+      console.log("録音中");
 
       let input = e.inputBuffer.getChannelData(0);
       let bufferData = new Float32Array(bufferSize);

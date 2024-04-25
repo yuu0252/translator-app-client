@@ -48,7 +48,6 @@ export const speechToText = (base64data: string) => {
         result,
         currentLanguage
       );
-      console.log("source:" + sourceLanguage, "target:" + targetLanguage);
       // 出力されたテキストを翻訳する
       translateText(
         text,

@@ -103,7 +103,7 @@ export const TranslatedImageArea = () => {
         );
         setImageTranslatedData(imageOutputData);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, [currentLanguage]);
 
   return (
