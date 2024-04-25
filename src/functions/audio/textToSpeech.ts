@@ -2,9 +2,13 @@ import axios from "axios";
 import { Howl } from "howler";
 import { isMobile, isTablet } from "react-device-detect";
 import { languageCodeList } from "../../constants";
+import store from "../../reducer/store";
+import { setIsPlaying } from "../../reducer/statusSlice";
 
 // 翻訳後のテキストを出力
 export const textToSpeech = async (text: string, languageCode: string) => {
+  const { isPlaying } = store.getState().status;
+  if (isPlaying) return;
   const sourceLanguage = languageCode === "none" ? "en-us" : languageCode;
   const speaker =
     sourceLanguage === "ja-JP"
@@ -42,6 +46,12 @@ export const textToSpeech = async (text: string, languageCode: string) => {
       const sound = new Howl({
         src: [`data:${contentType};base64,${base64}`],
         volume: volume,
+        onplay: () => {
+          store.dispatch(setIsPlaying(true));
+        },
+        onend: () => {
+          store.dispatch(setIsPlaying(false));
+        },
       });
       sound.play();
     })
