@@ -22,12 +22,13 @@ export const resultSpeechToText = (
     currentLanguage = "en-us";
     sourceLanguage = "ja";
     targetLanguage = "en";
+    store.dispatch(setIsJapanese(true));
   } else if (detectedLanguage === "ja-jp") {
     // 出力先言語が指定されていれば翻訳元を日本語に、翻訳先を指定の言語に変換する
     const targetCode = languageCodeList.find((e) => e.code === currentLanguage);
     sourceLanguage = "ja";
     targetLanguage = targetCode?.shortCode;
-    store.dispatch(setIsJapanese(false));
+    store.dispatch(setIsJapanese(true));
   } else {
     // 入力言語が日本語以外であればその言語を日本語に翻訳する
     if (currentLanguage === "none") {

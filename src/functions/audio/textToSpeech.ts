@@ -9,7 +9,7 @@ import { setIsPlaying } from "../../reducer/statusSlice";
 export const textToSpeech = async (text: string, languageCode: string) => {
   const { isPlaying } = store.getState().status;
   if (isPlaying) return;
-  const sourceLanguage = languageCode === "none" ? "en-us" : languageCode;
+  const sourceLanguage = languageCode;
   const speaker =
     sourceLanguage === "ja-JP"
       ? "ja-JP-Neural2-C"
