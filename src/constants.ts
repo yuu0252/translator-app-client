@@ -16,22 +16,10 @@ export const languageCodeList: Array<TypeLanguageCode> = [
     speak: { code: "en-GB", speaker: "en-GB-Neural2-C" },
   },
   {
-    code: "en-sg",
-    shortCode: "en",
-    name: "英語（シンガポール）",
-    speak: { code: "en-US", speaker: "en-US-Neural2-J" },
-  },
-  {
-    code: "yue-hant-hk",
-    shortCode: "zh-tw",
-    name: "繁体字（香港）",
-    placeholder: "說你的語言",
-    speak: { code: "cmn-TW", speaker: "cmn-TW-Wavenet-A" },
-  },
-  {
     code: "cmn-hant-tw",
     shortCode: "zh-tw",
     name: "繁体字（台湾）",
+    placeholder: "說你的語言",
     speak: { code: "cmn-TW", speaker: "cmn-TW-Wavenet-A" },
   },
   {
@@ -138,41 +126,5 @@ export const languageCodeList: Array<TypeLanguageCode> = [
     name: "アラビア語（アラブ首長国連邦）",
     placeholder: "تحدث لغتك",
     speak: { code: "ar-XA", speaker: "ar-XA-Wavenet-C" },
-  },
-  {
-    code: "en-hk",
-    shortCode: "en",
-    name: "英語（香港）",
-    speak: { code: "en-GB", speaker: "en-GB-Neural2-C" },
-  },
-  {
-    code: "en-ph",
-    shortCode: "en",
-    name: "英語（フィリピン）",
-    speak: { code: "en-US", speaker: "en-US-Neural2-F" },
-  },
-  {
-    code: "en-ca",
-    shortCode: "en",
-    name: "英語（カナダ）",
-    speak: { code: "en-US", speaker: "en-US-Neural2-E" },
-  },
-  {
-    code: "en-au",
-    shortCode: "en",
-    name: "英語（オーストラリア）",
-    speak: { code: "en-AU", speaker: "en-AU-Wavenet-C" },
-  },
-  {
-    code: "en-nz",
-    shortCode: "en",
-    name: "英語（ニュージーランド）",
-    speak: { code: "en-AU", speaker: "en-AU-Wavenet-C" },
-  },
-  {
-    code: "en-in",
-    shortCode: "en",
-    name: "英語（インド）",
-    speak: { code: "en-IN", speaker: "en-IN-Wavenet-D" },
   },
 ];
